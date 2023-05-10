@@ -1,11 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player_Movement : MonoBehaviour
 {
     public float playerSpeed = 4;
     private Rigidbody2D playerRigidbody;
+    private TouchInput touchInput;
+
+    private void OnEnable()
+    {
+        touchInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        touchInput.Disable();
+    }
 
     private void Start()
     {

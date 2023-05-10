@@ -1,0 +1,74 @@
+{
+    "name": "TouchInput",
+    "maps": [
+        {
+            "name": "Hold",
+            "id": "bebf8401-5d82-4f3d-a893-2198f1752a37",
+            "actions": [
+                {
+                    "name": "HoldOnTouch",
+                    "type": "Value",
+                    "id": "d693146f-70a2-4985-86c8-0746cc17bf5e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold"
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Value",
+                    "id": "4b0d7b18-889a-4ce9-8f3f-63768085fbd7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "1D Axis Touch",
+                    "id": "8fd07ba1-f333-43f0-9fda-a0be578ff051",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldOnTouch",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "2e42db0f-5969-4de1-beab-54830e52fc21",
+                    "path": "<Touchscreen>/primaryTouch/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldOnTouch",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "44abaf81-959d-448f-bf99-d6b1e5ee0e02",
+                    "path": "<Touchscreen>/primaryTouch/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldOnTouch",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "9940928a-d43e-455c-bf11-0db2c380fdd7",
+                    "path": "<Touchscreen>/primaryTouch/indirectTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
