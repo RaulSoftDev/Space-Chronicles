@@ -5,8 +5,8 @@ using UnityEngine;
 public class SquadMovement : MonoBehaviour
 {
     public float squadSpeed = 4;
-    public Vector3 pos1 = new Vector3(-1, 3, 0);
-    public Vector3 pos2 = new Vector3(1, 3, 0);
+    public Vector3 pos1 = new Vector3(-0.65f, 3, 0);
+    public Vector3 pos2 = new Vector3(0.65f, 3, 0);
 
     public GameObject[] prefablist;
     public float gridX = 5f;
@@ -82,5 +82,7 @@ public class SquadMovement : MonoBehaviour
     private void Update()
     {
         transform.position = Vector3.Lerp (pos1, pos2, Mathf.PingPong(Time.time * squadSpeed, 1.0f));
+
+        Debug.Log(gameObject.name);
     }
 }

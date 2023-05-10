@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aec042be580d0049a85d4f513bcf62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemies: []
 --- !u!95 &1663134547066047540
 Animator:
   serializedVersion: 3
@@ -475,6 +476,10 @@ PrefabInstance:
     - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
       propertyPath: m_Name
       value: IIShield (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
@@ -1046,7 +1051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
@@ -1117,6 +1122,10 @@ PrefabInstance:
     - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
       propertyPath: m_Name
       value: IBasic (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
@@ -1258,6 +1267,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012433854803010 stripped
@@ -1398,6 +1411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012433933098855 stripped
@@ -1468,6 +1485,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012433924676102 stripped
@@ -1485,6 +1506,10 @@ PrefabInstance:
     - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_Name
       value: IIMisile (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2201741692871747730, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_RootOrder
@@ -1607,6 +1632,10 @@ PrefabInstance:
     - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
       propertyPath: m_Name
       value: IBasic (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
@@ -1765,6 +1794,10 @@ PrefabInstance:
     - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_Name
       value: IIMisile (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2201741692871747730, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_RootOrder
@@ -2028,6 +2061,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012435617307058 stripped
@@ -2098,6 +2135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IIShield (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
 --- !u!4 &3943640708029568526 stripped
@@ -2167,6 +2208,10 @@ PrefabInstance:
     - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
       propertyPath: m_Name
       value: IBasic (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
@@ -2452,6 +2497,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IIShield (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
 --- !u!4 &3943640708238436734 stripped
@@ -2469,6 +2518,10 @@ PrefabInstance:
     - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_Name
       value: IIMisile (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2201741692871747730, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_RootOrder
@@ -2664,7 +2717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
@@ -2806,6 +2859,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012435080483206 stripped
@@ -2946,6 +3003,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012434990660714 stripped
@@ -3015,6 +3076,10 @@ PrefabInstance:
     - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
       propertyPath: m_Name
       value: IBasic (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
@@ -3086,6 +3151,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IIShield (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2426882038742492587, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7340677dedd14794cba0711cca3173ec, type: 3}
 --- !u!4 &3943640707649332514 stripped
@@ -3156,6 +3225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IBasic (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
 --- !u!4 &6377012435033297833 stripped
@@ -3173,6 +3246,10 @@ PrefabInstance:
     - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_Name
       value: IIMisile (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201741692871747728, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2201741692871747730, guid: 25fd1e455228a6842aff9a4a08bca466, type: 3}
       propertyPath: m_RootOrder
@@ -3365,6 +3442,10 @@ PrefabInstance:
     - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
       propertyPath: m_Name
       value: IBasic (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722693086373877540, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efea28ef2bff1e4fb3ec0b42eeda3d6, type: 3}
