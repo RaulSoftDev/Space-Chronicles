@@ -3,17 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwipeDetection : MonoBehaviour
+public class SwipeDetection : Singleton<SwipeDetection>
 {
     [SerializeField]
     private float minimunDistance = 0.2f;
+    public float minimumTime = 2f;
 
     private InputManager inputManager;
 
-    private Vector2 startPosition;
-    private float startTime;
+    public Vector2 startPosition;
+    public float startTime;
     private Vector2 endPosition;
-    private float endTime;
+    public float endTime;
+
+    public bool touchStart;
 
     private void Awake()
     {
@@ -36,7 +39,7 @@ public class SwipeDetection : MonoBehaviour
     {
         startPosition = position;
         startTime = time;
-        DetectSwipe();
+        touchStart = true;
     }
 
     private void CurrentFingerPosition(Vector2 position, float time)
@@ -48,6 +51,7 @@ public class SwipeDetection : MonoBehaviour
     {
         endPosition = position;
         endTime = time;
+        touchStart=false;
         //DetectSwipe();
     }
 
@@ -59,6 +63,6 @@ public class SwipeDetection : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(inputManager.PrimaryPosition());
+        //Debug.Log(inputManager.PrimaryPosition());
     }
 }

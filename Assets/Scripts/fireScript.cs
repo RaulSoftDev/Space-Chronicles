@@ -34,6 +34,8 @@ public class fireScript : MonoBehaviour
     private void Start()
     {
         audioSourcePlayer = GetComponent<AudioSource>();
+
+        StartCoroutine(ShootBullet());
     }
 
 
@@ -41,12 +43,7 @@ public class fireScript : MonoBehaviour
     {
         SaveSlideValue();
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ShootBullet();
-        }
-
-        CheckRocketAvailability();
+        //CheckRocketAvailability();
     }
 
 
@@ -57,12 +54,17 @@ public class fireScript : MonoBehaviour
     }
 
     //Instantiate the basic bullet
-    void ShootBullet()
+    private IEnumerator ShootBullet()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
-        audioSourcePlayer.PlayOneShot(bulletSound);
+        while (true)
+        {
+            yield return new WaitUntil(() => SwipeDetection.Instance.touchStart);
+            GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
+            audioSourcePlayer.PlayOneShot(bulletSound);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     //Set the rocket current status
