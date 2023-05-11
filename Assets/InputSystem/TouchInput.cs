@@ -15,68 +15,46 @@ public class @TouchInput : IInputActionCollection, IDisposable
     ""name"": ""TouchInput"",
     ""maps"": [
         {
-            ""name"": ""Hold"",
+            ""name"": ""Touch"",
             ""id"": ""bebf8401-5d82-4f3d-a893-2198f1752a37"",
             ""actions"": [
                 {
-                    ""name"": ""HoldOnTouch"",
-                    ""type"": ""Value"",
-                    ""id"": ""d693146f-70a2-4985-86c8-0746cc17bf5e"",
+                    ""name"": ""Primary Contact"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d9bf8679-fc3f-4afd-89e5-9c54e7e62e6d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold""
+                    ""interactions"": ""Press""
                 },
                 {
-                    ""name"": ""Shoot"",
-                    ""type"": ""Value"",
-                    ""id"": ""4b0d7b18-889a-4ce9-8f3f-63768085fbd7"",
-                    ""expectedControlType"": """",
+                    ""name"": ""Primary position"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""bf5eacc8-e313-4080-9882-f3a22e311041"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""1D Axis Touch"",
-                    ""id"": ""8fd07ba1-f333-43f0-9fda-a0be578ff051"",
-                    ""path"": ""1DAxis"",
+                    ""name"": """",
+                    ""id"": ""468d0d92-69d4-4530-8c34-fee4882b03f0"",
+                    ""path"": ""<Touchscreen>/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HoldOnTouch"",
-                    ""isComposite"": true,
+                    ""action"": ""Primary Contact"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""2e42db0f-5969-4de1-beab-54830e52fc21"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HoldOnTouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""44abaf81-959d-448f-bf99-d6b1e5ee0e02"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HoldOnTouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
-                    ""id"": ""9940928a-d43e-455c-bf11-0db2c380fdd7"",
-                    ""path"": ""<Touchscreen>/primaryTouch/indirectTouch"",
+                    ""id"": ""006a45d7-cd90-4e31-ac75-65871c7a7add"",
+                    ""path"": ""<Touchscreen>/primaryTouch/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Primary position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -85,10 +63,10 @@ public class @TouchInput : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // Hold
-        m_Hold = asset.FindActionMap("Hold", throwIfNotFound: true);
-        m_Hold_HoldOnTouch = m_Hold.FindAction("HoldOnTouch", throwIfNotFound: true);
-        m_Hold_Shoot = m_Hold.FindAction("Shoot", throwIfNotFound: true);
+        // Touch
+        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
+        m_Touch_PrimaryContact = m_Touch.FindAction("Primary Contact", throwIfNotFound: true);
+        m_Touch_Primaryposition = m_Touch.FindAction("Primary position", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -135,49 +113,49 @@ public class @TouchInput : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // Hold
-    private readonly InputActionMap m_Hold;
-    private IHoldActions m_HoldActionsCallbackInterface;
-    private readonly InputAction m_Hold_HoldOnTouch;
-    private readonly InputAction m_Hold_Shoot;
-    public struct HoldActions
+    // Touch
+    private readonly InputActionMap m_Touch;
+    private ITouchActions m_TouchActionsCallbackInterface;
+    private readonly InputAction m_Touch_PrimaryContact;
+    private readonly InputAction m_Touch_Primaryposition;
+    public struct TouchActions
     {
         private @TouchInput m_Wrapper;
-        public HoldActions(@TouchInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @HoldOnTouch => m_Wrapper.m_Hold_HoldOnTouch;
-        public InputAction @Shoot => m_Wrapper.m_Hold_Shoot;
-        public InputActionMap Get() { return m_Wrapper.m_Hold; }
+        public TouchActions(@TouchInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PrimaryContact => m_Wrapper.m_Touch_PrimaryContact;
+        public InputAction @Primaryposition => m_Wrapper.m_Touch_Primaryposition;
+        public InputActionMap Get() { return m_Wrapper.m_Touch; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(HoldActions set) { return set.Get(); }
-        public void SetCallbacks(IHoldActions instance)
+        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
+        public void SetCallbacks(ITouchActions instance)
         {
-            if (m_Wrapper.m_HoldActionsCallbackInterface != null)
+            if (m_Wrapper.m_TouchActionsCallbackInterface != null)
             {
-                @HoldOnTouch.started -= m_Wrapper.m_HoldActionsCallbackInterface.OnHoldOnTouch;
-                @HoldOnTouch.performed -= m_Wrapper.m_HoldActionsCallbackInterface.OnHoldOnTouch;
-                @HoldOnTouch.canceled -= m_Wrapper.m_HoldActionsCallbackInterface.OnHoldOnTouch;
-                @Shoot.started -= m_Wrapper.m_HoldActionsCallbackInterface.OnShoot;
-                @Shoot.performed -= m_Wrapper.m_HoldActionsCallbackInterface.OnShoot;
-                @Shoot.canceled -= m_Wrapper.m_HoldActionsCallbackInterface.OnShoot;
+                @PrimaryContact.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryContact;
+                @PrimaryContact.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryContact;
+                @PrimaryContact.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryContact;
+                @Primaryposition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryposition;
+                @Primaryposition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryposition;
+                @Primaryposition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryposition;
             }
-            m_Wrapper.m_HoldActionsCallbackInterface = instance;
+            m_Wrapper.m_TouchActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @HoldOnTouch.started += instance.OnHoldOnTouch;
-                @HoldOnTouch.performed += instance.OnHoldOnTouch;
-                @HoldOnTouch.canceled += instance.OnHoldOnTouch;
-                @Shoot.started += instance.OnShoot;
-                @Shoot.performed += instance.OnShoot;
-                @Shoot.canceled += instance.OnShoot;
+                @PrimaryContact.started += instance.OnPrimaryContact;
+                @PrimaryContact.performed += instance.OnPrimaryContact;
+                @PrimaryContact.canceled += instance.OnPrimaryContact;
+                @Primaryposition.started += instance.OnPrimaryposition;
+                @Primaryposition.performed += instance.OnPrimaryposition;
+                @Primaryposition.canceled += instance.OnPrimaryposition;
             }
         }
     }
-    public HoldActions @Hold => new HoldActions(this);
-    public interface IHoldActions
+    public TouchActions @Touch => new TouchActions(this);
+    public interface ITouchActions
     {
-        void OnHoldOnTouch(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
+        void OnPrimaryContact(InputAction.CallbackContext context);
+        void OnPrimaryposition(InputAction.CallbackContext context);
     }
 }

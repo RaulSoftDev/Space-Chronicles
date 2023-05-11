@@ -2,68 +2,46 @@
     "name": "TouchInput",
     "maps": [
         {
-            "name": "Hold",
+            "name": "Touch",
             "id": "bebf8401-5d82-4f3d-a893-2198f1752a37",
             "actions": [
                 {
-                    "name": "HoldOnTouch",
-                    "type": "Value",
-                    "id": "d693146f-70a2-4985-86c8-0746cc17bf5e",
+                    "name": "Primary Contact",
+                    "type": "PassThrough",
+                    "id": "d9bf8679-fc3f-4afd-89e5-9c54e7e62e6d",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold"
+                    "interactions": "Press"
                 },
                 {
-                    "name": "Shoot",
-                    "type": "Value",
-                    "id": "4b0d7b18-889a-4ce9-8f3f-63768085fbd7",
-                    "expectedControlType": "",
+                    "name": "Primary position",
+                    "type": "PassThrough",
+                    "id": "bf5eacc8-e313-4080-9882-f3a22e311041",
+                    "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "Tap"
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
                 {
-                    "name": "1D Axis Touch",
-                    "id": "8fd07ba1-f333-43f0-9fda-a0be578ff051",
-                    "path": "1DAxis",
+                    "name": "",
+                    "id": "468d0d92-69d4-4530-8c34-fee4882b03f0",
+                    "path": "<Touchscreen>/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HoldOnTouch",
-                    "isComposite": true,
+                    "action": "Primary Contact",
+                    "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "2e42db0f-5969-4de1-beab-54830e52fc21",
-                    "path": "<Touchscreen>/primaryTouch/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "HoldOnTouch",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "44abaf81-959d-448f-bf99-d6b1e5ee0e02",
-                    "path": "<Touchscreen>/primaryTouch/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "HoldOnTouch",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
-                    "id": "9940928a-d43e-455c-bf11-0db2c380fdd7",
-                    "path": "<Touchscreen>/primaryTouch/indirectTouch",
+                    "id": "006a45d7-cd90-4e31-ac75-65871c7a7add",
+                    "path": "<Touchscreen>/primaryTouch/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Primary position",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
