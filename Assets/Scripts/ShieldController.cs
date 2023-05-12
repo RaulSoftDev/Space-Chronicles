@@ -10,6 +10,7 @@ public class ShieldController : MonoBehaviour
     public Image shieldSliderColor;
     public bool shieldActive = false;
     public Button shieldButton;
+    public Image buttonBackground360;
 
     private void Start()
     {
@@ -28,7 +29,8 @@ public class ShieldController : MonoBehaviour
 
     private void SaveCurrentShieldValue()
     {
-        shieldSlider.value = PlayerHealth.instance.playerShieldPoints;
+        //shieldSlider.value = PlayerHealth.instance.playerShieldPoints;
+        buttonBackground360.fillAmount = (PlayerHealth.instance.playerShieldPoints / 2) / 10;
     }
 
     private IEnumerator shieldTime()
@@ -36,10 +38,11 @@ public class ShieldController : MonoBehaviour
         shieldActive = true;
         PlayerHealth.instance.GetDamage = false;
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
-        shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", true);
+        //shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", true);
         yield return new WaitForSecondsRealtime(10);
-        shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", false);
-        shieldSliderColor.color = new Color(0, 242, 255);
+        /*shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", false);
+        shieldSliderColor.color = new Color(0, 242, 255);*/
+        buttonBackground360.fillAmount = 0;
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
         PlayerHealth.instance.GetDamage = true;
         PlayerHealth.instance.playerShieldPoints = 0;

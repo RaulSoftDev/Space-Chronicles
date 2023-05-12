@@ -18,6 +18,8 @@ public class fireScript : MonoBehaviour
     public float rocketForce = 5;
     public AudioClip bulletSound;
     public AudioClip rocketSound;
+    public Image rocketButtonBackground;
+    public Button rocketButton;
 
     private void Awake()
     {
@@ -43,7 +45,7 @@ public class fireScript : MonoBehaviour
     {
         SaveSlideValue();
 
-        //CheckRocketAvailability();
+        CheckRocketAvailability();
     }
 
 
@@ -72,33 +74,42 @@ public class fireScript : MonoBehaviour
     {
         switch (PlayerHealth.instance.powerSlider.value)
         {
+            case 0:
+                rocketButtonBackground.fillAmount = 0f;
+                rocketButton.interactable = false;
+                break;
             case 1:
-                PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
-                if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    LaunchRocket();
-                    PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 0.24f);
-                    PlayerHealth.instance.playerPoints = 0;
-                }
+                rocketButtonBackground.fillAmount = 0.33f;
+                //PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
+                rocketButton.interactable = true;
                 return;
             case 2:
-                PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
-                if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    LaunchRocket();
-                    PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 0.24f);
-                    PlayerHealth.instance.playerPoints = 10;
-                }
+                rocketButtonBackground.fillAmount = 0.66f;
+                //PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
                 return;
             case 3:
-                PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
-                if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    LaunchRocket();
-                    PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 0.24f);
-                    PlayerHealth.instance.playerPoints = 20;
-                }
+                rocketButtonBackground.fillAmount = 1f;
+                //PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
                 return;
+        }
+    }
+
+    public void RocketManagement()
+    {
+        switch (PlayerHealth.instance.powerSlider.value)
+        {
+            case 1:
+                LaunchRocket();
+                PlayerHealth.instance.playerPoints = 0;
+                break;
+            case 2:
+                LaunchRocket();
+                PlayerHealth.instance.playerPoints = 10;
+                break;
+            case 3:
+                LaunchRocket();
+                PlayerHealth.instance.playerPoints = 20;
+                break;
         }
     }
 
