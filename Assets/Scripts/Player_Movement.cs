@@ -24,7 +24,7 @@ public class Player_Movement : MonoBehaviour
 
         if (swipeDetection.touchStart)
         {
-            transform.position += new Vector3(inputManager.PrimaryPosition().x, 0, 0) * playerSpeed * Time.deltaTime;
+            transform.position = new Vector3(Mathf.Lerp(transform.position.x, inputManager.PrimaryPosition().x, Time.deltaTime * playerSpeed), Mathf.Lerp(transform.position.y, inputManager.PrimaryPosition().y, Time.deltaTime * playerSpeed), 0);
         }
     }
 

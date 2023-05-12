@@ -9,6 +9,7 @@ public class ShieldController : MonoBehaviour
     public Slider shieldSlider;
     public Image shieldSliderColor;
     public bool shieldActive = false;
+    public Button shieldButton;
 
     private void Start()
     {
@@ -18,6 +19,11 @@ public class ShieldController : MonoBehaviour
     private void Update()
     {
         SaveCurrentShieldValue();
+        
+        if(shieldActive)
+        {
+            shieldButton.interactable = false;
+        }
     }
 
     private void SaveCurrentShieldValue()
@@ -25,7 +31,7 @@ public class ShieldController : MonoBehaviour
         shieldSlider.value = PlayerHealth.instance.playerShieldPoints;
     }
 
-    IEnumerator shieldTime()
+    private IEnumerator shieldTime()
     {
         shieldActive = true;
         PlayerHealth.instance.GetDamage = false;
@@ -40,12 +46,17 @@ public class ShieldController : MonoBehaviour
         shieldActive=false;
     }
 
+    public void TurnShieldOn()
+    {
+        StartCoroutine(shieldTime());
+    }
+
     IEnumerator EnableShield()
     {
         while (true)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.playerShieldPoints == 20 && Input.GetKeyDown(KeyCode.Q) && !shieldActive);
-            StartCoroutine(shieldTime());
+            yield return new WaitUntil(() => PlayerHealth.instance.playerShieldPoints == 20 && !shieldActive);
+            shieldButton.interactable = true;
         }
     }
 }
