@@ -1381,7 +1381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &757162076
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2145,7 +2145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1373048197
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2729,7 +2729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1738052827
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3238,38 +3238,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 64730634, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 0
+    - target: {fileID: 753820820, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.93
       objectReference: {fileID: 0}
-    - target: {fileID: 220512831200962856, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: playerSpeed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 220512831200962856, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: playerActionSet
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: bedaaf1220280e044a53fdf466791b41, type: 3}
     - target: {fileID: 220512831200962858, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
       propertyPath: rocketButton
       value: 
       objectReference: {fileID: 18966431}
     - target: {fileID: 220512831200962858, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: shieldSlider
-      value: 
-      objectReference: {fileID: 1494267836}
-    - target: {fileID: 220512831200962858, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: shieldSliderColor
-      value: 
-      objectReference: {fileID: 34229523}
-    - target: {fileID: 220512831200962858, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
       propertyPath: rocketButtonBackground
       value: 
       objectReference: {fileID: 1922512405}
-    - target: {fileID: 4066883973385641544, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -9083004389754896849, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
     - target: {fileID: 4872061765653834096, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
       propertyPath: shieldButton
       value: 
@@ -3334,10 +3314,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5891335943036934882, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -9083004389754896849, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
     - target: {fileID: 6551248735911202635, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
       propertyPath: shoot1
       value: 
@@ -3355,10 +3331,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1280861347}
     - target: {fileID: 6551248735911202635, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: lifeText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6551248735911202635, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
       propertyPath: powerSlider
       value: 
       objectReference: {fileID: 1473257174}
@@ -3366,10 +3338,6 @@ PrefabInstance:
       propertyPath: healthSlider
       value: 
       objectReference: {fileID: 1338586139}
-    - target: {fileID: 6551248735911202635, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
-      propertyPath: playerHealth
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 725a33b0ee257de4c8bd136dd1a92c95, type: 3}
 --- !u!1001 &1663134548200132018
@@ -3401,7 +3369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663134547066047542, guid: f798fa1bdf612c74cb6832922eff6e0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.09
       objectReference: {fileID: 0}
     - target: {fileID: 1663134547066047542, guid: f798fa1bdf612c74cb6832922eff6e0d, type: 3}
       propertyPath: m_LocalPosition.z

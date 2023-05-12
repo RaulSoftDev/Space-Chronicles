@@ -114,7 +114,7 @@ AudioSource:
   m_GameObject: {fileID: 64730631}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -9083004389754896849, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -238,7 +238,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753820819}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.94, z: 0}
+  m_LocalPosition: {x: 0, y: 7.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5774827217732626862}
@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acf713fab66d1f4796d542bbafd2bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 8
+  playerSpeed: 1.5
 --- !u!114 &220512831200962858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,14 +412,12 @@ MonoBehaviour:
   firePosition: {fileID: 753820820}
   bulletPrefab: {fileID: 6713682823303231800, guid: 4849512a9b047ba47a4e7cab720902cc, type: 3}
   rocketPrefab: {fileID: 6713682823303231800, guid: 0925f07ed0f215745b7f4ff0e547ef0a, type: 3}
-  shieldObject: {fileID: 64730631}
-  shieldSlider: {fileID: 0}
-  shieldSliderColor: {fileID: 0}
   bulletForce: 5
   rocketForce: 5
   bulletSound: {fileID: 8300000, guid: 184a33d9636751b48b2babd194b0f217, type: 3}
   rocketSound: {fileID: 8300000, guid: a278ab118b4eeb742abd347a39845182, type: 3}
-  shieldActive: 0
+  rocketButtonBackground: {fileID: 0}
+  rocketButton: {fileID: 0}
 --- !u!114 &6551248735911202635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad93aae15dd455542890ab7bfc4563bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: 10
+  playerHealth: 11
   GetDamage: 0
   healthSlider: {fileID: 0}
   powerSlider: {fileID: 0}
@@ -461,6 +459,8 @@ MonoBehaviour:
   shieldSlider: {fileID: 0}
   shieldSliderColor: {fileID: 0}
   shieldActive: 0
+  shieldButton: {fileID: 0}
+  buttonBackground360: {fileID: 0}
 --- !u!95 &1727958607
 Animator:
   serializedVersion: 3
@@ -489,7 +489,7 @@ AudioSource:
   m_GameObject: {fileID: 5726821054428788995}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -9083004389754896849, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

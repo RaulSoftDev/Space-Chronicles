@@ -8,6 +8,7 @@ public class Rocket : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.LogError(collision.name);
         switch (collision.tag)
         {
             case "IBasic":
