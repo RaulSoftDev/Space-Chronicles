@@ -17,6 +17,7 @@ TagManager:
   - Missile
   - Rocket
   - Music
+  - UI
   layers:
   - Default
   - TransparentFX
