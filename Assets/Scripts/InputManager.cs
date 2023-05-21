@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class InputManager : Singleton<InputManager>
 {
@@ -16,7 +18,22 @@ public class InputManager : Singleton<InputManager>
     private TouchInput touchInput;
     private Camera mainCamera;
 
+    public bool joystickMode = false;
     public Vector2 currentPosition;
+
+    public int FirstFingerTouchID()
+    {
+        foreach (var touch in Touch.activeTouches)
+        {
+            // Only respond to first finger
+            if (touch.finger.index == 0 && touch.isInProgress)
+            {
+                return touch.finger.index;
+            }
+        }
+
+        return -1;
+    }
 
     private void Awake()
     {
@@ -27,11 +44,13 @@ public class InputManager : Singleton<InputManager>
     private void OnEnable()
     {
         touchInput.Enable();
+        EnhancedTouchSupport.Enable();
     }
 
     private void OnDisable()
     {
         touchInput.Disable();
+        EnhancedTouchSupport.Disable();
     }
 
     void Start()

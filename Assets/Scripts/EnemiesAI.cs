@@ -54,22 +54,44 @@ public class EnemiesAI : MonoBehaviour
     //External Scripts
     PlayerHealth playerScript;
 
+    private float rotateSpeed = 2f;
+    private float radius = 0.75f;
+    private float angle;
+    private Vector2 center;
+    private float counterZero = 0;
 
-
-    private void Awake()
+    private void Start()
     {
-        switch(gameObject.tag)
+        LoadShipsAttacks();
+
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+        enemiesAnim = GetComponent<Animator>();
+        audioSourceEnemies = GetComponent<AudioSource>();
+
+        canAttack = true;
+        center = transform.localPosition;
+
+        StartCoroutine(EnemyDeathCheck());
+    }
+
+    private void LoadShipsAttacks()
+    {
+        switch (gameObject.tag)
         {
             case "IBasic":
                 currentHealth = healthI;
                 StartCoroutine(WaitingForAimBasicShoot());
+                StartCoroutine(basicMovement());
+                //StartCoroutine(basicEnemiesRotation(transform));
                 return;
             case "IIMisile":
                 currentHealth = healthII;
                 StartCoroutine(WaitingForAimMisile());
+                StartCoroutine(basicMovement());
                 return;
             case "IIShield":
                 currentHealth = healthII;
+                StartCoroutine(basicMovement());
                 return;
             case "IIIMisile":
                 currentHealth = healthIII;
@@ -88,17 +110,6 @@ public class EnemiesAI : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
-        enemiesAnim = GetComponent<Animator>();
-        audioSourceEnemies = GetComponent<AudioSource>();
-
-        canAttack = true;
-
-        StartCoroutine(EnemyDeathCheck());
-    }
-
     //Enemy health check
     private IEnumerator EnemyDeathCheck()
     {
@@ -106,8 +117,19 @@ public class EnemiesAI : MonoBehaviour
         {
             yield return new WaitUntil(() => currentHealth <= 0);
             Debug.LogWarning("Enemy death");
-            EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
+            //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
             Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator basicEnemiesRotation(Transform t)
+    {
+        while(Application.isPlaying)
+        {
+            yield return new WaitUntil(() => gameObject.tag == "IBasic");
+            angle += rotateSpeed * Time.deltaTime;
+            var offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
+            t.localPosition = new Vector2(transform.parent.GetChild(3).transform.localPosition.x, transform.parent.GetChild(3).transform.localPosition.y) + offset;
         }
     }
 
@@ -131,14 +153,64 @@ public class EnemiesAI : MonoBehaviour
         }
     }
 
+    private IEnumerator basicMovement()
+    {
+        yield return new WaitUntil(() => EnemyBehaviour.instance.enemyVertical);
+        while (Application.isPlaying)
+        {
+            float counter = 0f;
+            while (counter < 2)
+            {
+                transform.localPosition = Vector3.Lerp(new Vector3(transform.localPosition.x, -1f, transform.localPosition.z), new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z), counter / 2);
+                counter += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.01f);
+            counter = 0f;
+            while (counter < 2)
+            {
+                transform.localPosition = Vector3.Lerp(new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z), new Vector3(transform.localPosition.x, -1f, transform.localPosition.z), counter / 2);
+                counter += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+    //To be implemented later
+    private IEnumerator circleMovement()
+    {
+        Vector3 localOriginalPosition = transform.localPosition;
+        while (Application.isPlaying)
+        {
+            float counter = 0f;
+            while(counter < 2)
+            {
+                transform.localPosition = Vector3.Slerp(new Vector3(localOriginalPosition.x, localOriginalPosition.y, localOriginalPosition.z), new Vector3(localOriginalPosition.x, -0.15f, localOriginalPosition.z), counter / 2);
+                counter += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.01f);
+            counter = 0;
+            while (counter < 2)
+            {
+                transform.localPosition = Vector3.Slerp(new Vector3(localOriginalPosition.x, -0.15f, localOriginalPosition.z), new Vector3(localOriginalPosition.x, localOriginalPosition.y, localOriginalPosition.z), counter / 2);
+                counter += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
     //Assignment for Aim&Shoot
     IEnumerator WaitingForAimBasicShoot()
     {
         while (true)
         {
-            firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
+            yield return new WaitUntil(() => transform.parent.transform.parent.transform.position.y < 2f);
+            //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
             BasicShoot();
-            yield return new WaitForSeconds(Random.Range(2, 10));
+            yield return new WaitForSeconds(Random.Range(2, 5));
         }
     }
 
@@ -201,11 +273,11 @@ public class EnemiesAI : MonoBehaviour
     {
         if (canAttack)
         {
-            GameObject bullet = Instantiate(bulletEnemiesPrefab, firePositionEnemies.position, firePositionEnemies.rotation);
+            GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), transform.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(-firePositionEnemies.up * bulletForce, ForceMode2D.Impulse);
+            rb.AddForce(-transform.up * bulletForce, ForceMode2D.Impulse);
             //EnemySquadMove.instance.GetComponent<AudioSource>().Stop();
-            EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(basicShootSound);
+            //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(basicShootSound);
         }
     }
 
@@ -218,7 +290,7 @@ public class EnemiesAI : MonoBehaviour
             Rigidbody2D rb = misile.GetComponent<Rigidbody2D>();
             rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Force);
             //EnemySquadMove.instance.GetComponent<AudioSource>().Stop();
-            EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(misileSound);
+            //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(misileSound);
         }
     }
 

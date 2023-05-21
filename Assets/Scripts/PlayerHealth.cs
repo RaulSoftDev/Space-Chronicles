@@ -49,6 +49,7 @@ public class PlayerHealth : MonoBehaviour
         while (true)
         {
             yield return new WaitUntil(() => playerHealth <= 0);
+            PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadScene(4);
         }
     } 

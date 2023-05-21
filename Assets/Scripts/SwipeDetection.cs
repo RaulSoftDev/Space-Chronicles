@@ -42,27 +42,15 @@ public class SwipeDetection : Singleton<SwipeDetection>
         touchStart = true;
     }
 
-    private void CurrentFingerPosition(Vector2 position, float time)
-    {
-        //Debug.Log(position + " : " + time);
-    }
-
     private void SwipeEnd(Vector2 position, float time)
     {
         endPosition = position;
         endTime = time;
         touchStart=false;
-        //DetectSwipe();
     }
 
     private void DetectSwipe()
     {
         Debug.Log("Swipe Detected");
-        //Debug.DrawLine(startPosition, endPosition, Color.red, 5f);
-    }
-
-    private void Update()
-    {
-        //Debug.Log(inputManager.PrimaryPosition());
     }
 }

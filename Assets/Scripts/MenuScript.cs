@@ -27,6 +27,11 @@ public class MenuScript : MonoBehaviour
         StartCoroutine(waitForScene(scene));
     }
 
+    public void RestartPreviousScene()
+    {
+        StartCoroutine(LoadPreviousScene());
+    }
+
     public void ExitMenu()
     {
         Application.Quit();
@@ -34,6 +39,7 @@ public class MenuScript : MonoBehaviour
 
     IEnumerator waitForScene(int scene)
     {
+        PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(scene);
     }
@@ -42,6 +48,12 @@ public class MenuScript : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Application.Quit();
+    }
+
+    IEnumerator LoadPreviousScene()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(PlayerPrefs.GetInt("LastScene"));
     }
 
     private void SetCurrentButtonText()

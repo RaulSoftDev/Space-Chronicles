@@ -8,20 +8,30 @@ public class Rocket : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.LogError(collision.name);
+        GameObject hit;
+
         switch (collision.tag)
         {
             case "IBasic":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 break;
             case "IIMisile":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 break;
             case "IIShield":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of shield enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield -= 3;
                 //Then we check for shield points and activate the animation needed
@@ -41,11 +51,17 @@ public class Rocket : MonoBehaviour
                 }
                 break;
             case "IIIMisile":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 break;
             case "IIIShield":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of shield enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield -= 3;
                 //Then we check for shield points and activate the animation needed
@@ -65,6 +81,9 @@ public class Rocket : MonoBehaviour
                 }
                 break;
             case "Boss":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of boss enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield -= 3;
                 //Then we check for shield points and activate the animation needed
@@ -85,9 +104,6 @@ public class Rocket : MonoBehaviour
                 break;
         }
 
-        //Instantiate explosion on collision
-        GameObject hit = Instantiate(explosionFx, transform.position, transform.rotation);
-        Destroy(hit, 1.6f);
         Destroy(gameObject);
     }
 }

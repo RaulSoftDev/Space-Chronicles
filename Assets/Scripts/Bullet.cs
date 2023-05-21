@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class Bullet : MonoBehaviour
 {
@@ -10,9 +11,15 @@ public class Bullet : MonoBehaviour
     //Check if the bullet have collision on the enemy
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Explosion on hit
+        GameObject hit;
+
         switch (collision.tag)
         {
             case "IBasic":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
@@ -20,6 +27,9 @@ public class Bullet : MonoBehaviour
                 PlayerHealth.instance.playerShieldPoints++;
                 break;
             case "IIMisile":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
@@ -27,6 +37,9 @@ public class Bullet : MonoBehaviour
                 PlayerHealth.instance.playerShieldPoints++;
                 break;
             case "IIShield":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of shield enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield--;
                 PlayerHealth.instance.playerPoints++;
@@ -48,6 +61,9 @@ public class Bullet : MonoBehaviour
                 }
                 break;
             case "IIIMisile":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
@@ -55,6 +71,9 @@ public class Bullet : MonoBehaviour
                 PlayerHealth.instance.playerShieldPoints++;
                 break;
             case "IIIShield":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of shield enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield--;
                 PlayerHealth.instance.playerPoints++;
@@ -76,6 +95,9 @@ public class Bullet : MonoBehaviour
                 }
                 break;
             case "Boss":
+                //Instantiate explosion on collision
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
                 //In case of boss enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield--;
                 PlayerHealth.instance.playerPoints++;
@@ -98,9 +120,6 @@ public class Bullet : MonoBehaviour
                 break;
         }
 
-        //Instantiate explosion on collision
-        GameObject hit = Instantiate(explosionFx, transform.position, transform.rotation);
-        Destroy(hit, 1.6f);
         Destroy(gameObject);
     }
 

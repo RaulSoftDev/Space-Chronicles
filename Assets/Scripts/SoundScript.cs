@@ -60,6 +60,12 @@ public class SoundScript : MonoBehaviour
                 audioSource.clip = song;
                 audioSource.Play();
                 break;
+            case "Round1Joystick":
+                audioSource.Stop();
+                audioSource.loop = true;
+                audioSource.clip = song;
+                audioSource.Play();
+                break;
             case "MainMenu":
                 if(audioSource.clip != songMenu)
                 {

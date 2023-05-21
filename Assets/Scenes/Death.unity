@@ -629,8 +629,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 736487566}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: StartMenu
-        m_Mode: 3
+        m_MethodName: RestartPreviousScene
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1431,7 +1431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 736487562}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1761710296

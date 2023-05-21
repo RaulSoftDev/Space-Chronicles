@@ -7,6 +7,10 @@ public class EnemiesBullet : MonoBehaviour
 
     public GameObject enemiesExplosionFx;
 
+    private void Start()
+    {
+        StartCoroutine(DeleteBulletOnTime());
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,6 +28,15 @@ public class EnemiesBullet : MonoBehaviour
             Destroy(gameObject);
         }
 
+    }
+
+    private IEnumerator DeleteBulletOnTime()
+    {
+        while (Application.isPlaying)
+        {
+            yield return new WaitForSeconds(3f);
+            Destroy(gameObject);
+        }
     }
 
 }

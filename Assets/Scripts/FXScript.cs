@@ -25,12 +25,12 @@ public class FXScript : MonoBehaviour
         Debug.LogWarning("Enemy damaged");
         if (clip.name == "EnemiesShield")
         {
-            EnemySquadMove.instance.gameObject.GetComponent<AudioSource>().clip = clip;
-            EnemySquadMove.instance.gameObject.GetComponent<AudioSource>().Play();
+            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().clip = clip;
+            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().Play();
         }
         else
         {
-            EnemySquadMove.instance.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
         }
     }
 }
