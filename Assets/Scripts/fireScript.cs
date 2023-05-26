@@ -84,6 +84,7 @@ public class fireScript : MonoBehaviour
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
             audioSourcePlayer.PlayOneShot(bulletSound);
+            Debug.Log("ShootOut");
             yield return new WaitForSeconds(0.3f);
         }
     }

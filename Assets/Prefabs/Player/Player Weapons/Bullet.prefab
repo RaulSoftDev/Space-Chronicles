@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 14
   m_Sprite: {fileID: 21300000, guid: de7cd932501094988a25e04e44b1b9f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -121,7 +121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionFx: {fileID: 8755856670773691837, guid: 897f6a8aaa514654b923a2c4ab8bae86, type: 3}
-  bulletFX: {fileID: 8300000, guid: 2f772bfb1355cd84b9e300b5a24ab06a, type: 3}
 --- !u!61 &-7045024578943527018
 BoxCollider2D:
   m_ObjectHideFlags: 0

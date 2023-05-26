@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour
         noEnemiesLeft = false;
         currentSquad = Instantiate(squads[round], spawnPoint.transform.position, spawnPoint.transform.rotation);
         enemyText.SetActive(true);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         enemyText.SetActive(false);
         Debug.LogWarning("Spawning Squad");
         StartCoroutine(EnemyBehaviour.instance.SetUpEnemies(currentSquad.transform));
@@ -71,5 +71,6 @@ public class LevelManager : MonoBehaviour
         }
         noEnemiesLeft = true;
         Debug.Log("Round Clear");
+        EnemyBehaviour.instance.enemyInPosition = false;
     }
 }

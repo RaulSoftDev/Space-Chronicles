@@ -28,7 +28,7 @@ public class Player_Movement : MonoBehaviour
     {
         touchXPosition = swipeDetection.startPosition.x - inputManager.PrimaryPosition().x;
 
-        if(playerInPos)
+        if (playerInPos)
         {
             if (!inputManager.joystickMode)
             {

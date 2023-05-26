@@ -118,6 +118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0410c78a81a1264fa1d5d60f988fc96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shieldObject: {fileID: 0}
+  shieldSlider: {fileID: 0}
+  shieldSliderColor: {fileID: 0}
+  shieldActive: 0
+  shieldButton: {fileID: 0}
+  buttonBackground360: {fileID: 0}
 --- !u!82 &5062608037282393032
 AudioSource:
   m_ObjectHideFlags: 0
@@ -335,7 +341,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 9
   m_Sprite: {fileID: 21300000, guid: 59a86de1012d42949ba6392c46032cf0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -364,7 +370,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 16, y: 20}
+    oldSize: {x: 16.015625, y: 20}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -387,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   shield: 8
+  enemiesAnim: {fileID: 0}
   basicShootSound: {fileID: 8300000, guid: 4dd05899cd82a564680fec2dbba55050, type: 3}
   misileSound: {fileID: 8300000, guid: e4946c556459be24fb24c2de01fcf744, type: 3}
   enemiesDeath: {fileID: 8300000, guid: 088fac503d8d751458306a44b831e7cf, type: 3}
@@ -562,6 +569,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8073572648183857476, guid: 0e6a23d141afb974da9bd0a29b1ec597, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8073572648183857477, guid: 0e6a23d141afb974da9bd0a29b1ec597, type: 3}
+      propertyPath: m_SortingOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8073572648183857482, guid: 0e6a23d141afb974da9bd0a29b1ec597, type: 3}

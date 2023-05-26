@@ -8,6 +8,11 @@ public class Bullet : MonoBehaviour
 
     public GameObject explosionFx;
 
+    private void Start()
+    {
+        StartCoroutine(DestroyOnSeconds());
+    }
+
     //Check if the bullet have collision on the enemy
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,6 +30,7 @@ public class Bullet : MonoBehaviour
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 PlayerHealth.instance.playerPoints++;
                 PlayerHealth.instance.playerShieldPoints++;
+                Destroy(gameObject);
                 break;
             case "IIMisile":
                 //Instantiate explosion on collision
@@ -35,6 +41,7 @@ public class Bullet : MonoBehaviour
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 PlayerHealth.instance.playerPoints++;
                 PlayerHealth.instance.playerShieldPoints++;
+                Destroy(gameObject);
                 break;
             case "IIShield":
                 //Instantiate explosion on collision
@@ -59,6 +66,7 @@ public class Bullet : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
             case "IIIMisile":
                 //Instantiate explosion on collision
@@ -69,6 +77,7 @@ public class Bullet : MonoBehaviour
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 PlayerHealth.instance.playerPoints++;
                 PlayerHealth.instance.playerShieldPoints++;
+                Destroy(gameObject);
                 break;
             case "IIIShield":
                 //Instantiate explosion on collision
@@ -93,6 +102,7 @@ public class Bullet : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
             case "Boss":
                 //Instantiate explosion on collision
@@ -117,9 +127,16 @@ public class Bullet : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
         }
 
+        //Destroy(gameObject);
+    }
+
+    private IEnumerator DestroyOnSeconds()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 

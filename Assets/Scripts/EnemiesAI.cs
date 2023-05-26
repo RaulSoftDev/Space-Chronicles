@@ -81,17 +81,17 @@ public class EnemiesAI : MonoBehaviour
             case "IBasic":
                 currentHealth = healthI;
                 StartCoroutine(WaitingForAimBasicShoot());
-                StartCoroutine(basicMovement());
+                //StartCoroutine(basicMovement());
                 //StartCoroutine(basicEnemiesRotation(transform));
                 return;
             case "IIMisile":
                 currentHealth = healthII;
                 StartCoroutine(WaitingForAimMisile());
-                StartCoroutine(basicMovement());
+                //StartCoroutine(basicMovement());
                 return;
             case "IIShield":
                 currentHealth = healthII;
-                StartCoroutine(basicMovement());
+                //StartCoroutine(basicMovement());
                 return;
             case "IIIMisile":
                 currentHealth = healthIII;
@@ -155,13 +155,16 @@ public class EnemiesAI : MonoBehaviour
 
     private IEnumerator basicMovement()
     {
-        yield return new WaitUntil(() => EnemyBehaviour.instance.enemyVertical);
+        Vector3 position1 = new Vector3(transform.localPosition.x, transform.localPosition.y - 1, transform.localPosition.z);
+        Vector3 position2 = new Vector3(transform.localPosition.x, transform.localPosition.y + 1, transform.localPosition.z);
+
+        yield return new WaitUntil(() => LevelManager.instance.currentSquad.transform.position.y <= 2.2f);
         while (Application.isPlaying)
         {
             float counter = 0f;
             while (counter < 2)
             {
-                transform.localPosition = Vector3.Lerp(new Vector3(transform.localPosition.x, -1f, transform.localPosition.z), new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z), counter / 2);
+                transform.localPosition = Vector3.Lerp(position2, position1, counter / 2);
                 counter += Time.deltaTime;
                 yield return null;
             }
@@ -169,7 +172,7 @@ public class EnemiesAI : MonoBehaviour
             counter = 0f;
             while (counter < 2)
             {
-                transform.localPosition = Vector3.Lerp(new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z), new Vector3(transform.localPosition.x, -1f, transform.localPosition.z), counter / 2);
+                transform.localPosition = Vector3.Lerp(position1, position2, counter / 2);
                 counter += Time.deltaTime;
                 yield return null;
             }
@@ -207,10 +210,10 @@ public class EnemiesAI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => transform.parent.transform.parent.transform.position.y < 2f);
+            yield return new WaitUntil(() => EnemyBehaviour.instance.enemyInPosition);
             //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
+            yield return new WaitForSeconds(Random.Range(1, 8));
             BasicShoot();
-            yield return new WaitForSeconds(Random.Range(2, 5));
         }
     }
 
@@ -225,7 +228,7 @@ public class EnemiesAI : MonoBehaviour
         }
     }
 
-    //Show up enemy Active Shield animation
+    //Show up enemy Active Shield damage animation
     public void ActivateEnemyShieldAnimation()
     {
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
@@ -288,7 +291,7 @@ public class EnemiesAI : MonoBehaviour
         {
             GameObject misile = Instantiate(misileEnemiesPrefab, firePositionEnemies.position, firePositionEnemies.rotation);
             Rigidbody2D rb = misile.GetComponent<Rigidbody2D>();
-            rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Force);
+            rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Impulse);
             //EnemySquadMove.instance.GetComponent<AudioSource>().Stop();
             //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(misileSound);
         }
