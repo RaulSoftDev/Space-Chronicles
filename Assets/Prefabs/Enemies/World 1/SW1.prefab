@@ -9898,6 +9898,7 @@ GameObject:
   - component: {fileID: 5456423552969050561}
   - component: {fileID: 8493582393611431307}
   - component: {fileID: 8174873240162236534}
+  - component: {fileID: 6964173139178033044}
   m_Layer: 0
   m_Name: SW1
   m_TagString: Untagged
@@ -10034,18 +10035,115 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   shield: 8
-  enemiesAnim: {fileID: 0}
+  enemiesAnim: {fileID: 5456423552969050561}
   basicShootSound: {fileID: 8300000, guid: 4dd05899cd82a564680fec2dbba55050, type: 3}
   misileSound: {fileID: 8300000, guid: e4946c556459be24fb24c2de01fcf744, type: 3}
   enemiesDeath: {fileID: 8300000, guid: 088fac503d8d751458306a44b831e7cf, type: 3}
   firePositionEnemies: {fileID: 0}
-  bulletEnemiesPrefab: {fileID: 0}
+  bulletEnemiesPrefab: {fileID: 804413135992331832, guid: d66655bf6458e4c4c8fd1a8fa3c2be05, type: 3}
   bulletForce: 5
   misileEnemiesPrefab: {fileID: 0}
   misileForce: 2.5
   shieldObject: {fileID: 6691985745154127988}
   group: {fileID: 0}
+  deathAnimation: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
   canAttack: 0
+--- !u!82 &6964173139178033044
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5960995355974889857}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -9083004389754896849, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6599195066543982924
 GameObject:
   m_ObjectHideFlags: 0
@@ -10139,6 +10237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 591836057480440800}
   - component: {fileID: 8599874099300914570}
+  - component: {fileID: 2964493400345843244}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -10183,6 +10282,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2964493400345843244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6691985745154127988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c59076b2962d5b44a894993f16f6633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alternateClip: {fileID: 0}
 --- !u!1 &8079185696530385271
 GameObject:
   m_ObjectHideFlags: 0

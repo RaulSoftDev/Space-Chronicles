@@ -580,7 +580,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 736487562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27759fa06b1931e4d9af65370097ca90, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ef5566a6ceb81d4baed43e5ef8787b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &736487567
@@ -628,8 +628,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 736487566}
-        m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: RestartPreviousScene
+        m_TargetAssemblyTypeName: SceneShortcut, Assembly-CSharp
+        m_MethodName: RestartLastScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -839,8 +839,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 952823121}
-        m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: MainMenu
+        m_TargetAssemblyTypeName: SceneShortcut, Assembly-CSharp
+        m_MethodName: LoadScene
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -897,7 +897,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 952823116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27759fa06b1931e4d9af65370097ca90, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ef5566a6ceb81d4baed43e5ef8787b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &952823122

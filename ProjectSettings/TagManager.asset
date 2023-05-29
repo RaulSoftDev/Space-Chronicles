@@ -18,6 +18,9 @@ TagManager:
   - Rocket
   - Music
   - UI
+  - BScreen
+  - BSParent
+  - SController
   layers:
   - Default
   - TransparentFX

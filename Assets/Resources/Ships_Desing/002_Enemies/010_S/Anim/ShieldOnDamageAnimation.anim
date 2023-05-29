@@ -1166,4 +1166,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: PlaySoundFXOnEnemies
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 160105990c461124faf198c8f5b0cd13, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
