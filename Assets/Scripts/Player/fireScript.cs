@@ -24,6 +24,9 @@ public class fireScript : MonoBehaviour
     [SerializeField] private Image rocketButtonBackground;
     [SerializeField] private Button rocketButton;
     [SerializeField] private Button basicAttackButton;
+    [SerializeField] private Image[] rocketLoadButtons;
+    [SerializeField] private Sprite rocketOn;
+    [SerializeField] private Sprite rocketOff;
     public bool canAttack = false;
     private InputManager inputManager;
 
@@ -46,6 +49,10 @@ public class fireScript : MonoBehaviour
         inputManager = InputManager.Instance;
 
         StartCoroutine(ShootBullet());
+        StartCoroutine(LoadRocketOff());
+        StartCoroutine(LoadRocket01());
+        StartCoroutine(LoadRocket02());
+        StartCoroutine(LoadRocket03());
     }
 
 
@@ -53,7 +60,7 @@ public class fireScript : MonoBehaviour
     {
         SaveSlideValue();
 
-        CheckRocketAvailability();
+        //CheckRocketAvailability();
 
         if (!inputManager.joystickMode)
         {
@@ -89,28 +96,93 @@ public class fireScript : MonoBehaviour
         }
     }
 
+    public void ShootBulletOnButton()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
+        audioSourcePlayer.PlayOneShot(bulletSound);
+        Debug.Log("ShootOut");
+    }
+
     //Set the rocket current status
     public void CheckRocketAvailability()
     {
         switch (PlayerHealth.instance.powerSlider.value)
         {
             case 0:
-                rocketButtonBackground.fillAmount = 0f;
+                //rocketButtonBackground.fillAmount = 0f;
+                rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
+                rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                rocketButton.image.sprite = rocketOff;
                 rocketButton.interactable = false;
                 break;
             case 1:
-                rocketButtonBackground.fillAmount = 0.33f;
+                rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                rocketLoadButtons[0].color = Color.white;
+                rocketButton.image.sprite = rocketOn;
+                //rocketButtonBackground.fillAmount = 0.33f;
                 //PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
                 rocketButton.interactable = true;
                 return;
             case 2:
-                rocketButtonBackground.fillAmount = 0.66f;
+                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                rocketLoadButtons[1].color = Color.white;
+                //rocketButtonBackground.fillAmount = 0.66f;
                 //PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
                 return;
             case 3:
-                rocketButtonBackground.fillAmount = 1f;
+                rocketLoadButtons[2].color = Color.white;
+                //rocketButtonBackground.fillAmount = 1f;
                 //PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
                 return;
+        }
+    }
+
+    private IEnumerator LoadRocketOff()
+    {
+        while (Application.isPlaying)
+        {
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 0);
+            rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
+            rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+            rocketButton.image.sprite = rocketOff;
+            rocketButton.interactable = false;
+        }
+    }
+
+    private IEnumerator LoadRocket01()
+    {
+        while (Application.isPlaying)
+        {
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 1);
+            rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+            rocketLoadButtons[0].color = Color.white;
+            rocketButton.image.sprite = rocketOn;
+            rocketButton.interactable = true;
+        }
+    }
+
+    private IEnumerator LoadRocket02()
+    {
+        while (Application.isPlaying)
+        {
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 2);
+            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+            rocketLoadButtons[1].color = Color.white;
+        }
+    }
+
+    private IEnumerator LoadRocket03()
+    {
+        while (Application.isPlaying)
+        {
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 3);
+            rocketLoadButtons[2].color = Color.white;
         }
     }
 

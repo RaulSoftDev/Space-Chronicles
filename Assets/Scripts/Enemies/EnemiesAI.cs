@@ -116,14 +116,12 @@ public class EnemiesAI : MonoBehaviour
     //Enemy health check
     private IEnumerator EnemyDeathCheck()
     {
-        while(true)
-        {
-            yield return new WaitUntil(() => currentHealth <= 0);
-            Debug.LogWarning("Enemy death");
-            Instantiate(deathAnimation, transform.position, transform.rotation);
-            //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
-            Destroy(gameObject);
-        }
+        yield return new WaitUntil(() => currentHealth < 1);
+        Debug.LogWarning("Enemy death");
+        transform.parent = null;
+        GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation);
+        //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
+        Destroy(gameObject);
     }
 
     private IEnumerator basicEnemiesRotation(Transform t)
@@ -263,8 +261,8 @@ public class EnemiesAI : MonoBehaviour
     IEnumerator shieldWait()
     {
         yield return new WaitForSeconds(0.5f);
-        shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
-        yield return new WaitForSeconds(0.27f);
+        /*shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
+        yield return new WaitForSeconds(0.27f);*/
         canBeAttacked = true;
     }
 

@@ -199,7 +199,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.25
-      minScalar: 0.125
+      minScalar: 0.25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -367,8 +367,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.1
+      scalar: 0.3
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4931,7 +4931,7 @@ Transform:
   m_GameObject: {fileID: 1153985657594295435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.18, y: 0.18, z: 0.18}
   m_Children:
   - {fileID: 2748338021026848575}
   - {fileID: 1153985657593997691}
@@ -5057,11 +5057,11 @@ MonoBehaviour:
   firePositionEnemies: {fileID: 2748338021026848575}
   bulletEnemiesPrefab: {fileID: 0}
   bulletForce: 5
-  misileEnemiesPrefab: {fileID: 804413135992331832, guid: edbfdcd50fd4dc34ab170651c758afbd, type: 3}
+  misileEnemiesPrefab: {fileID: 804413135992331832, guid: d66655bf6458e4c4c8fd1a8fa3c2be05, type: 3}
   misileForce: 3
   shieldObject: {fileID: 0}
   group: {fileID: 0}
-  deathAnimation: {fileID: 8038344524183138613, guid: 0277167a12290af47801444830a2be97, type: 3}
+  deathAnimation: {fileID: 8038344524183138613, guid: 38121ffcf6f58744fa1d925395046c6a, type: 3}
   canAttack: 0
 --- !u!82 &1377484382250086739
 AudioSource:

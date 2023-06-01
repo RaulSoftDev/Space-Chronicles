@@ -129,6 +129,16 @@ public class Bullet : MonoBehaviour
                 }
                 Destroy(gameObject);
                 break;
+            case "BulletIBasic":
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
+                Destroy(gameObject);
+                break;
+            case "Missile":
+                hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                Destroy(hit, 1.6f);
+                Destroy(gameObject);
+                break;
         }
 
         //Destroy(gameObject);

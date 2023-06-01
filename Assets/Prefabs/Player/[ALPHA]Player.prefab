@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 1727958607}
   - component: {fileID: 5891335943036934882}
   m_Layer: 0
-  m_Name: Player
+  m_Name: '[ALPHA]Player'
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,7 +278,7 @@ Transform:
   m_GameObject: {fileID: 5726821054428788995}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.18, y: 0.18, z: 0.18}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_Children:
   - {fileID: 7245877475892349046}
   - {fileID: 753820820}
@@ -441,10 +441,7 @@ MonoBehaviour:
   playerPoints: 0
   rocketPoints: 0
   playerShieldPoints: 0
-  shoot1: {fileID: 0}
-  shoot2: {fileID: 0}
-  shoot3: {fileID: 0}
-  shield1: {fileID: 0}
+  playerExplosion: {fileID: 0}
   rocketAvailable: {fileID: 8300000, guid: 9ca214db77065fe49a66966ac6e634e4, type: 3}
   shieldAvailable: {fileID: 8300000, guid: 22be32baffefde44daab6f638d5d690e, type: 3}
 --- !u!114 &4872061765653834096
@@ -655,6 +652,22 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1168669145436344116, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168669145436344116, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168669145436385800, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168669145436385800, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1168669145439093154, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
       propertyPath: m_SortingOrder
       value: 9
@@ -675,9 +688,25 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5745931086314954556, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745931086314954556, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 5745931087003285266, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
       propertyPath: m_SortingOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745931087003285267, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745931087003285267, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f416df5b4a693349869fefbbd73fd43, type: 3}

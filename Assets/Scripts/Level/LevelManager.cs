@@ -41,7 +41,7 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(SpawnSquad());
         }
 
-        SceneManager.LoadScene(3);
+        MenuScript.Instance.StartMenu(3);
     }
 
     private IEnumerator SpawnSquad()

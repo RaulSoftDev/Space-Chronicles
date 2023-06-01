@@ -16,6 +16,11 @@ public class PlayerHealth : MonoBehaviour
     public int rocketPoints = 0;
     public float playerShieldPoints = 0;
 
+    public Animator healthBar;
+
+    public float enemyBulletValue = 1;
+    public float enemyRocketValue = 3;
+
     public GameObject playerExplosion;
 
     AudioSource playerAudiosource;
@@ -36,6 +41,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        healthSlider.maxValue = playerHealth;
         playerAudiosource = GetComponent<AudioSource>();
         GetDamage = true;
         StartCoroutine(PlayerStats());
@@ -59,25 +65,25 @@ public class PlayerHealth : MonoBehaviour
                 switch (collision.tag)
                 {
                     case "BulletIBasic":
-                        playerHealth -= 1;
-                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
-                        return;
-                    case "Bullet_B":
-                        playerHealth -= 1;
-                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
-                        return;
-                    case "BulletIII":
-                        playerHealth -= 1;
-                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
-                        return;
-                    case "BulletBoss":
-                        playerHealth -= 1;
+                        playerHealth -= enemyBulletValue;
                         gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
                         return;
                     case "Missile":
-                        playerHealth -= 3;
+                        playerHealth -= enemyRocketValue;
                         gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
                         return;
+                    case "BulletIII":
+                        playerHealth -= enemyBulletValue;
+                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
+                        return;
+                    case "BulletBoss":
+                        playerHealth -= enemyBulletValue;
+                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
+                        return;
+                    /*case "Missile":
+                        playerHealth -= 3;
+                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
+                        return;*/
                 }
             }
         } 
@@ -106,10 +112,20 @@ public class PlayerHealth : MonoBehaviour
         }
 
         HealthSliderValues();
+
+        HealthBarColor();
     }
 
     private void HealthSliderValues()
     {
         healthSlider.value = playerHealth;
+    }
+
+    private void HealthBarColor()
+    {
+        if(playerHealth < 100)
+        {
+            healthBar.SetTrigger("OrangeOn");
+        } 
     }
 }

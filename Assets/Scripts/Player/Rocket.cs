@@ -6,6 +6,11 @@ public class Rocket : MonoBehaviour
 {
     public GameObject explosionFx;
 
+    private void Start()
+    {
+        StartCoroutine(DestroyOnSeconds());
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject hit;
@@ -19,6 +24,7 @@ public class Rocket : MonoBehaviour
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                Destroy(gameObject);
                 break;
             case "IIMisile":
                 //Instantiate explosion on collision
@@ -27,6 +33,7 @@ public class Rocket : MonoBehaviour
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                Destroy(gameObject);
                 break;
             case "IIShield":
                 //Instantiate explosion on collision
@@ -49,6 +56,7 @@ public class Rocket : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
             case "IIIMisile":
                 //Instantiate explosion on collision
@@ -57,6 +65,7 @@ public class Rocket : MonoBehaviour
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                Destroy(gameObject);
                 break;
             case "IIIShield":
                 //Instantiate explosion on collision
@@ -79,6 +88,7 @@ public class Rocket : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
             case "Boss":
                 //Instantiate explosion on collision
@@ -101,9 +111,15 @@ public class Rocket : MonoBehaviour
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 }
+                Destroy(gameObject);
                 break;
         }
 
+    }
+
+    private IEnumerator DestroyOnSeconds()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 }

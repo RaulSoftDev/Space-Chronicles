@@ -28,15 +28,19 @@ public class EnemiesBullet : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if (collision.tag == "Rocket")
+        {
+            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, transform.rotation);
+            Destroy(hit, 1.5f);
+            Destroy(gameObject);
+        }
+
     }
 
     private IEnumerator DeleteBulletOnTime()
     {
-        while (Application.isPlaying)
-        {
-            yield return new WaitForSeconds(3f);
-            Destroy(gameObject);
-        }
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 
 }

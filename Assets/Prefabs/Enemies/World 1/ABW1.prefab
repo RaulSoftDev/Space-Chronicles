@@ -160,7 +160,7 @@ MonoBehaviour:
   misileForce: 2.5
   shieldObject: {fileID: 0}
   group: {fileID: 0}
-  deathAnimation: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  deathAnimation: {fileID: 6192724089161036641, guid: d02544c5c8052b3408df223a8cf69869, type: 3}
   canAttack: 0
 --- !u!82 &7277150168902873195
 AudioSource:
@@ -486,7 +486,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.25
+      scalar: 0.1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -655,7 +655,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.75
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1237,7 +1237,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 30
       minScalar: 10
       maxCurve:
         serializedVersion: 2

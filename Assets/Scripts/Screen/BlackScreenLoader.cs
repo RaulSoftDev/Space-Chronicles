@@ -37,7 +37,10 @@ public class BlackScreenLoader : Singleton<BlackScreenLoader>
 
     public void LoadBlackScreen()
     {
-        GetComponent<Animator>().SetTrigger("SetScreenBlackOn");
+        if(GetComponent<Animator>() != null)
+        {
+            GetComponent<Animator>().SetTrigger("SetScreenBlackOn");
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
