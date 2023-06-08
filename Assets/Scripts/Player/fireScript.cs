@@ -27,6 +27,7 @@ public class fireScript : MonoBehaviour
     [SerializeField] private Image[] rocketLoadButtons;
     [SerializeField] private Sprite rocketOn;
     [SerializeField] private Sprite rocketOff;
+    private float currentBullet = 0;
     public bool canAttack = false;
     private InputManager inputManager;
 
@@ -48,24 +49,27 @@ public class fireScript : MonoBehaviour
         audioSourcePlayer = GetComponent<AudioSource>();
         inputManager = InputManager.Instance;
 
-        StartCoroutine(ShootBullet());
+        StartCoroutine(ShootBlast());
         StartCoroutine(LoadRocketOff());
         StartCoroutine(LoadRocket01());
         StartCoroutine(LoadRocket02());
         StartCoroutine(LoadRocket03());
+
+        canAttack = true;
     }
 
 
     private void Update()
     {
         SaveSlideValue();
+        Debug.Log(currentBullet);
 
         //CheckRocketAvailability();
 
         if (!inputManager.joystickMode)
         {
-            if (SwipeDetection.Instance.touchStart && !EventSystem.current.IsPointerOverGameObject()) canAttack = true;
-            else canAttack = false;
+            /*if (SwipeDetection.Instance.touchStart && !EventSystem.current.IsPointerOverGameObject()) canAttack = true;
+            else canAttack = false;*/
         }
     }
 
@@ -82,27 +86,42 @@ public class fireScript : MonoBehaviour
     }
 
     //Instantiate the basic bullet
-    private IEnumerator ShootBullet()
+    public IEnumerator ShootBullet()
     {
-        while (true)
+        canAttack = false;
+        //GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+        GameObject bullet = BulletsManager.Instance.GetPooledObject();
+        bullet.transform.position = firePosition.position;
+        bullet.transform.rotation = firePosition.rotation;
+        bullet.SetActive(true);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
+        audioSourcePlayer.PlayOneShot(bulletSound);
+        Debug.Log("ShootOut");
+        currentBullet++;
+        yield return new WaitForSeconds(0.2f);
+        canAttack = true;
+    }
+
+    IEnumerator ShootBlast()
+    {
+        while(Application.isPlaying)
         {
-            yield return new WaitUntil(() => canAttack && transform.position.y > -3.5f);
-            GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
-            audioSourcePlayer.PlayOneShot(bulletSound);
-            Debug.Log("ShootOut");
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitUntil(() => currentBullet > 2);
+            yield return new WaitForSeconds(0.5f);
+            currentBullet = 0;
         }
     }
 
     public void ShootBulletOnButton()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
-        audioSourcePlayer.PlayOneShot(bulletSound);
-        Debug.Log("ShootOut");
+        if (canAttack)
+        {
+            if(currentBullet < 3)
+            {
+                StartCoroutine(ShootBullet());
+            }
+        }
     }
 
     //Set the rocket current status

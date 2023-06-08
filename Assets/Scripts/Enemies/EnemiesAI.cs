@@ -49,7 +49,7 @@ public class EnemiesAI : MonoBehaviour
     public GameObject deathAnimation;
 
     //Enemies Booleans
-    public bool canAttack;
+    public bool canAttack = false;
     bool canBeAttacked = false;
     bool shieldDisable = false;
 
@@ -70,10 +70,15 @@ public class EnemiesAI : MonoBehaviour
         enemiesAnim = GetComponent<Animator>();
         audioSourceEnemies = GetComponent<AudioSource>();
 
-        canAttack = true;
+        //canAttack = true;
         center = transform.localPosition;
 
         StartCoroutine(EnemyDeathCheck());
+    }
+
+    private void Update()
+    {
+        BasicShoot();
     }
 
     private void LoadShipsAttacks()
@@ -136,7 +141,7 @@ public class EnemiesAI : MonoBehaviour
     }
 
     //Sets up that if the enemy have another enemy under then cannot attack player until this enemy is destroyed
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.4f), -Vector2.up);
 
@@ -153,7 +158,7 @@ public class EnemiesAI : MonoBehaviour
         {
             canAttack = true;
         }
-    }
+    }*/
 
     private IEnumerator basicMovement()
     {
@@ -212,10 +217,10 @@ public class EnemiesAI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => EnemyBehaviour.instance.enemyInPosition);
+            yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
             //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
             yield return new WaitForSeconds(Random.Range(1, 8));
-            BasicShoot();
+            //canAttack = true;
         }
     }
 
@@ -283,6 +288,7 @@ public class EnemiesAI : MonoBehaviour
             rb.AddForce(-transform.up * bulletForce, ForceMode2D.Impulse);
             audioSourceEnemies.Stop();
             audioSourceEnemies.PlayOneShot(basicShootSound);
+            canAttack = false;
         }
     }
 
@@ -296,6 +302,17 @@ public class EnemiesAI : MonoBehaviour
             rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Impulse);
             audioSourceEnemies.Stop();
             audioSourceEnemies.PlayOneShot(misileSound);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Player")
+        {
+            if(PlayerHealth.instance.playerHealth > 0)
+            {
+                PlayerHealth.instance.playerHealth = 0;
+            }
         }
     }
 

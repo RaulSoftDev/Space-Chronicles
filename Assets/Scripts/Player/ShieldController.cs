@@ -48,7 +48,7 @@ public class ShieldController : MonoBehaviour
         {
             sliderValue = Mathf.Clamp(sliderValue - 1 * Time.deltaTime, 0, 10);
             buttonBackground360.fillAmount = sliderValue / 10;
-            Debug.Log(sliderValue);
+            //Debug.Log(sliderValue);
         }
     }
 

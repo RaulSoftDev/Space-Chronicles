@@ -4,11 +4,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Player_Movement : MonoBehaviour
 {
     [SerializeField] private float playerSpeed = 4;
-    [SerializeField] Joystick joystick;
+    [SerializeField] private Joystick leftPad;
+    [SerializeField] private Joystick rightPad;
+    [SerializeField] private GameObject[] rightArrows;
+    [SerializeField] private GameObject[] leftArrows;
     private Rigidbody2D playerRigidbody;
     private SwipeDetection swipeDetection;
     private InputManager inputManager;
@@ -22,11 +26,12 @@ public class Player_Movement : MonoBehaviour
         inputManager = InputManager.Instance;
 
         StartCoroutine(SetUpPlayer());
+        StartCoroutine(disableArrowsRuntime());
     }
 
     private void Update()
     {
-        touchXPosition = swipeDetection.startPosition.x - inputManager.PrimaryPosition().x;
+        //touchXPosition = swipeDetection.startPosition.x - inputManager.PrimaryPosition().x;
 
         if (playerInPos)
         {
@@ -34,27 +39,126 @@ public class Player_Movement : MonoBehaviour
             {
                 if (swipeDetection.touchStart && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    transform.position = new Vector3(Mathf.Lerp(transform.position.x, inputManager.PrimaryPosition().x, Time.deltaTime * playerSpeed), Mathf.Lerp(transform.position.y, inputManager.PrimaryPosition().y, Time.deltaTime * playerSpeed), 0);
+                    transform.position = new Vector3(Mathf.Lerp(transform.position.x, inputManager.PrimaryPosition().x, Time.deltaTime * playerSpeed), transform.position.y, 0);
                 }
             }
             else
             {
-                Vector2 direction = Vector2.up * joystick.Vertical + Vector2.right * joystick.Horizontal;
+                //MOVEMENT
+                if (rightPad.Horizontal > 0)
+                {
+                    Debug.Log(rightPad.Horizontal);
+                    Vector2 directionX = Vector2.right * rightPad.Horizontal;
+                    Debug.LogWarning(directionX);
+                    gameObject.transform.Translate(new Vector3(directionX.x, 0, 0) * playerSpeed * Time.deltaTime);
 
-                transform.Translate(direction * playerSpeed * Time.deltaTime);
+                }
+
+                if (leftPad.Horizontal < 0)
+                {
+                    Vector2 directionX = Vector2.right * leftPad.Horizontal;
+                    Debug.LogWarning(directionX);
+                    gameObject.transform.Translate(new Vector3(directionX.x, 0, 0) * playerSpeed * Time.deltaTime);
+                }
+
+                //RIGHT PAD
+                if (rightPad.Horizontal > 0f)
+                {
+                    rightArrows[0].GetComponent<Image>().color = Color.white;
+                }
+
+                if (rightPad.Horizontal > 0.25f)
+                {
+                    rightArrows[1].GetComponent<Image>().color = Color.white;
+                }
+
+                if (rightPad.Horizontal > 0.5f)
+                {
+                    rightArrows[2].GetComponent<Image>().color = Color.white;
+                }
+
+                if (rightPad.Horizontal > 0.75f)
+                {
+                    rightArrows[3].GetComponent<Image>().color = Color.white;
+                }
+
+                if (rightPad.Horizontal < 0.1f)
+                {
+                    rightArrows[0].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (rightPad.Horizontal < 0.25f)
+                {
+                    rightArrows[1].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (rightPad.Horizontal < 0.5f)
+                {
+                    rightArrows[2].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (rightPad.Horizontal < 0.75f)
+                {
+                    rightArrows[3].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                //LEFT PAD
+                if (leftPad.Horizontal < 0f)
+                {
+                    leftArrows[0].GetComponent<Image>().color = Color.white;
+                }
+
+                if (leftPad.Horizontal < -0.25f)
+                {
+                    leftArrows[1].GetComponent<Image>().color = Color.white;
+                }
+
+                if (leftPad.Horizontal < -0.5f)
+                {
+                    leftArrows[2].GetComponent<Image>().color = Color.white;
+                }
+
+                if (leftPad.Horizontal < -0.75f)
+                {
+                    leftArrows[3].GetComponent<Image>().color = Color.white;
+                }
+
+                if (leftPad.Horizontal > 0.1f)
+                {
+                    leftArrows[0].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (leftPad.Horizontal > -0.25f)
+                {
+                    leftArrows[1].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (leftPad.Horizontal > -0.5f)
+                {
+                    leftArrows[2].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
+
+                if (leftPad.Horizontal > -0.75f)
+                {
+                    leftArrows[3].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                }
             }
 
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -2.20f, 2.20f), Mathf.Clamp(transform.position.y, -3.2f, 4.5f), transform.position.z);
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -2.20f, 2.20f), transform.position.y, transform.position.z);
         }
     }
 
-    private void FixedUpdate()
+    private IEnumerator disableArrowsRuntime()
     {
-        if(inputManager.joystickMode)
+        while (Application.isPlaying)
         {
-            Vector2 direction = Vector2.up * joystick.Vertical + Vector2.right * joystick.Horizontal;
-
-            transform.Translate(direction * playerSpeed * Time.deltaTime);
+            yield return new WaitUntil(() => !swipeDetection.touchStart);
+            for (int i = 0; i < leftArrows.Length; i++)
+            {
+                leftArrows[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                rightArrows[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+            }
+            yield return null;
         }
     }
 
@@ -68,5 +172,6 @@ public class Player_Movement : MonoBehaviour
             yield return null;
         }
         playerInPos = true;
+        yield break;
     }
 }

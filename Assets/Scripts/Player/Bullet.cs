@@ -7,10 +7,17 @@ public class Bullet : MonoBehaviour
 {
 
     public GameObject explosionFx;
+    private float timeToHide = 1.75f;
+    private float currentTime = 0;
 
     private void Start()
     {
-        StartCoroutine(DestroyOnSeconds());
+        //StartCoroutine(DestroyOnSeconds());
+    }
+
+    private void OnEnable()
+    {
+        currentTime = 0;
     }
 
     //Check if the bullet have collision on the enemy
@@ -30,7 +37,8 @@ public class Bullet : MonoBehaviour
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
                 PlayerHealth.instance.playerPoints++;
                 PlayerHealth.instance.playerShieldPoints++;
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                gameObject.SetActive(false);
                 break;
             case "IIMisile":
                 //Instantiate explosion on collision
@@ -132,22 +140,33 @@ public class Bullet : MonoBehaviour
             case "BulletIBasic":
                 hit = Instantiate(explosionFx, transform.position, transform.rotation);
                 Destroy(hit, 1.6f);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
                 break;
             case "Missile":
                 hit = Instantiate(explosionFx, transform.position, transform.rotation);
                 Destroy(hit, 1.6f);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
                 break;
         }
 
         //Destroy(gameObject);
     }
 
+    private void Update()
+    {
+        currentTime += 1 * Time.deltaTime;
+
+        if(currentTime >= timeToHide)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private IEnumerator DestroyOnSeconds()
     {
         yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
+        Debug.Log("Turn off");
+        gameObject.SetActive(false);
     }
 
 

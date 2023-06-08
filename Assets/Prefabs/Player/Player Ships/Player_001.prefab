@@ -76,7 +76,7 @@ ParticleSystem:
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  emitterVelocityMode: 1
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -630,7 +630,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -4790,8 +4790,8 @@ ParticleSystemRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168669145418244112}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -4894,7 +4894,7 @@ ParticleSystem:
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  emitterVelocityMode: 1
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -5448,7 +5448,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -9608,8 +9608,8 @@ ParticleSystemRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168669145418275430}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -9927,7 +9927,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 3
-  joystick: {fileID: 0}
+  leftPad: {fileID: 0}
+  rightPad: {fileID: 0}
+  rightArrows: []
+  leftArrows: []
 --- !u!114 &8269094602774562875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9950,6 +9953,9 @@ MonoBehaviour:
   rocketButtonBackground: {fileID: 0}
   rocketButton: {fileID: 0}
   basicAttackButton: {fileID: 0}
+  rocketLoadButtons: []
+  rocketOn: {fileID: 0}
+  rocketOff: {fileID: 0}
   canAttack: 0
 --- !u!114 &8766969694456990686
 MonoBehaviour:
@@ -9970,6 +9976,9 @@ MonoBehaviour:
   playerPoints: 0
   rocketPoints: 0
   playerShieldPoints: 0
+  healthBar: {fileID: 0}
+  enemyBulletValue: 1
+  enemyRocketValue: 3
   playerExplosion: {fileID: 0}
   rocketAvailable: {fileID: 8300000, guid: 9ca214db77065fe49a66966ac6e634e4, type: 3}
   shieldAvailable: {fileID: 8300000, guid: 22be32baffefde44daab6f638d5d690e, type: 3}
@@ -9991,6 +10000,8 @@ MonoBehaviour:
   shieldActive: 0
   shieldButton: {fileID: 0}
   buttonBackground360: {fileID: 0}
+  buttonOnMode: {fileID: 0}
+  buttonOffMode: {fileID: 0}
 --- !u!82 &1251612095818700128
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10285,7 +10296,7 @@ ParticleSystem:
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  emitterVelocityMode: 1
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -10839,7 +10850,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -14999,8 +15010,8 @@ ParticleSystemRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5745931086314954553}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -15103,7 +15114,7 @@ ParticleSystem:
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  emitterVelocityMode: 1
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -15657,7 +15668,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -19817,8 +19828,8 @@ ParticleSystemRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5745931087003285264}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1

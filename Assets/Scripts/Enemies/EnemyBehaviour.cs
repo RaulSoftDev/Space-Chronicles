@@ -10,6 +10,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     public bool enemyInPosition = false;
 
+    
+
     private void Awake()
     {
         if (instance == null)
@@ -26,15 +28,16 @@ public class EnemyBehaviour : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         float counter = 0f;
-        while (t.position.y >= 2.1f)
+        while (t.position.y >= -10)
         {
-            t.position = Vector3.Lerp(new Vector3(t.position.x, t.position.y, t.position.z), new Vector3(t.position.x, 2f, t.position.z), counter / 12 * Time.deltaTime / 2);
+            t.position = Vector3.Lerp(new Vector3(t.position.x, t.position.y, t.position.z), new Vector3(t.position.x, -10f, t.position.z), counter / 16 * Time.deltaTime / 2);
             counter += Time.deltaTime;
             yield return null;
         }
         Debug.Log("Enemy Ready");
+        yield return new WaitUntil(() => t.position.y < 6);
         enemyInPosition = true;
-        StartCoroutine(VerticalMovement(t));
+        //StartCoroutine(VerticalMovement(t));
     }
 
     public IEnumerator WaitCoroutine(Transform t)

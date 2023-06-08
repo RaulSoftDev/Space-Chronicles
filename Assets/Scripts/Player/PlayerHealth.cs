@@ -52,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitUntil(() => playerHealth < 1);
         GameObject explotionInstance = Instantiate(playerExplosion, transform.position, transform.rotation);
+        explotionInstance.transform.parent = transform;
         //Load scene
         MenuScript.Instance.StartMenu(4);
     } 

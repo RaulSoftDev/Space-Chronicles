@@ -6,11 +6,8 @@ public class EnemiesBullet : MonoBehaviour
 {
 
     public GameObject enemiesExplosionFx;
-
-    private void Start()
-    {
-        StartCoroutine(DeleteBulletOnTime());
-    }
+    private float timeToHide = 3;
+    private float currentTime = 0;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -37,10 +34,13 @@ public class EnemiesBullet : MonoBehaviour
 
     }
 
-    private IEnumerator DeleteBulletOnTime()
+    private void Update()
     {
-        yield return new WaitForSeconds(3f);
-        Destroy(gameObject);
-    }
+        currentTime += 1 * Time.deltaTime;
 
+        if (currentTime >= timeToHide)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

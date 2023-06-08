@@ -12,5 +12,6 @@ public class PerformanceSettings : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 300;
+        QualitySettings.vSyncCount = 0;
     }
 }

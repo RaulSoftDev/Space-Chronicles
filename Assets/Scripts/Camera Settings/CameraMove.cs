@@ -7,16 +7,15 @@ public class CameraMove : MonoBehaviour
     public float cameraSpeedMove = 1f;
     public float layersOffSet = 0.2f;
     public Transform background;
+    public Transform background2;
     public SpriteRenderer BGLayer;
-    private Transform map1;
-    private Transform map2;
 
     public GameObject[] layers;
 
     private void Start()
     {
-        map1 = Instantiate(background, background.position, background.rotation);
-        background.gameObject.SetActive(false);
+        //map1 = Instantiate(background, background.position, background.rotation);
+        //background.gameObject.SetActive(false);
         StartCoroutine(GenerateMap());
         //StartCoroutine(Map3DEffect());
     }
@@ -31,34 +30,37 @@ public class CameraMove : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => map1 != null && map1.position.y < 0);
-            map2 = Instantiate(map1, new Vector3(map1.position.x, map1.position.y + BGLayer.sprite.bounds.size.y, map1.position.z), map1.rotation);
+            yield return new WaitUntil(() => background != null && background.position.y < 0);
+            //background2 = Instantiate(background, new Vector3(background.position.x, background.position.y + background.GetComponent<SpriteRenderer>().bounds.size.y, background.position.z), background.rotation);
+            background2.transform.position = new Vector3(background.position.x, background.position.y + background.GetComponent<SpriteRenderer>().bounds.size.y, background.position.z);
+            background2.gameObject.SetActive(true);
 
-            yield return new WaitUntil(() => map2 != null && map2.position.y < 0);
-            map1 = Instantiate(map2, new Vector3(map2.position.x, map2.position.y + BGLayer.sprite.bounds.size.y, map2.position.z), map2.rotation);
+            yield return new WaitUntil(() => background2 != null && background2.position.y < 0);
+            background.transform.position = new Vector3(background2.position.x, background2.position.y + background2.GetComponent<SpriteRenderer>().bounds.size.y, background2.position.z);
+            background.gameObject.SetActive(true);
         }
     }
 
     private void MapsManager()
     {
-        if (map1 != null)
+        if (background != null)
         {
-            map1.Translate(Vector3.up * cameraSpeedMove * Time.deltaTime);
+            background.Translate(Vector3.up * cameraSpeedMove * Time.deltaTime);
         }
 
-        if (map2 != null)
+        if (background2 != null)
         {
-            map2.Translate(Vector3.up * cameraSpeedMove * Time.deltaTime);
+            background2.Translate(Vector3.up * cameraSpeedMove * Time.deltaTime);
         }
 
-        if (map1 != null && map1.position.y < -11)
+        if (background != null && background.position.y < -10.3f)
         {
-            Destroy(map1.gameObject);
+           background.gameObject.SetActive(false);
         }
 
-        if (map2 != null && map2.position.y < -11)
+        if (background2 != null && background2.position.y < -10.3f) 
         {
-            Destroy(map2.gameObject);
+            background2.gameObject.SetActive(false);
         }
     }
 
@@ -66,12 +68,12 @@ public class CameraMove : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => map1 != null);
-            Vector2 offSetPosition1 = map1.position - transform.position;
+            yield return new WaitUntil(() => background != null);
+            Vector2 offSetPosition1 = background.position - transform.position;
 
-            for (int i = 0; i < map1.childCount; i++)
+            for (int i = 0; i < background.childCount; i++)
             {
-                map1.GetChild(i).transform.Translate(new Vector3(offSetPosition1.x * i, offSetPosition1.y * i, 0), Space.World);
+                background.GetChild(i).transform.Translate(new Vector3(offSetPosition1.x * i, offSetPosition1.y * i, 0), Space.World);
             }
         }
     }
