@@ -795,7 +795,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -411.99658, y: -837.50024}
+  m_AnchoredPosition: {x: -411.9966, y: -837.50024}
   m_SizeDelta: {x: 122.66, y: 96.600006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &44942888
@@ -1216,6 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323db1186f39ddc498d9656d4d9a046d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  round: 0
   currentSquad: {fileID: 0}
   enemyText: {fileID: 1374456309}
   spawnPoint: {fileID: 481130123}
@@ -1508,7 +1509,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -410.4022, y: -839.46545}
+  m_AnchoredPosition: {x: -410.40222, y: -839.46545}
   m_SizeDelta: {x: 68.82, y: 42.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &136303651
@@ -8288,7 +8289,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.157, y: 0.57844865}
   m_AnchorMax: {x: 0.86800003, y: 0.643}
-  m_AnchoredPosition: {x: -1, y: 0.3999939}
+  m_AnchoredPosition: {x: -1, y: 0.4000244}
   m_SizeDelta: {x: 3.5999756, y: 3.800003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1924860501
