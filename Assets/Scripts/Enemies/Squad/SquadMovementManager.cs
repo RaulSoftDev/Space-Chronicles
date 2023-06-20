@@ -5,7 +5,7 @@ using UnityEngine;
 public class SquadMovementManager : MonoBehaviour
 {
     //TESTING
-    float lerpTime = 45f;
+    float lerpTime = 100f;
     float currentLerpTime;
 
     float moveDistance = 10f;

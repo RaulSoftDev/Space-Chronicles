@@ -29,6 +29,7 @@ public class fireScript : MonoBehaviour
     [SerializeField] private Sprite rocketOff;
     private float currentBullet = 0;
     public bool canAttack = false;
+    public bool enableAttack = false;
     private InputManager inputManager;
 
 
@@ -115,7 +116,7 @@ public class fireScript : MonoBehaviour
 
     public void ShootBulletOnButton()
     {
-        if (canAttack)
+        if (enableAttack && canAttack)
         {
             if(currentBullet < 3)
             {

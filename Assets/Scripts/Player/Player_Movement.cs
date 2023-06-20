@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Player_Movement : MonoBehaviour
+public class Player_Movement : Singleton<Player_Movement>
 {
     [SerializeField] private float playerSpeed = 4;
     [SerializeField] private Joystick leftPad;
@@ -17,7 +17,7 @@ public class Player_Movement : MonoBehaviour
     private SwipeDetection swipeDetection;
     private InputManager inputManager;
     private float touchXPosition;
-    private bool playerInPos = false;
+    public bool playerInPos = false;
 
     private void Start()
     {
@@ -165,9 +165,9 @@ public class Player_Movement : MonoBehaviour
     private IEnumerator SetUpPlayer()
     {
         float counter = 0f;
-        while (counter < 2)
+        while (counter < 7)
         {
-            transform.position = Vector3.Lerp(new Vector3(transform.position.x, -6, transform.position.z), new Vector3(transform.position.x, -2.5f, transform.position.z), counter / 2);
+            transform.position = Vector3.Lerp(new Vector3(transform.position.x, -6, transform.position.z), new Vector3(transform.position.x, -2.5f, transform.position.z), counter / 7);
             counter += Time.deltaTime;
             yield return null;
         }

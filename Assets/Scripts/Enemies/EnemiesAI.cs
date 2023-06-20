@@ -50,6 +50,7 @@ public class EnemiesAI : MonoBehaviour
 
     //Enemies Booleans
     public bool canAttack = false;
+    public bool enableAttack = false;
     bool canBeAttacked = false;
     bool shieldDisable = false;
 
@@ -219,8 +220,8 @@ public class EnemiesAI : MonoBehaviour
         {
             yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
             //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
-            yield return new WaitForSeconds(Random.Range(1, 8));
-            //canAttack = true;
+            yield return new WaitForSeconds(Random.Range(2, 8));
+            canAttack = true;
         }
     }
 
@@ -281,7 +282,7 @@ public class EnemiesAI : MonoBehaviour
     //Sets the enemy basic shoot instance
     void BasicShoot()
     {
-        if (canAttack)
+        if (enableAttack && canAttack)
         {
             GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), transform.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

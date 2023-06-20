@@ -39,6 +39,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator RoundsManager()
     {
+        yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
         Debug.LogWarning("Round 1");
 
         //ROUND 1
@@ -79,6 +80,8 @@ public class LevelManager : MonoBehaviour
     {
         StartCoroutine(CheckEnemiesState());
 
+        fireScript.instance.enableAttack = false;
+
         //WARNING TEXT
         yield return new WaitForSeconds(2f);
         enemyText.SetActive(true);
@@ -88,11 +91,50 @@ public class LevelManager : MonoBehaviour
         //ROUND 1
         SpawnSquad();
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 3);
-        SpawnSquad();
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= 5.5f);
+        currentSquad.GetComponent<SquadMovementManager>().startMove = false;
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 3);
+        //WARNING TEXT
+        yield return new WaitForSeconds(2f);
+        enemyText.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        enemyText.SetActive(false);
+
+        //BEGIN FIGHT
+        currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+        foreach (Transform child in currentSquad.transform)
+        {
+            child.GetComponent<RowManager>().rightMoveLoop = true;
+            foreach(Transform child2 in child.transform)
+            {
+                child2.GetComponent<EnemiesAI>().enableAttack = true;
+            }
+        }
+
+        //ENABLE ATTACKS
+        fireScript.instance.enableAttack = true;
+
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0);
         SpawnSquad();
+        foreach (Transform child in currentSquad.transform)
+        {
+            child.GetComponent<RowManager>().rightMoveLoop = true;
+            foreach (Transform child2 in child.transform)
+            {
+                child2.GetComponent<EnemiesAI>().enableAttack = true;
+            }
+        }
+
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0);
+        SpawnSquad();
+        foreach (Transform child in currentSquad.transform)
+        {
+            child.GetComponent<RowManager>().rightMoveLoop = true;
+            foreach (Transform child2 in child.transform)
+            {
+                child2.GetComponent<EnemiesAI>().enableAttack = true;
+            }
+        }
 
         yield return new WaitUntil(() => noEnemiesLeft);
         round++;
