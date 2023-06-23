@@ -9,7 +9,7 @@ public class Settings : MonoBehaviour
     //Set the cursor on lock mode (cannot leave the game window)
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         DontDestroyOnLoad(gameObject);
     }
 }

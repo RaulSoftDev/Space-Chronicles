@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     public GameObject enemyText;
     public GameObject spawnPoint;
     public GameObject[] squads;
+    public List<GameObject> runtimeSquads = new List<GameObject>();
     public GameObject inGameMenu;
 
     public GameObject[] enemiesList;
@@ -35,6 +36,25 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(RoundsManager());
+    }
+
+    private void Update()
+    {
+        foreach (GameObject squad in runtimeSquads)
+        {
+            foreach(Transform child in squad.transform)
+            {
+                if(child.childCount < 1)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
+            if(squad.transform.childCount < 1)
+            {
+                runtimeSquads.Remove(squad);
+            }
+        }
     }
 
     private IEnumerator RoundsManager()
@@ -78,7 +98,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator GenerateRound()
     {
-        StartCoroutine(CheckEnemiesState());
+        //StartCoroutine(CheckEnemiesState());
 
         fireScript.instance.enableAttack = false;
 
@@ -114,7 +134,7 @@ public class LevelManager : MonoBehaviour
         //ENABLE ATTACKS
         fireScript.instance.enableAttack = true;
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0);
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
         SpawnSquad();
         foreach (Transform child in currentSquad.transform)
         {
@@ -125,7 +145,7 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0);
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
         SpawnSquad();
         foreach (Transform child in currentSquad.transform)
         {
@@ -136,7 +156,7 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        yield return new WaitUntil(() => noEnemiesLeft);
+        yield return new WaitUntil(() => runtimeSquads.Count == 0);
         round++;
     }
 
@@ -145,6 +165,7 @@ public class LevelManager : MonoBehaviour
         squadNumber++;
 
         currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+        runtimeSquads.Add(currentSquad);
         //enemyText.SetActive(true);
         //yield return new WaitForSeconds(3f);
         //enemyText.SetActive(false);
