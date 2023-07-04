@@ -5,21 +5,25 @@ using UnityEngine;
 public class RowManager : MonoBehaviour
 {
     Vector3 startPos;
+    Vector3 endPos;
     float moveDistance = 0.75f;
     float speed = 2f;
     public bool rightMoveLoop = false;
 
+    //Move To Point
+    float lerpTime = 100f;
+
+    //Functions
+    private MyFunctions archive = new MyFunctions();
+
     protected void Start()
     {
         startPos = transform.localPosition;
+        endPos = new Vector3(0.8f, 0, 0);
     }
 
     protected void Update()
     {
-        if (rightMoveLoop)
-        {
-            float distance = Mathf.Sin(Time.timeSinceLevelLoad * speed);
-            transform.localPosition = startPos + Vector3.right * distance * moveDistance;
-        }
+        archive.LoopMovement(transform, startPos, moveDistance, speed, rightMoveLoop);
     }
 }

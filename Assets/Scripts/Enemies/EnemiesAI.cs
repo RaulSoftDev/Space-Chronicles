@@ -125,7 +125,7 @@ public class EnemiesAI : MonoBehaviour
         yield return new WaitUntil(() => currentHealth < 1);
         Debug.LogWarning("Enemy death");
         transform.parent = null;
-        GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation);
+        GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation, transform.parent);
         //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
         Destroy(gameObject);
     }

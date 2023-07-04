@@ -15,6 +15,8 @@ public class SquadMovementManager : MonoBehaviour
 
     public bool startMove = false;
 
+    private MyFunctions archive = new MyFunctions();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,24 +27,6 @@ public class SquadMovementManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //reset when we press spacebar
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            currentLerpTime = 0f;
-        }*/
-
-        if (startMove)
-        {
-            //increment timer once per frame
-            currentLerpTime += Time.deltaTime;
-            if (currentLerpTime > lerpTime)
-            {
-                currentLerpTime = lerpTime;
-            }
-
-            //lerp!
-            float perc = currentLerpTime / lerpTime;
-            transform.position = Vector3.Lerp(startPos, endPos, perc);
-        }
+        archive.MoveToPoint(transform, startPos, endPos, lerpTime, startMove);
     }
 }

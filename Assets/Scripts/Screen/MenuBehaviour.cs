@@ -9,6 +9,11 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] Animator[] difficultyMenuButtons;
     [SerializeField] Animator[] campaignButtons;
     [SerializeField] Animator[] menuTitles;
+    [SerializeField] GameObject disabledMenu;
+    [SerializeField] Animator disabledMenuAnimator;
+    [SerializeField] Animator disabledDifficultyMenuAnimator;
+    [SerializeField] Button disabledMenuButton;
+    [SerializeField] Animator titleScreen;
     private bool enableMenuButtons = false;
     private bool enterDifficultyMenu = false;
     private bool enterCampaignMenu = false;
@@ -16,60 +21,182 @@ public class MenuBehaviour : MonoBehaviour
     private bool disableDifficultyButtons = false;
     private bool enableCampaignButtons = false;
     private bool disableCampaignButtons = false;
+    private bool enableDisabledScreenButton = false;
+    private bool disableDisabledScreenButton = false;
+    private bool disableTapScreen = false;
 
     private void Start()
     {
+        StartCoroutine(LoadMainMenu());
+    }
+
+    private IEnumerator LoadMainMenu()
+    {
+        yield return new WaitUntil(() => disableTapScreen);
+        titleScreen.gameObject.SetActive(false);
         StartCoroutine(EnterMainMenuButtons());
     }
 
-    private void Update()
+    #region Menu Loading Times
+    private void LoadCurrentMenuTimes()
     {
-        //Main Menu Checker
-        AnimatorStateInfo mainMenuAnimatorStateInfo = mainMenuButtons[mainMenuButtons.Length - 1].GetCurrentAnimatorStateInfo(0);
-        float NTime = mainMenuAnimatorStateInfo.normalizedTime;
+        //Main Title Checker
+        AnimatorStateInfo mainTitleAnimatorStateInfo = titleScreen.GetCurrentAnimatorStateInfo(0);
 
-        if (mainMenuAnimatorStateInfo.IsName("Enter") || mainMenuAnimatorStateInfo.IsName("Back") && NTime > 1.0f)
+        if (mainTitleAnimatorStateInfo.IsName("Hide"))
         {
-            enableMenuButtons = true;
+            float MTTime = mainTitleAnimatorStateInfo.normalizedTime;
+            if (MTTime > 1)
+            {
+                disableTapScreen = true;
+            }
         }
 
-        if (mainMenuAnimatorStateInfo.IsName("Exit") && NTime > 1.0f)
+        //Main Menu Checker
+        AnimatorStateInfo mainMenuAnimatorStateInfo = mainMenuButtons[mainMenuButtons.Length - 1].GetCurrentAnimatorStateInfo(0);
+
+        if (mainMenuAnimatorStateInfo.IsName("Enter"))
         {
-            enterDifficultyMenu = true;
+            float NTime = mainMenuAnimatorStateInfo.normalizedTime;
+            if(NTime > 1)
+            {
+                enableMenuButtons = true;
+            }
+        }
+
+        if (mainMenuAnimatorStateInfo.IsName("Back"))
+        {
+            float NTime = mainMenuAnimatorStateInfo.normalizedTime;
+            if (NTime > 1)
+            {
+                enableMenuButtons = true;
+                Debug.LogError("Menu");
+            }
+        }
+
+        if (mainMenuAnimatorStateInfo.IsName("Exit"))
+        {
+            float NTime = mainMenuAnimatorStateInfo.normalizedTime;
+            if(NTime > 1)
+            {
+                enterDifficultyMenu = true;
+            }
         }
 
         //Difficulty Menu Checker
         AnimatorStateInfo difficultyMenuAnimatorStateInfo = difficultyMenuButtons[difficultyMenuButtons.Length - 1].GetCurrentAnimatorStateInfo(0);
-        float DTime = difficultyMenuAnimatorStateInfo.normalizedTime;
 
-        if (difficultyMenuAnimatorStateInfo.IsName("Enter") || difficultyMenuAnimatorStateInfo.IsName("Back") && DTime > 1.0f)
+        if (difficultyMenuAnimatorStateInfo.IsName("Enter"))
         {
-            enableDifficultyButtons = true;
+            float DTime = difficultyMenuAnimatorStateInfo.normalizedTime;
+            if(DTime > 1)
+            {
+                enableDifficultyButtons = true;
+            }
         }
 
-        if (difficultyMenuAnimatorStateInfo.IsName("Exit") && NTime > 1.0f)
+        if (difficultyMenuAnimatorStateInfo.IsName("Back"))
         {
-            enterCampaignMenu = true;
+            float DTime = difficultyMenuAnimatorStateInfo.normalizedTime;
+            if (DTime > 1)
+            {
+                enableDifficultyButtons = true;
+            }
         }
 
-        if (difficultyMenuAnimatorStateInfo.IsName("Hide") && DTime > 1.0f)
+        if (difficultyMenuAnimatorStateInfo.IsName("Exit"))
         {
-            disableDifficultyButtons = true;
+            float DTime = difficultyMenuAnimatorStateInfo.normalizedTime;
+            if (DTime > 1.0f)
+            {
+                enterCampaignMenu = true;
+            }
+        }
+
+        if (difficultyMenuAnimatorStateInfo.IsName("Hide"))
+        {
+            float DTime = difficultyMenuAnimatorStateInfo.normalizedTime;
+            if(DTime > 1.0f)
+            {
+                disableDifficultyButtons = true;
+            }
         }
 
         //Campaign Menu Checker
         AnimatorStateInfo campaignMenuAnimatorStateInfo = campaignButtons[campaignButtons.Length - 1].GetCurrentAnimatorStateInfo(0);
-        float CTime = campaignMenuAnimatorStateInfo.normalizedTime;
 
-        if (campaignMenuAnimatorStateInfo.IsName("Enter") && CTime > 1.0f)
+        if (campaignMenuAnimatorStateInfo.IsName("Enter"))
         {
-            enableCampaignButtons = true;
+            float CTime = campaignMenuAnimatorStateInfo.normalizedTime;
+            if (CTime > 1.0f)
+            {
+                enableCampaignButtons = true;
+            }
         }
 
-        if (campaignMenuAnimatorStateInfo.IsName("Hide") && DTime > 1.0f)
+        if (campaignMenuAnimatorStateInfo.IsName("Hide"))
         {
-            disableCampaignButtons = true;
+            float CTime = campaignMenuAnimatorStateInfo.normalizedTime;
+            if (CTime > 1.0f)
+            {
+                disableCampaignButtons = true;
+            }
         }
+
+        //Disabled Menu Checker
+        AnimatorStateInfo disabledMenuAnimatorStateInfo = disabledMenuAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if (disabledMenuAnimatorStateInfo.IsName("Disabled Screen On"))
+        {
+            float DSTime = disabledMenuAnimatorStateInfo.normalizedTime;
+            if (DSTime > 1.0f)
+            {
+                enableDisabledScreenButton = true;
+                disabledMenuButton.interactable = true;
+            }
+        }
+
+        if (disabledMenuAnimatorStateInfo.IsName("Disabled Screen Off"))
+        {
+            float DSTime = disabledMenuAnimatorStateInfo.normalizedTime;
+            if (DSTime > 1.0f)
+            {
+                enableDisabledScreenButton = false;
+                disabledMenu.SetActive(false);
+            }
+        }
+
+        //Disabled Difficulty Menu Checker
+        AnimatorStateInfo disabledDifficultyMenuAnimatorStateInfo = disabledDifficultyMenuAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if (disabledDifficultyMenuAnimatorStateInfo.IsName("Disabled Screen On"))
+        {
+            float DDTime = disabledDifficultyMenuAnimatorStateInfo.normalizedTime;
+            if (DDTime > 1.0f)
+            {
+                disabledMenuButton.interactable = true;
+            }
+        }
+
+        if (disabledDifficultyMenuAnimatorStateInfo.IsName("Disabled Screen Off"))
+        {
+            float DDTime = disabledDifficultyMenuAnimatorStateInfo.normalizedTime;
+            if (DDTime > 1.0f)
+            {
+                disabledMenu.SetActive(false);
+            }
+        }
+    }
+    #endregion
+
+    public void HideTitle()
+    {
+        titleScreen.SetTrigger("Hide");
+    }
+
+    private void Update()
+    {
+        LoadCurrentMenuTimes();
     }
 
     #region Main Menu
@@ -90,6 +217,12 @@ public class MenuBehaviour : MonoBehaviour
             switch (button.name)
             {
                 case "Campaign":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "GOAT":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Hangar":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
                 case "Tutorial":
@@ -124,6 +257,12 @@ public class MenuBehaviour : MonoBehaviour
             switch (button.name)
             {
                 case "Campaign":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "GOAT":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Hangar":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
                 case "Tutorial":
@@ -217,6 +356,15 @@ public class MenuBehaviour : MonoBehaviour
                 case "Pussycat":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
+                case "Average":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Foolish":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Insane":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
                 case "Back_D":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
@@ -274,6 +422,15 @@ public class MenuBehaviour : MonoBehaviour
             switch (button.name)
             {
                 case "Pussycat":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Average":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Foolish":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "Insane":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
                 case "Back_D":
@@ -340,6 +497,24 @@ public class MenuBehaviour : MonoBehaviour
                 case "System01_T":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
+                case "System02 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "System03 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "System04 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "System05 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "System06 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
+                case "System07 (1)":
+                    button.gameObject.GetComponent<Button>().interactable = true;
+                    break;
                 case "Back":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
@@ -352,6 +527,52 @@ public class MenuBehaviour : MonoBehaviour
     private void GetInCampaignButtons()
     {
         StartCoroutine(EnterCampaignButtons());
+    }
+    #endregion
+
+    #region Not Available Menu Screen
+
+    //Enable Disabled Menu Screen
+    public void OnDisableMenuButton()
+    {
+        disabledMenu.SetActive(true);
+        disabledMenuAnimator.SetTrigger("DisabledScreenOn");
+    }
+
+    public void OffDisableMenuButton()
+    {
+        disabledMenuButton.interactable = false;
+        if(disabledMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Disabled Screen On"))
+        {
+            disabledMenuAnimator.SetTrigger("DisabledScreenOff");
+        }
+    }
+
+    public void TurnOffDisabledScreen()
+    {
+        if (enableDisabledScreenButton)
+        {
+            OffDisableMenuButton();
+        }
+        else
+        {
+            OffDisableDifficultyMenuButton();
+        }
+    }
+
+    private void OnDisableDifficultyMenuButton()
+    {
+        disabledMenu.SetActive(true);
+        disabledDifficultyMenuAnimator.SetTrigger("DisabledScreenOn");
+    }
+
+    private void OffDisableDifficultyMenuButton()
+    {
+        disabledMenuButton.interactable = false;
+        if (disabledDifficultyMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Disabled Screen On"))
+        {
+            disabledDifficultyMenuAnimator.SetTrigger("DisabledScreenOff");
+        }
     }
     #endregion
 }

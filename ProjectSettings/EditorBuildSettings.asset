@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Studio_Intro.unity
+    guid: bc248d792d621064e903d22757abb07c
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Scenes/Controls.unity
-    guid: c8a6071880c43304a924454f8f2db66b
   - enabled: 1
     path: Assets/Scenes/Round1.unity
     guid: c8015aeb09274d1429d9aef49b7506eb
@@ -20,7 +20,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Death.unity
     guid: 758f829f0804e264d9e480ad624b4754
-  - enabled: 1
-    path: Assets/Scenes/Round1Joystick.unity
-    guid: 1ee93a7064067df40abbc982d14da0b4
   m_configObjects: {}

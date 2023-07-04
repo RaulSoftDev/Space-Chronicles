@@ -160,6 +160,12 @@ public class Bullet : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+
+        /*if(transform.position.x > 5)
+        {
+            Debug.LogWarning("Disabled");
+            GetComponent<BoxCollider2D>().enabled = false;
+        }*/
     }
 
     private IEnumerator DestroyOnSeconds()

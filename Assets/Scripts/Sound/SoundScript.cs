@@ -54,6 +54,9 @@ public class SoundScript : MonoBehaviour
     {
         switch(scene.name)
         {
+            case "Studio_Intro":
+                //NO MUSIC
+                break;
             case "Round1":
                 audioSource.Stop();
                 audioSource.loop = true;

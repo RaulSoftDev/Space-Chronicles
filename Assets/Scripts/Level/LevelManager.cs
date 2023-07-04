@@ -18,6 +18,9 @@ public class LevelManager : MonoBehaviour
     public GameObject[] squads;
     public List<GameObject> runtimeSquads = new List<GameObject>();
     public GameObject inGameMenu;
+    public Animator warningSign;
+    public Animator[] roundSigns;
+    public bool roundSignDone = false;
 
     public GameObject[] enemiesList;
 
@@ -40,6 +43,14 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        AnimatorStateInfo roundState = roundSigns[round].GetCurrentAnimatorStateInfo(0);
+        float roundSignTime = roundState.normalizedTime;
+
+        if(roundState.IsName("EnterRound") && roundSignTime > 1.0f)
+        {
+            roundSignDone = true;
+        }
+
         foreach (GameObject squad in runtimeSquads)
         {
             foreach(Transform child in squad.transform)
@@ -60,6 +71,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator RoundsManager()
     {
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
+
         Debug.LogWarning("Round 1");
 
         //ROUND 1
@@ -101,12 +113,14 @@ public class LevelManager : MonoBehaviour
         //StartCoroutine(CheckEnemiesState());
 
         fireScript.instance.enableAttack = false;
+        roundSignDone = false;
 
-        //WARNING TEXT
-        yield return new WaitForSeconds(2f);
-        enemyText.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        enemyText.SetActive(false);
+        yield return new WaitForSeconds(2);
+
+        //WARNING SIGN
+        warningSign.SetTrigger("SignOn");
+        yield return new WaitForSeconds(4);
+        warningSign.SetTrigger("SignOff");
 
         //ROUND 1
         SpawnSquad();
@@ -114,11 +128,9 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => currentSquad.transform.position.y <= 5.5f);
         currentSquad.GetComponent<SquadMovementManager>().startMove = false;
 
-        //WARNING TEXT
-        yield return new WaitForSeconds(2f);
-        enemyText.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        enemyText.SetActive(false);
+        //ROUND SIGN
+        roundSigns[round].SetTrigger("RoundOn");
+        yield return new WaitUntil(() => roundSignDone);
 
         //BEGIN FIGHT
         currentSquad.GetComponent<SquadMovementManager>().startMove = true;
@@ -225,7 +237,10 @@ public class LevelManager : MonoBehaviour
     {
         foreach (Transform child in inGameMenu.transform)
         {
-            child.GetComponent<Button>().interactable = false;
+            if(child.GetComponent<Button>() != null)
+            {
+                child.GetComponent<Button>().interactable = false;
+            }
         }
         Time.timeScale = 1;
         MenuScript.Instance.MainMenu(0);
