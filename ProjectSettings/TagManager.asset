@@ -21,6 +21,8 @@ TagManager:
   - BScreen
   - BSParent
   - SController
+  - CollisionChecker
+  - IIBasic
   layers:
   - Default
   - TransparentFX

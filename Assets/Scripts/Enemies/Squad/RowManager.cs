@@ -14,10 +14,12 @@ public class RowManager : MonoBehaviour
     float lerpTime = 100f;
 
     //Functions
-    private MyFunctions archive = new MyFunctions();
+    private MyFunctions archive;
 
     protected void Start()
     {
+        archive = gameObject.AddComponent<MyFunctions>();
+
         startPos = transform.localPosition;
         endPos = new Vector3(0.8f, 0, 0);
     }

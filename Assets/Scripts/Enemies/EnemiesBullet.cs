@@ -9,25 +9,33 @@ public class EnemiesBullet : MonoBehaviour
     private float timeToHide = 3;
     private float currentTime = 0;
 
+    private void Start()
+    {
+        if(gameObject.tag == "Missile")
+        {
+            timeToHide = 12;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Player")
         {
-            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, transform.rotation);
+            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
         }
 
         if (collision.tag == "Bullet")
         {
-            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, transform.rotation);
+            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
         }
 
         if (collision.tag == "Rocket")
         {
-            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, transform.rotation);
+            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
         }

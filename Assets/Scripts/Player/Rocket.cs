@@ -18,45 +18,66 @@ public class Rocket : MonoBehaviour
         switch (collision.tag)
         {
             case "IBasic":
-                //Instantiate explosion on collision
-                hit = Instantiate(explosionFx, transform.position, transform.rotation);
-                Destroy(hit, 1.6f);
-                //In case of no shield enemy we take 1 enemy life point
-                collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
-                collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                Destroy(gameObject);
-                break;
-            case "IIMisile":
-                //Instantiate explosion on collision
-                hit = Instantiate(explosionFx, transform.position, transform.rotation);
-                Destroy(hit, 1.6f);
-                //In case of no shield enemy we take 1 enemy life point
-                collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
-                collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                Destroy(gameObject);
-                break;
-            case "IIShield":
-                //Instantiate explosion on collision
-                hit = Instantiate(explosionFx, transform.position, transform.rotation);
-                Destroy(hit, 1.6f);
-                //In case of shield enemy we take 1 enemy shield point
-                collision.gameObject.GetComponent<EnemiesAI>().shield -= 3;
-                //Then we check for shield points and activate the animation needed
-                if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
+                if (collision.gameObject.GetComponent<EnemiesAI>().enableCollision)
                 {
-                    collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
-                }
-                else if (collision.gameObject.GetComponent<EnemiesAI>().shield == 0)
-                {
-                    collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
-                }
-                else
-                {
-                    //Once it has no more shield points start to take life points
+                    //Instantiate explosion on collision
+                    hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    Destroy(hit, 1.6f);
+                    //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                    Destroy(gameObject);
                 }
-                Destroy(gameObject);
+                break;
+            case "IIBasic":
+                if (collision.gameObject.GetComponent<EnemiesAI>().enableCollision)
+                {
+                    //Instantiate explosion on collision
+                    hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    Destroy(hit, 1.6f);
+                    //In case of no shield enemy we take 1 enemy life point
+                    collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
+                    collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                    Destroy(gameObject);
+                }
+                break;
+            case "IIMisile":
+                if (collision.gameObject.GetComponent<EnemiesAI>().enableCollision)
+                {
+                    //Instantiate explosion on collision
+                    hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    Destroy(hit, 1.6f);
+                    //In case of no shield enemy we take 1 enemy life point
+                    collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
+                    collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                    Destroy(gameObject);
+                }
+                break;
+            case "IIShield":
+                if (collision.gameObject.GetComponent<EnemiesAI>().enableCollision)
+                {
+                    //Instantiate explosion on collision
+                    hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    Destroy(hit, 1.6f);
+                    //In case of shield enemy we take 1 enemy shield point
+                    collision.gameObject.GetComponent<EnemiesAI>().shield -= 3;
+                    //Then we check for shield points and activate the animation needed
+                    if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
+                    {
+                        collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
+                    }
+                    else if (collision.gameObject.GetComponent<EnemiesAI>().shield == 0)
+                    {
+                        collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
+                    }
+                    else
+                    {
+                        //Once it has no more shield points start to take life points
+                        collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= 3;
+                        collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+                    }
+                    Destroy(gameObject);
+                }
                 break;
             case "IIIMisile":
                 //Instantiate explosion on collision

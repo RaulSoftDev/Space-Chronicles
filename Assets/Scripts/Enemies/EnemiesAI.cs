@@ -53,6 +53,9 @@ public class EnemiesAI : MonoBehaviour
     public bool enableAttack = false;
     bool canBeAttacked = false;
     bool shieldDisable = false;
+    public bool enableCollision = false;
+    private bool canMissile = false;
+    private bool canBasic = false;
 
     //External Scripts
     PlayerHealth playerScript;
@@ -62,6 +65,7 @@ public class EnemiesAI : MonoBehaviour
     private float angle;
     private Vector2 center;
     private float counterZero = 0;
+    private float secToAttack;
 
     private void Start()
     {
@@ -74,12 +78,8 @@ public class EnemiesAI : MonoBehaviour
         //canAttack = true;
         center = transform.localPosition;
 
+        StartCoroutine(EnableCollision());
         StartCoroutine(EnemyDeathCheck());
-    }
-
-    private void Update()
-    {
-        BasicShoot();
     }
 
     private void LoadShipsAttacks()
@@ -89,6 +89,12 @@ public class EnemiesAI : MonoBehaviour
             case "IBasic":
                 currentHealth = healthI;
                 StartCoroutine(WaitingForAimBasicShoot());
+                //StartCoroutine(basicMovement());
+                //StartCoroutine(basicEnemiesRotation(transform));
+                return;
+            case "IIBasic":
+                currentHealth = healthI;
+                StartCoroutine(WaitingForAimBasicShootLV2());
                 //StartCoroutine(basicMovement());
                 //StartCoroutine(basicEnemiesRotation(transform));
                 return;
@@ -102,7 +108,9 @@ public class EnemiesAI : MonoBehaviour
                 //StartCoroutine(WaitingForAimBasicShoot());
                 //StartCoroutine(basicMovement());
                 return;
-            case "IIIMisile":
+            default:
+                return;
+            /*case "IIIMisile":
                 currentHealth = healthIII;
                 StartCoroutine(WaitingForAimBasicShoot());
                 StartCoroutine(WaitingForAimMisile());
@@ -115,7 +123,16 @@ public class EnemiesAI : MonoBehaviour
                 currentHealth = healthIV;
                 StartCoroutine(WaitingForAimBasicShoot());
                 StartCoroutine(WaitingForAimMisile());
-                return;
+                return;*/
+        }
+    }
+
+    private void Update()
+    {
+        if (canAttack)
+        {
+            BasicShoot();
+            MisileShoot();
         }
     }
 
@@ -128,6 +145,12 @@ public class EnemiesAI : MonoBehaviour
         GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation, transform.parent);
         //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
         Destroy(gameObject);
+    }
+
+    private IEnumerator EnableCollision()
+    {
+        yield return new WaitUntil(() => transform.position.y < -1);
+        GetComponent<BoxCollider2D>().enabled = true;
     }
 
     private IEnumerator basicEnemiesRotation(Transform t)
@@ -216,23 +239,43 @@ public class EnemiesAI : MonoBehaviour
     //Assignment for Aim&Shoot
     IEnumerator WaitingForAimBasicShoot()
     {
+        yield return new WaitUntil(() => canAttack);
+
         while (true)
         {
             yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
             //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
             yield return new WaitForSeconds(Random.Range(2, 8));
-            canAttack = true;
+            canBasic = true;
+        }
+    }
+
+    IEnumerator WaitingForAimBasicShootLV2()
+    {
+        yield return new WaitUntil(() => canAttack);
+
+        while (true)
+        {
+            yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
+            //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
+            yield return new WaitForSeconds(Random.Range(1, 5));
+            canBasic = true;
         }
     }
 
     //Set the enemy to aim to the player
     IEnumerator WaitingForAimMisile()
     {
+        yield return new WaitUntil(() => canAttack);
+
         while (true)
         {
+            secToAttack = Random.Range(6, 20);
+            yield return new WaitForSeconds(secToAttack);
             firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
-            MisileShoot();
-            yield return new WaitForSeconds(Random.Range(2, 10));
+            Debug.LogError(gameObject.tag);
+            //MisileShoot();
+            canMissile = true;
         }
     }
 
@@ -282,32 +325,41 @@ public class EnemiesAI : MonoBehaviour
     //Sets the enemy basic shoot instance
     void BasicShoot()
     {
-        if (enableAttack && canAttack)
+        if (enableAttack && canBasic)
         {
             GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), transform.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(-transform.up * bulletForce, ForceMode2D.Impulse);
             audioSourceEnemies.Stop();
             audioSourceEnemies.PlayOneShot(basicShootSound);
-            canAttack = false;
+            canBasic = false;
         }
     }
 
     //Sets the enemy missile shot instance 
     void MisileShoot()
     {
-        if (canAttack)
+        if (canMissile)
         {
+            canMissile = false;
             GameObject misile = Instantiate(misileEnemiesPrefab, firePositionEnemies.position, firePositionEnemies.rotation);
             Rigidbody2D rb = misile.GetComponent<Rigidbody2D>();
             rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Impulse);
             audioSourceEnemies.Stop();
             audioSourceEnemies.PlayOneShot(misileSound);
+            Debug.LogError(gameObject.tag);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        if (collision.tag == "CollisionChecker")
+        {
+            enableCollision = true;
+            canAttack = true;
+        }
+
         if(collision.tag == "Player")
         {
             if(PlayerHealth.instance.playerHealth > 0)

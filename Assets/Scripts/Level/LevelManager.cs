@@ -16,6 +16,8 @@ public class LevelManager : MonoBehaviour
     public GameObject enemyText;
     public GameObject spawnPoint;
     public GameObject[] squads;
+    public GameObject[] squadsLV2;
+    public GameObject[] squadsLV3;
     public List<GameObject> runtimeSquads = new List<GameObject>();
     public GameObject inGameMenu;
     public Animator warningSign;
@@ -176,13 +178,36 @@ public class LevelManager : MonoBehaviour
     {
         squadNumber++;
 
-        currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+        switch (round)
+        {
+            case 0:
+                currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+                runtimeSquads.Add(currentSquad);
+                Debug.LogWarning("Spawning Squad");
+                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                break;
+            case 1:
+                currentSquad = Instantiate(squadsLV2[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+                runtimeSquads.Add(currentSquad);
+                Debug.LogWarning("Spawning Squad");
+                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                break;
+            case 2:
+                currentSquad = Instantiate(squadsLV3[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+                runtimeSquads.Add(currentSquad);
+                Debug.LogWarning("Spawning Squad");
+                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                break;
+            default:
+                break;
+        }
+        /*currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
         runtimeSquads.Add(currentSquad);
         //enemyText.SetActive(true);
         //yield return new WaitForSeconds(3f);
         //enemyText.SetActive(false);
         Debug.LogWarning("Spawning Squad");
-        currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+        currentSquad.GetComponent<SquadMovementManager>().startMove = true;*/
         //StartCoroutine(EnemyBehaviour.instance.SetUpEnemies(currentSquad.transform));
         //StartCoroutine(EnemyBehaviour.instance.WaitCoroutine(currentSquad.transform));
         //StartCoroutine(CheckForEnemiesOnSquads());

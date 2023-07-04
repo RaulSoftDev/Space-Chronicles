@@ -6,6 +6,6 @@ public class Rotation : MonoBehaviour
 {
     void Update()
     {
-        transform.RotateAround(transform.position, Vector3.forward, 5 * Time.deltaTime);
+        transform.RotateAround(transform.position, Vector3.forward, 0.66f * Time.deltaTime);
     }
 }

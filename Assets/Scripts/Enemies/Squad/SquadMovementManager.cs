@@ -15,11 +15,13 @@ public class SquadMovementManager : MonoBehaviour
 
     public bool startMove = false;
 
-    private MyFunctions archive = new MyFunctions();
+    private MyFunctions archive;
 
     // Start is called before the first frame update
     void Start()
     {
+        archive = gameObject.AddComponent<MyFunctions>();
+
         startPos = transform.position;
         endPos = transform.position - transform.up * moveDistance;
     }
