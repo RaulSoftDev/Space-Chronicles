@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class MenuScript : Singleton<MenuScript>
 {
+    private float t = 0;
+
     private void Awake()
     {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("SController");
@@ -17,6 +19,16 @@ public class MenuScript : Singleton<MenuScript>
         }
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += StopTiming;
+    }
+
+    private void StopTiming(Scene scene, LoadSceneMode mode)
+    {
+        StopCoroutine("Timing");
     }
 
     public void MainMenu(int scene)
@@ -46,10 +58,22 @@ public class MenuScript : Singleton<MenuScript>
 
     IEnumerator waitForScene(int scene)
     {
-        PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
+        //PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine("Timing");
         BlackScreenLoader.Instance.LoadBlackScreen();
         yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene(scene);
+    }
+
+    IEnumerator Timing()
+    {
+        t = 0;
+        while (true)
+        {
+            t += 0.5f * Time.deltaTime;
+            SoundScript.instance.audioSource.volume = Mathf.Lerp(1, 0, t);
+            yield return null;
+        }
     }
 
     IEnumerator waitForExit()
@@ -60,7 +84,8 @@ public class MenuScript : Singleton<MenuScript>
 
     IEnumerator LoadPreviousScene()
     {
-        yield return new WaitForSeconds(1);
+        BlackScreenLoader.Instance.LoadBlackScreen();
+        yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene(PlayerPrefs.GetInt("LastScene"));
     }
 

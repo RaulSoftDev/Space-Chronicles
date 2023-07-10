@@ -56,6 +56,7 @@ public class EnemiesAI : MonoBehaviour
     public bool enableCollision = false;
     private bool canMissile = false;
     private bool canBasic = false;
+    public bool isPlayerDead = false;
 
     //External Scripts
     PlayerHealth playerScript;
@@ -80,6 +81,7 @@ public class EnemiesAI : MonoBehaviour
 
         StartCoroutine(EnableCollision());
         StartCoroutine(EnemyDeathCheck());
+        StartCoroutine(PlayerDead());
     }
 
     private void LoadShipsAttacks()
@@ -134,6 +136,12 @@ public class EnemiesAI : MonoBehaviour
             BasicShoot();
             MisileShoot();
         }
+    }
+
+    private IEnumerator PlayerDead()
+    {
+        yield return new WaitUntil(() => PlayerHealth.instance.playerHealth <= 0);
+        StopAllCoroutines();
     }
 
     //Enemy health check

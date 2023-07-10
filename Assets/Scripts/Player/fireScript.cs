@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class fireScript : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class fireScript : MonoBehaviour
     [SerializeField] private Image[] rocketLoadButtons;
     [SerializeField] private Sprite rocketOn;
     [SerializeField] private Sprite rocketOff;
+    [SerializeField] private Button triggerButton;
     private float currentBullet = 0;
     public bool canAttack = false;
     public bool enableAttack = false;
@@ -47,6 +49,8 @@ public class fireScript : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
+
         audioSourcePlayer = GetComponent<AudioSource>();
         inputManager = InputManager.Instance;
 
@@ -56,6 +60,8 @@ public class fireScript : MonoBehaviour
         StartCoroutine(LoadRocket02());
         StartCoroutine(LoadRocket03());
 
+        StartCoroutine(StopAttacksOnDeath());
+
         canAttack = true;
     }
 
@@ -63,7 +69,7 @@ public class fireScript : MonoBehaviour
     private void Update()
     {
         SaveSlideValue();
-        Debug.Log(currentBullet);
+        //Debug.Log(currentBullet);
 
         //CheckRocketAvailability();
 
@@ -72,6 +78,23 @@ public class fireScript : MonoBehaviour
             /*if (SwipeDetection.Instance.touchStart && !EventSystem.current.IsPointerOverGameObject()) canAttack = true;
             else canAttack = false;*/
         }
+
+        if(PlayerHealth.instance.playerHealth <= 0)
+        {
+            StopAllCoroutines();
+            rocketButton.image.sprite = rocketOff;
+            rocketButton.interactable = false;
+            triggerButton.interactable = false;
+            PlayerHealth.instance.powerSlider.value = 0;
+        }
+    }
+
+    private IEnumerator StopAttacksOnDeath()
+    {
+        yield return new WaitUntil(() => PlayerHealth.instance.playerHealth <= 0);
+        triggerButton.interactable = false;
+        canAttack = false;
+        StopAllCoroutines();
     }
 
 

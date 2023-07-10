@@ -33,7 +33,7 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         //touchXPosition = swipeDetection.startPosition.x - inputManager.PrimaryPosition().x;
 
-        if (playerInPos)
+        if (playerInPos && PlayerHealth.instance.playerHealth > 0)
         {
             if (!inputManager.joystickMode)
             {
@@ -45,6 +45,9 @@ public class Player_Movement : Singleton<Player_Movement>
             else
             {
                 //MOVEMENT
+                rightPad.enabled = true;
+                leftPad.enabled = true;
+
                 if (rightPad.Horizontal > 0)
                 {
                     Debug.Log(rightPad.Horizontal);
@@ -145,6 +148,11 @@ public class Player_Movement : Singleton<Player_Movement>
             }
 
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, -2.20f, 2.20f), transform.position.y, transform.position.z);
+        }
+        else
+        {
+            rightPad.enabled = false;
+            leftPad.enabled = false;
         }
     }
 

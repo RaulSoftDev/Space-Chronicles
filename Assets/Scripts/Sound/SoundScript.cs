@@ -7,7 +7,7 @@ public class SoundScript : MonoBehaviour
 {
     public static SoundScript instance;
 
-    AudioSource audioSource;
+    public AudioSource audioSource;
     public AudioClip song;
     public AudioClip songMenu;
     public AudioClip victoryClip1;
@@ -52,19 +52,20 @@ public class SoundScript : MonoBehaviour
 
     void ChangeSongMenu(Scene scene)
     {
-        switch(scene.name)
+        audioSource.Stop();
+        audioSource.volume = 1.0f;
+
+        switch (scene.name)
         {
             case "Studio_Intro":
                 //NO MUSIC
                 break;
             case "Round1":
-                audioSource.Stop();
                 audioSource.loop = true;
                 audioSource.clip = song;
                 audioSource.Play();
                 break;
             case "Round1Joystick":
-                audioSource.Stop();
                 audioSource.loop = true;
                 audioSource.clip = song;
                 audioSource.Play();
@@ -72,7 +73,6 @@ public class SoundScript : MonoBehaviour
             case "MainMenu":
                 if(audioSource.clip != songMenu)
                 {
-                    audioSource.Stop();
                     audioSource.loop = true;
                     audioSource.clip = songMenu;
                     audioSource.Play();
@@ -82,7 +82,6 @@ public class SoundScript : MonoBehaviour
                 StartCoroutine(victoryClipAudio());
                 break;
             case "Death":
-                audioSource.Stop();
                 audioSource.loop = false;
                 audioSource.clip = deathClip;
                 audioSource.Play();
@@ -92,7 +91,6 @@ public class SoundScript : MonoBehaviour
 
     IEnumerator victoryClipAudio()
     {
-        audioSource.Stop();
         audioSource.clip = victoryClip1;
         audioSource.loop = false;
         audioSource.Play();

@@ -15,8 +15,16 @@ public class PlayerHealth : MonoBehaviour
     public int playerPoints = 0;
     public int rocketPoints = 0;
     public float playerShieldPoints = 0;
+    public float hueValue = 124;
+    public float saturationValue = 100;
+    public float brightnessValue = 100;
+    private float redBGAlpha = 0.1f;
+    private float redGradientAlpha = 0.85f;
 
     public Animator healthBar;
+
+    //Health Bar Color
+    public Image healthColor;
 
     public float enemyBulletValue = 1;
     public float enemyRocketValue = 3;
@@ -26,6 +34,25 @@ public class PlayerHealth : MonoBehaviour
     AudioSource playerAudiosource;
     public AudioClip rocketAvailable;
     public AudioClip shieldAvailable;
+
+    //Red Background Variables
+    public Image redBG;
+    public Image redGradient;
+    private float desiredDurationBG = 2f;
+    private float desiredDuration = 2f;
+    private float elapsedTimeBG;
+    private float elapsedTime;
+    private float percentageCompleteBG;
+    private float percentageComplete;
+    private bool restartPercentage = false;
+    private bool isLooping = true;
+    private bool isPlayerDead = false;
+    private Color redColor1;
+    private Color redColor2;
+
+    //Death Screen Variables
+    public GameObject deathScreen;
+    public GameObject pauseButton;
 
     private void Awake()
     {
@@ -53,8 +80,12 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitUntil(() => playerHealth < 1);
         GameObject explotionInstance = Instantiate(playerExplosion, transform.position, transform.rotation);
         explotionInstance.transform.parent = transform;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
         //Load scene
-        MenuScript.Instance.StartMenu(4);
+        //MenuScript.Instance.StartMenu(4)
+        StartCoroutine(LerpColorOnDeath());
+        pauseButton.SetActive(false);
+        deathScreen.SetActive(true);
     } 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -113,8 +144,18 @@ public class PlayerHealth : MonoBehaviour
         }
 
         HealthSliderValues();
+        
+        if(healthSlider.value < (healthSlider.maxValue * 50) / 100)
+        {
+            elapsedTimeBG += Time.deltaTime;
+            percentageCompleteBG = elapsedTimeBG / desiredDurationBG;
+            redBG.color = Color.Lerp(Color.clear, redColor1, percentageCompleteBG);
+        }
 
-        HealthBarColor();
+        if (healthSlider.value < (healthSlider.maxValue * 25) / 100)
+        {
+            desiredDuration = 1;
+        }
     }
 
     private void HealthSliderValues()
@@ -122,11 +163,83 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.value = playerHealth;
     }
 
-    private void HealthBarColor()
+    public void HealthBarColor()
     {
-        if(playerHealth < 100)
+        healthColor.color = Color.Lerp(Color.red, new Color(0, 1, 0.06043053f, 1), healthSlider.value / 500);
+        redColor1 = Color.Lerp(new Color(1, 1, 1, 0.15f), new Color(1, 1, 1, 0.01f), healthSlider.value / 500);
+    }
+
+    private void loadPercentage()
+    {
+        elapsedTime += Time.deltaTime;
+
+        if (restartPercentage)
         {
-            healthBar.SetTrigger("OrangeOn");
-        } 
+            elapsedTime = 0;
+            restartPercentage = false;
+        }
+    }
+
+    private void RedColorAnimation()
+    {
+        float percentageComplete = elapsedTime / desiredDuration;
+        Debug.Log(percentageComplete);
+
+        redBG.color = Color.Lerp(Color.clear, Color.white, percentageComplete);
+    }
+
+    private IEnumerator LerpColorOn()
+    {
+        while (percentageComplete < 1)
+        {
+            elapsedTime += Time.deltaTime;
+            percentageComplete = elapsedTime / desiredDuration;
+            redGradient.color = Color.Lerp(Color.clear, new Color(1, 1, 1, redGradientAlpha), percentageComplete);
+            yield return null;
+        }
+        if(playerHealth <= 0)
+        {
+            yield break;
+        }
+        elapsedTime = 0;
+        percentageComplete = 0;
+        StartCoroutine(LerpColorOff());
+    }
+
+    private IEnumerator LerpColorOnDeath()
+    {
+        Color currentColor = redBG.color;
+        //Color currentGradientColor = redGradient.color;
+        while (true)
+        {
+            elapsedTime += Time.deltaTime;
+            percentageComplete = elapsedTime / desiredDuration;
+            redBG.color = Color.Lerp(new Color(1, 1, 1, 0.15f), currentColor, percentageComplete);
+            //redGradient.color = Color.Lerp(new Color(1, 1, 1, 0.85f), currentGradientColor, percentageComplete);
+            yield return null;
+        }
+    }
+
+    private IEnumerator LerpColorOff()
+    {
+        while (percentageComplete < 1)
+        {
+            elapsedTime += Time.deltaTime;
+            percentageComplete = elapsedTime / desiredDuration;
+            redGradient.color = Color.Lerp(new Color(1, 1, 1, redGradientAlpha), Color.clear, percentageComplete);
+            yield return null;
+        }
+        elapsedTime = 0;
+        percentageComplete = 0;
+        StartCoroutine(LerpColorOn());
+    }
+
+    public void ColorLerpLoop()
+    {
+        if(healthSlider.value < (healthSlider.maxValue * 20) / 100 && isLooping)
+        {
+            StartCoroutine(LerpColorOn());
+            isLooping = false;
+        }
     }
 }

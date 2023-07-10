@@ -31,6 +31,13 @@ public class ShieldController : MonoBehaviour
             shieldButton.interactable = false;
             shieldButton.image.sprite = buttonOffMode;
         }
+
+        if(PlayerHealth.instance.playerHealth <= 0)
+        {
+            StopAllCoroutines();
+            shieldButton.interactable = false;
+            shieldButton.image.sprite = buttonOffMode;
+        }
     }
 
     private void SaveCurrentShieldValue()

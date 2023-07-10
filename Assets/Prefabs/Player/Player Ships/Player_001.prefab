@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1168669145436385800}
   - component: {fileID: 1168669145436241366}
   m_Layer: 0
-  m_Name: Engine Particles
+  m_Name: Engine Particles_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4860,7 +4860,7 @@ GameObject:
   - component: {fileID: 1168669145436344116}
   - component: {fileID: 1168669145436308568}
   m_Layer: 0
-  m_Name: Engine Particles
+  m_Name: Engine Particles_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9737,7 +9737,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 54398bbbdf3507a4f9e9e90c9fea674b, type: 3}
   m_Color: {r: 0.6, g: 1, b: 0.7013403, a: 1}
   m_FlipX: 0
@@ -9836,7 +9836,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: eb7a87a10d1e65d49b3c2d9a86b4b17a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -9957,7 +9957,9 @@ MonoBehaviour:
   rocketLoadButtons: []
   rocketOn: {fileID: 0}
   rocketOff: {fileID: 0}
+  triggerButton: {fileID: 0}
   canAttack: 0
+  enableAttack: 0
 --- !u!114 &8766969694456990686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9977,12 +9979,20 @@ MonoBehaviour:
   playerPoints: 0
   rocketPoints: 0
   playerShieldPoints: 0
+  hueValue: 124
+  saturationValue: 100
+  brightnessValue: 100
   healthBar: {fileID: 0}
+  healthColor: {fileID: 0}
   enemyBulletValue: 1
   enemyRocketValue: 3
   playerExplosion: {fileID: 0}
   rocketAvailable: {fileID: 8300000, guid: 9ca214db77065fe49a66966ac6e634e4, type: 3}
   shieldAvailable: {fileID: 8300000, guid: 22be32baffefde44daab6f638d5d690e, type: 3}
+  redBG: {fileID: 0}
+  redGradient: {fileID: 0}
+  deathScreen: {fileID: 0}
+  pauseButton: {fileID: 0}
 --- !u!114 &8432754308955003227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10263,7 +10273,7 @@ GameObject:
   - component: {fileID: 5745931086314954556}
   - component: {fileID: 5745931086314954555}
   m_Layer: 0
-  m_Name: Engine Particles (1)
+  m_Name: Engine Particles_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15081,7 +15091,7 @@ GameObject:
   - component: {fileID: 5745931087003285267}
   - component: {fileID: 5745931087003285266}
   m_Layer: 0
-  m_Name: Engine Particles (2)
+  m_Name: Engine Particles_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20207,7 +20217,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 54119232683c514439e10cce63172055, type: 3}
   m_Color: {r: 0.482353, g: 0.7372549, b: 0.99215686, a: 1}
   m_FlipX: 0

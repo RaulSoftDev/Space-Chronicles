@@ -41,6 +41,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(RoundsManager());
+        StartCoroutine(PlayerHealthCheck());
     }
 
     private void Update()
@@ -246,6 +247,22 @@ public class LevelManager : MonoBehaviour
 
 
     //MENU SETTINGS
+    public void RestartScene()
+    {
+        BlockUIButtons();
+        MenuScript.Instance.RestartPreviousScene();
+    }
+
+    private void BlockUIButtons()
+    {
+        Button[] UIButtons = FindObjectsOfType<Button>();
+
+        foreach (Button button in UIButtons)
+        {
+            button.interactable = false;
+        }
+    }
+
     public void OpenInGameMenu()
     {
         Time.timeScale = 0;
@@ -260,14 +277,23 @@ public class LevelManager : MonoBehaviour
 
     public void ExitToMainMenu()
     {
-        foreach (Transform child in inGameMenu.transform)
+        /*foreach (Transform child in inGameMenu.transform)
         {
             if(child.GetComponent<Button>() != null)
             {
                 child.GetComponent<Button>().interactable = false;
             }
-        }
+        }*/
+        BlockUIButtons();
         Time.timeScale = 1;
         MenuScript.Instance.MainMenu(0);
+    }
+
+    IEnumerator PlayerHealthCheck()
+    {
+        yield return new WaitUntil(() => PlayerHealth.instance.playerHealth <= 0);
+        PlayerHealth.instance.gameObject.GetComponent<Animator>().SetTrigger("IsPlayerDead");
+        yield return new WaitForSeconds(1);
+        StopAllCoroutines();
     }
 }
