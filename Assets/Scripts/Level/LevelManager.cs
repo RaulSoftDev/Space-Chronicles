@@ -23,6 +23,8 @@ public class LevelManager : MonoBehaviour
     public Animator warningSign;
     public Animator[] roundSigns;
     public bool roundSignDone = false;
+    public Vector3 startPosition;
+    public GameObject dialogue;
 
     public GameObject[] enemiesList;
 
@@ -75,6 +77,10 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
 
+        //AI MESSAGE
+        dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
+        yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
+
         Debug.LogWarning("Round 1");
 
         //ROUND 1
@@ -83,7 +89,6 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => round == 1);
 
         //ROUND 2
-
         Debug.LogWarning("Round 2");
 
         noEnemiesLeft = false;
@@ -107,8 +112,9 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => round == 3);
 
         //VICTORY SCENE
-
-        MenuScript.Instance.StartMenu(3);
+        dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
+        yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
+        MenuScript.Instance.StartMenu(0);
     }
 
     private IEnumerator GenerateRound()
@@ -137,9 +143,10 @@ public class LevelManager : MonoBehaviour
 
         //BEGIN FIGHT
         currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+        currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
+        startPosition = currentSquad.transform.position;
         foreach (Transform child in currentSquad.transform)
         {
-            child.GetComponent<RowManager>().rightMoveLoop = true;
             foreach(Transform child2 in child.transform)
             {
                 child2.GetComponent<EnemiesAI>().enableAttack = true;
@@ -151,9 +158,9 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
         SpawnSquad();
+        currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
         foreach (Transform child in currentSquad.transform)
         {
-            child.GetComponent<RowManager>().rightMoveLoop = true;
             foreach (Transform child2 in child.transform)
             {
                 child2.GetComponent<EnemiesAI>().enableAttack = true;
@@ -162,9 +169,9 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
         SpawnSquad();
+        currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
         foreach (Transform child in currentSquad.transform)
         {
-            child.GetComponent<RowManager>().rightMoveLoop = true;
             foreach (Transform child2 in child.transform)
             {
                 child2.GetComponent<EnemiesAI>().enableAttack = true;

@@ -14,6 +14,7 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] Animator disabledDifficultyMenuAnimator;
     [SerializeField] Button disabledMenuButton;
     [SerializeField] Animator titleScreen;
+    [SerializeField] Animator dialogSystem;
     private bool enableMenuButtons = false;
     private bool enterDifficultyMenu = false;
     private bool enterCampaignMenu = false;
@@ -24,6 +25,16 @@ public class MenuBehaviour : MonoBehaviour
     private bool enableDisabledScreenButton = false;
     private bool disableDisabledScreenButton = false;
     private bool disableTapScreen = false;
+    private int currentUnlockedDifficulty = 0;
+    public bool skipLogo = false;
+
+    private void Awake()
+    {
+        if (skipLogo)
+        {
+            UnlockNextDifficulty();
+        }
+    }
 
     private void Start()
     {
@@ -334,6 +345,13 @@ public class MenuBehaviour : MonoBehaviour
     {
         StartCoroutine(EnterBackMainMenuButtons());
     }
+
+    private void SkipLogo()
+    {
+        titleScreen.gameObject.SetActive(false);
+        StartCoroutine(EnterMainMenuButtons());
+
+    }
     #endregion
 
     #region Difficulty Menu
@@ -354,18 +372,6 @@ public class MenuBehaviour : MonoBehaviour
             switch(button.name)
             {
                 case "Pussycat":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Average":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Foolish":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Insane":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Back_D":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
             }
@@ -422,18 +428,6 @@ public class MenuBehaviour : MonoBehaviour
             switch (button.name)
             {
                 case "Pussycat":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Average":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Foolish":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Insane":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-                case "Back_D":
                     button.gameObject.GetComponent<Button>().interactable = true;
                     break;
             }
@@ -573,6 +567,29 @@ public class MenuBehaviour : MonoBehaviour
         {
             disabledDifficultyMenuAnimator.SetTrigger("DisabledScreenOff");
         }
+    }
+    #endregion
+
+    #region Unlocked Difficulties
+    private void UnlockNextDifficulty()
+    {
+        //Hide Title Screen
+        titleScreen.gameObject.SetActive(false);
+        //Show Difficulty Menu
+        GetInDifficultyButtons();
+        //Show unlocked difficulty dialogue
+        StartCoroutine(NewDifficultyUnlocked());
+    }
+
+    IEnumerator NewDifficultyUnlocked()
+    {
+        yield return new WaitUntil(() => enableDifficultyButtons);
+        dialogSystem.gameObject.SetActive(true);
+        dialogSystem.SetTrigger("OpenDialogue");
+        yield return new WaitUntil(() => dialogSystem.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
+        dialogSystem.gameObject.SetActive(false);
+        currentUnlockedDifficulty++;
+        difficultyMenuButtons[currentUnlockedDifficulty].GetComponent<Button>().interactable = true;
     }
     #endregion
 }
