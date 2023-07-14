@@ -9,10 +9,10 @@ public class EnemiesAI : MonoBehaviour
 
     //Variables Assignment
     //Var Health
-    int healthI = 2;
-    int healthII = 4;
-    int healthIII = 8;
-    int healthIV = 16;
+    int healthI = 20;
+    int healthII = 40;
+    int healthIII = 80;
+    int healthIV = 160;
 
     public int currentHealth;
 
@@ -20,7 +20,7 @@ public class EnemiesAI : MonoBehaviour
     private string[] enemiesTags = {"IBasic", "IIMisile", "IIShield", "IIIMisile", "IIIShield", "Boss"};
 
     //Var Shield
-    public int shield = 8;
+    public int shield = 80;
 
 
     //Var Components
@@ -67,6 +67,12 @@ public class EnemiesAI : MonoBehaviour
     private Vector2 center;
     private float counterZero = 0;
     private float secToAttack;
+
+    private void Awake()
+    {
+        healthI = PlayerPrefs.GetInt("BHealth");
+        healthII = PlayerPrefs.GetInt("RocketHealth");
+    }
 
     private void Start()
     {

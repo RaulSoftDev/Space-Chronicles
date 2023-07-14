@@ -13,11 +13,14 @@ public class DialogueSystem : MonoBehaviour
     private Animator dialogueAnimator;
     public bool isDialogueClosed = false;
 
+    private void OnEnable()
+    {
+        StartCoroutine(ShowButton());
+    }
+
     void Start()
     {
         dialogueAnimator = gameObject.GetComponent<Animator>();
-
-        StartCoroutine(ShowButton());
     }
 
     private void Update()

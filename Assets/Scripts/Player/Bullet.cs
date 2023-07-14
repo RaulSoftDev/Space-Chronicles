@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     public GameObject explosionFx;
     private float timeToHide = 1.75f;
     private float currentTime = 0;
-    public int damageLevel = 2;
+    public int damageLevel = 10;
 
     private void Start()
     {

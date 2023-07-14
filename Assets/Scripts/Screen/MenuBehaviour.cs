@@ -9,6 +9,8 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] Animator[] difficultyMenuButtons;
     [SerializeField] Animator[] campaignButtons;
     [SerializeField] Animator[] menuTitles;
+    [SerializeField] Sprite[] lockedDifficultiesSprites;
+    [SerializeField] Sprite[] unlockedDifficultiesSprites;
     [SerializeField] GameObject disabledMenu;
     [SerializeField] Animator disabledMenuAnimator;
     [SerializeField] Animator disabledDifficultyMenuAnimator;
@@ -27,17 +29,41 @@ public class MenuBehaviour : MonoBehaviour
     private bool disableTapScreen = false;
     private int currentUnlockedDifficulty = 0;
     public bool skipLogo = false;
+    private bool unlockLevel = false;
+    private int levelToUnlock = 0;
+    public bool resetDifficulty = false;
 
     private void Awake()
     {
-        if (skipLogo)
+        if (resetDifficulty)
+        {
+            PlayerPrefs.SetInt("LevelToUnlock", 0);
+        }
+
+        unlockLevel = (PlayerPrefs.GetInt("UnlockLevel") != 0);
+        levelToUnlock = PlayerPrefs.GetInt("LevelToUnlock");
+
+        if (unlockLevel)
         {
             UnlockNextDifficulty();
+            unlockLevel = false;
+            PlayerPrefs.SetInt("UnlockLevel", (unlockLevel ? 1 : 0));
+            if(levelToUnlock < 3)
+            {
+                levelToUnlock++;
+            }
+            Debug.LogError(levelToUnlock);
+            PlayerPrefs.SetInt("LevelToUnlock", levelToUnlock);
+        }
+        else if (skipLogo)
+        {
+            SkipLogo();
         }
     }
 
     private void Start()
     {
+        DifficultyButtonsCheck();
         StartCoroutine(LoadMainMenu());
     }
 
@@ -366,18 +392,31 @@ public class MenuBehaviour : MonoBehaviour
         }
 
         yield return new WaitUntil(() => enableDifficultyButtons);
-        //difficultyMenuButtons[0].transform.parent.GetComponent<VerticalLayoutGroup>().enabled = true;
+        DifficultyButtonsBehaviour();
+
+        enableDifficultyButtons = false;
+    }
+
+    private void DifficultyButtonsBehaviour()
+    {
         foreach (Animator button in difficultyMenuButtons)
         {
-            switch(button.name)
+            switch (button.name)
             {
                 case "Pussycat":
-                    button.gameObject.GetComponent<Button>().interactable = true;
+                    button.gameObject.GetComponent<Button>().enabled = true;
+                    break;
+                case "Average":
+                    button.gameObject.GetComponent<Button>().enabled = true;
+                    break;
+                case "Foolish":
+                    button.gameObject.GetComponent<Button>().enabled = true;
+                    break;
+                case "Insane":
+                    button.gameObject.GetComponent<Button>().enabled = true;
                     break;
             }
         }
-
-        enableDifficultyButtons = false;
     }
 
     private void GetInDifficultyButtons()
@@ -391,7 +430,7 @@ public class MenuBehaviour : MonoBehaviour
 
         foreach (Animator button in difficultyMenuButtons)
         {
-            button.gameObject.GetComponent<Button>().interactable = false;
+            button.gameObject.GetComponent<Button>().enabled = false;
         }
 
         menuTitles[1].SetTrigger("TitleOff");
@@ -422,16 +461,7 @@ public class MenuBehaviour : MonoBehaviour
         }
 
         yield return new WaitUntil(() => enableDifficultyButtons);
-        //mainMenuButtons[0].transform.parent.GetComponent<VerticalLayoutGroup>().enabled = true;
-        foreach (Animator button in difficultyMenuButtons)
-        {
-            switch (button.name)
-            {
-                case "Pussycat":
-                    button.gameObject.GetComponent<Button>().interactable = true;
-                    break;
-            }
-        }
+        DifficultyButtonsBehaviour();
 
         enableDifficultyButtons = false;
     }
@@ -554,7 +584,7 @@ public class MenuBehaviour : MonoBehaviour
         }
     }
 
-    private void OnDisableDifficultyMenuButton()
+    public void OnDisableDifficultyMenuButton()
     {
         disabledMenu.SetActive(true);
         disabledDifficultyMenuAnimator.SetTrigger("DisabledScreenOn");
@@ -571,6 +601,46 @@ public class MenuBehaviour : MonoBehaviour
     #endregion
 
     #region Unlocked Difficulties
+    private void DifficultyButtonsCheck()
+    {
+        foreach (Animator button in difficultyMenuButtons)
+        {
+            switch (button.name)
+            {
+                case "Average":
+                    if (PlayerPrefs.GetInt("LevelToUnlock") < 1)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[0];
+                    }
+                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 1)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[0];
+                    }
+                    break;
+                case "Foolish":
+                    if (PlayerPrefs.GetInt("LevelToUnlock") < 2)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[1];
+                    }
+                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 2)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[1];
+                    }
+                    break;
+                case "Insane":
+                    if (PlayerPrefs.GetInt("LevelToUnlock") < 3)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[2];
+                    }
+                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 3)
+                    {
+                        button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[2];
+                    }
+                    break;
+            }
+        }
+    }
+
     private void UnlockNextDifficulty()
     {
         //Hide Title Screen
@@ -587,9 +657,44 @@ public class MenuBehaviour : MonoBehaviour
         dialogSystem.gameObject.SetActive(true);
         dialogSystem.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogSystem.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
+        dialogSystem.GetComponent<DialogueSystem>().isDialogueClosed = false;
         dialogSystem.gameObject.SetActive(false);
-        currentUnlockedDifficulty++;
-        difficultyMenuButtons[currentUnlockedDifficulty].GetComponent<Button>().interactable = true;
+    }
+
+    public void CurrentDifficulty(int minLevel)
+    {
+        if (PlayerPrefs.GetInt("LevelToUnlock") >= minLevel)
+        {
+            SetCurrentDifficultyData(minLevel);
+            MoveOutDifficultyButtons();
+        }
+        else
+        {
+            OnDisableDifficultyMenuButton();
+        }
+    }
+
+    private void SetCurrentDifficultyData(int level)
+    {
+        DataControl.Instance.ResetData();
+        switch (level)
+        {
+            case 0:
+                DataControl.Instance.SetPussycatDifficultyData();
+                break;
+            case 1:
+                DataControl.Instance.SetAverageDifficultyData();
+                break;
+            case 2:
+                DataControl.Instance.SetFoolishDifficultyData();
+                break;
+            case 3:
+                DataControl.Instance.SetInsaneDifficultyData();
+                break;
+            default:
+                DataControl.Instance.SetPussycatDifficultyData();
+                break;
+        }
     }
     #endregion
 }

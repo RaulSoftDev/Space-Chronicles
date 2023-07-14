@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public static PlayerHealth instance;
 
     public float playerHealth = 11;
+    private float maxHealth;
     public bool GetDamage;
     public Slider healthSlider;
     public Slider powerSlider;
@@ -64,6 +65,9 @@ public class PlayerHealth : MonoBehaviour
         {
             Destroy(this);
         }
+
+        playerHealth = PlayerPrefs.GetInt("PlayerHealth");
+        maxHealth = playerHealth;
     }
 
     private void Start()
@@ -165,8 +169,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void HealthBarColor()
     {
-        healthColor.color = Color.Lerp(Color.red, new Color(0, 1, 0.06043053f, 1), healthSlider.value / 500);
-        redColor1 = Color.Lerp(new Color(1, 1, 1, 0.15f), new Color(1, 1, 1, 0.01f), healthSlider.value / 500);
+        healthColor.color = Color.Lerp(Color.red, new Color(0, 1, 0.06043053f, 1), healthSlider.value / maxHealth);
+        redColor1 = Color.Lerp(new Color(1, 1, 1, 0.15f), new Color(1, 1, 1, 0.01f), healthSlider.value / maxHealth);
     }
 
     private void loadPercentage()

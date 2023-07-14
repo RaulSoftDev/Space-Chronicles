@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     public bool roundSignDone = false;
     public Vector3 startPosition;
     public GameObject dialogue;
+    private bool unlockNext = false;
 
     public GameObject[] enemiesList;
 
@@ -73,13 +74,21 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void ShowDialogue()
+    {
+        dialogue.gameObject.SetActive(true);
+        dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
+    }
+
     private IEnumerator RoundsManager()
     {
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
 
         //AI MESSAGE
-        dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
+        ShowDialogue();
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
+        dialogue.GetComponent<DialogueSystem>().isDialogueClosed = false;
+        dialogue.gameObject.SetActive(false);
 
         Debug.LogWarning("Round 1");
 
@@ -112,9 +121,16 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => round == 3);
 
         //VICTORY SCENE
+        ShowDialogue();
         dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
-        MenuScript.Instance.StartMenu(0);
+        dialogue.GetComponent<DialogueSystem>().isDialogueClosed = false;
+        dialogue.gameObject.SetActive(false);
+
+        //UNLOCK NEXT DIFFICULTY
+        unlockNext = true;
+        PlayerPrefs.SetInt("UnlockLevel", (unlockNext ? 1 : 0));
+        MenuScript.Instance.StartMenu(1);
     }
 
     private IEnumerator GenerateRound()
