@@ -756,11 +756,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a3b0236bde7eb4cb06733b1e602bf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
   song: {fileID: 8300000, guid: 6aef848862e9770499901fb7c4581d48, type: 3}
   songMenu: {fileID: 8300000, guid: 9d9abbc699b5bf749b0930b22e7344ec, type: 3}
   victoryClip1: {fileID: 8300000, guid: d1de8e2d7e37ab74eabb9f190b918a6e, type: 3}
   victoryClip2: {fileID: 8300000, guid: ff71eed93cd78b945807a02ab2657881, type: 3}
   deathClip: {fileID: 8300000, guid: 07f7c787b89795e46a9ab83e9df1aae2, type: 3}
+  mixer: {fileID: 24100000, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
   play: 1
 --- !u!82 &1481092568
 AudioSource:

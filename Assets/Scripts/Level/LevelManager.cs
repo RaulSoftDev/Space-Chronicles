@@ -26,6 +26,11 @@ public class LevelManager : MonoBehaviour
     public Vector3 startPosition;
     public GameObject dialogue;
     private bool unlockNext = false;
+    private bool skipLogo = false;
+    public bool inGameMenuHide = false;
+    private bool settingsClosed = false;
+    private float inGameMenuTime = 0;
+    [SerializeField] GameObject settingsMenu;
 
     public GameObject[] enemiesList;
 
@@ -70,6 +75,37 @@ public class LevelManager : MonoBehaviour
             if(squad.transform.childCount < 1)
             {
                 runtimeSquads.Remove(squad);
+            }
+        }
+
+        //IN GAME MENU
+        AnimatorStateInfo inGameMenuState = inGameMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (inGameMenuState.IsName("Exit Menu") || inGameMenuState.IsName("CloseMenu"))
+        {
+            inGameMenuTime = inGameMenuState.normalizedTime;
+            if(inGameMenuTime > 1.0f)
+            {
+                inGameMenuHide = true;
+            }
+        }
+        else
+        {
+            inGameMenuTime = 0;
+            inGameMenuHide = false;
+        }
+
+        Debug.Log(inGameMenuTime);
+
+        //SETTINGS MENU
+        AnimatorStateInfo settingsState = settingsMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        if (settingsState.IsName("Exit Settings"))
+        {
+            float settingsTime = settingsState.normalizedTime;
+            if(settingsTime > 1.0f)
+            {
+                settingsClosed = true;
             }
         }
     }
@@ -290,26 +326,63 @@ public class LevelManager : MonoBehaviour
     {
         Time.timeScale = 0;
         inGameMenu.SetActive(true);
+        inGameMenu.gameObject.GetComponent<Animator>().SetTrigger("EnterMenu");
+    }
+
+    public void OpenSettings()
+    {
+        //Hide InGame Menu
+        inGameMenu.GetComponent<Animator>().SetTrigger("ExitMenu");
+        StartCoroutine(InGameMenuOut());
+    }
+
+    IEnumerator InGameMenuOut()
+    {
+        yield return new WaitUntil(() => inGameMenuHide);
+        //inGameMenuHide = false;
+        //Enter Animation
+        settingsMenu.SetActive(true);
+        settingsMenu.GetComponent<Animator>().SetTrigger("EnterMenu");
+    }
+
+    public void CloseSettings()
+    {
+        //Enter Animation
+        settingsMenu.GetComponent<Animator>().SetTrigger("ExitMenu");
+        StartCoroutine(SettingsOut());
+    }
+
+    IEnumerator SettingsOut()
+    {
+        yield return new WaitUntil(() => settingsClosed);
+        settingsClosed = false;
+        //Set Active Settings Off
+        settingsMenu.SetActive(false);
+        //Enter In Game Menu
+        inGameMenu.GetComponent<Animator>().SetTrigger("BackMenu");
     }
 
     public void CloseInGameMenu()
     {
-        Time.timeScale = 1;
+        //Enter Animation
+        inGameMenu.GetComponent<Animator>().SetTrigger("CloseMenu");
+        StartCoroutine(InGameMenuClosing());
+    }
+
+    IEnumerator InGameMenuClosing()
+    {
+        yield return new WaitUntil(() => inGameMenuHide);
         inGameMenu.SetActive(false);
+        Time.timeScale = 1;
     }
 
     public void ExitToMainMenu()
     {
-        /*foreach (Transform child in inGameMenu.transform)
-        {
-            if(child.GetComponent<Button>() != null)
-            {
-                child.GetComponent<Button>().interactable = false;
-            }
-        }*/
         BlockUIButtons();
         Time.timeScale = 1;
-        MenuScript.Instance.MainMenu(0);
+        skipLogo = true;
+        PlayerPrefs.SetInt("SkipLogo", (skipLogo ? 1 : 0));
+        MenuScript.Instance.MainMenu(1);
     }
 
     IEnumerator PlayerHealthCheck()

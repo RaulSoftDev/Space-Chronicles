@@ -5,6 +5,7 @@ using UnityEngine;
 public class SceneShortcut : MonoBehaviour
 {
     private MenuScript menuManager;
+    [SerializeField] GameObject loadingScreen;
 
     private void Start()
     {
@@ -19,5 +20,10 @@ public class SceneShortcut : MonoBehaviour
     public void RestartLastScene()
     {
         menuManager.RestartPreviousScene();
+    }
+
+    public void LoadingScreenToScene(int scene)
+    {
+        menuManager.SceneLoadingScreen(scene, loadingScreen);
     }
 }

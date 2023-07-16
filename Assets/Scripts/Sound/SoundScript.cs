@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class SoundScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class SoundScript : MonoBehaviour
     public AudioClip victoryClip1;
     public AudioClip victoryClip2;
     public AudioClip deathClip;
+    public AudioMixer mixer;
     public bool play;
 
     private void OnEnable()
@@ -48,6 +50,18 @@ public class SoundScript : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Start()
+    {
+        LoadAudioSaveData();
+    }
+
+    private void LoadAudioSaveData()
+    {
+        mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume", Mathf.Log10(0.5f) * 20));
+        mixer.SetFloat("ButtonsVolume", PlayerPrefs.GetFloat("ButtonsVolume", Mathf.Log10(0.5f) * 20));
+        mixer.SetFloat("FXVolume", PlayerPrefs.GetFloat("FXVolume", Mathf.Log10(0.5f) * 20));
     }
 
     void ChangeSongMenu(Scene scene)

@@ -17,8 +17,9 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] Button disabledMenuButton;
     [SerializeField] Animator titleScreen;
     [SerializeField] Animator dialogSystem;
+    [SerializeField] Animator mainMenuSettings;
     private bool enableMenuButtons = false;
-    private bool enterDifficultyMenu = false;
+    private bool mainMenuHidden = false;
     private bool enterCampaignMenu = false;
     private bool enableDifficultyButtons = false;
     private bool disableDifficultyButtons = false;
@@ -27,6 +28,7 @@ public class MenuBehaviour : MonoBehaviour
     private bool enableDisabledScreenButton = false;
     private bool disableDisabledScreenButton = false;
     private bool disableTapScreen = false;
+    private bool disableOptionsMenu = false;
     private int currentUnlockedDifficulty = 0;
     public bool skipLogo = false;
     private bool unlockLevel = false;
@@ -40,8 +42,9 @@ public class MenuBehaviour : MonoBehaviour
             PlayerPrefs.SetInt("LevelToUnlock", 0);
         }
 
-        unlockLevel = (PlayerPrefs.GetInt("UnlockLevel") != 0);
+        unlockLevel = PlayerPrefs.GetInt("UnlockLevel") != 0;
         levelToUnlock = PlayerPrefs.GetInt("LevelToUnlock");
+        skipLogo = PlayerPrefs.GetInt("SkipLogo") != 0;
 
         if (unlockLevel)
         {
@@ -116,8 +119,28 @@ public class MenuBehaviour : MonoBehaviour
             float NTime = mainMenuAnimatorStateInfo.normalizedTime;
             if(NTime > 1)
             {
-                enterDifficultyMenu = true;
+                mainMenuHidden = true;
             }
+        }
+        else
+        {
+            mainMenuHidden = false;
+        }
+
+        //Options Menu Checker
+        AnimatorStateInfo mainMenuOptionsAnimatorStateInfo = mainMenuSettings.GetCurrentAnimatorStateInfo(0);
+
+        if (mainMenuOptionsAnimatorStateInfo.IsName("Exit Settings"))
+        {
+            float OpTime = mainMenuOptionsAnimatorStateInfo.normalizedTime;
+            if (OpTime > 1)
+            {
+                disableOptionsMenu = true;
+            }
+        }
+        else
+        {
+            disableOptionsMenu = false;
         }
 
         //Difficulty Menu Checker
@@ -339,13 +362,55 @@ public class MenuBehaviour : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        yield return new WaitUntil(() => enterDifficultyMenu);
+        yield return new WaitUntil(() => mainMenuHidden);
         GetInDifficultyButtons();
+    }
+
+    private IEnumerator ExitMainMenuButtonsToOptions()
+    {
+        //mainMenuButtons[0].transform.parent.GetComponent<VerticalLayoutGroup>().enabled = false;
+
+        foreach (Animator button in mainMenuButtons)
+        {
+            button.gameObject.GetComponent<Button>().interactable = false;
+        }
+
+        menuTitles[0].SetTrigger("TitleOff");
+
+        for (int i = 0; i < mainMenuButtons.Length; i++)
+        {
+            mainMenuButtons[i].SetTrigger("Exit");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        yield return new WaitUntil(() => mainMenuHidden);
+
+        //Show Options Menu
+        mainMenuSettings.gameObject.SetActive(true);
+        mainMenuSettings.SetTrigger("EnterMenu");
     }
 
     public void MoveOutPreviousButtons()
     {
         StartCoroutine(ExitMainMenuButtons());
+    }
+
+    public void ShowOptionsMenu()
+    {
+        StartCoroutine(ExitMainMenuButtonsToOptions());
+    }
+
+    IEnumerator ClosingOptionsMenu()
+    {
+        mainMenuSettings.SetTrigger("ExitMenu");
+        yield return new WaitUntil(() => disableOptionsMenu);
+        mainMenuSettings.gameObject.SetActive(false);
+        BackToMainMenu();
+    }
+
+    public void CloseOptionsMenu()
+    {
+        StartCoroutine(ClosingOptionsMenu());
     }
 
     private IEnumerator EnterBackMainMenuButtons()
@@ -354,7 +419,7 @@ public class MenuBehaviour : MonoBehaviour
 
         foreach (Animator button in difficultyMenuButtons)
         {
-            button.gameObject.GetComponent<Button>().interactable = false;
+            button.gameObject.GetComponent<Button>().enabled = false;
         }
 
         for (int i = 0; i < difficultyMenuButtons.Length; i++)
@@ -413,6 +478,9 @@ public class MenuBehaviour : MonoBehaviour
                     button.gameObject.GetComponent<Button>().enabled = true;
                     break;
                 case "Insane":
+                    button.gameObject.GetComponent<Button>().enabled = true;
+                    break;
+                case "Back_D":
                     button.gameObject.GetComponent<Button>().enabled = true;
                     break;
             }

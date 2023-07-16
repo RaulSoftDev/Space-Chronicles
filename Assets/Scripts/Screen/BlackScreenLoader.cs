@@ -43,10 +43,21 @@ public class BlackScreenLoader : Singleton<BlackScreenLoader>
         }
     }
 
+    public void LoadOutBlackScreen()
+    {
+        if (GetComponent<Animator>() != null)
+        {
+            GetComponent<Animator>().SetTrigger("SetScreenBlackOff");
+        }
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         parent.GetComponent<Canvas>().worldCamera = Camera.main;
-        GetComponent<Animator>().SetTrigger("SetScreenBlackOff");
+        if(scene.buildIndex != 2)
+        {
+            GetComponent<Animator>().SetTrigger("SetScreenBlackOff");
+        }
     }
 
     private void OnDisable()

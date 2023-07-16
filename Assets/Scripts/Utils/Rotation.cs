@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Rotation : MonoBehaviour
 {
+    [SerializeField] float rotationSpeed = 0.66f;
+
     void Update()
     {
-        transform.RotateAround(transform.position, Vector3.forward, 0.66f * Time.deltaTime);
+        transform.RotateAround(transform.position, Vector3.forward, rotationSpeed * Time.deltaTime);
     }
 }

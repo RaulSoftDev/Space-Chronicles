@@ -46,6 +46,11 @@ public class MenuScript : Singleton<MenuScript>
         StartCoroutine(waitForScene(scene));
     }
 
+    public void SceneLoadingScreen(int scene, GameObject loadingScreen)
+    {
+        StartCoroutine(WaitForLoading(scene, loadingScreen));
+    }
+
     public void RestartPreviousScene()
     {
         StartCoroutine(LoadPreviousScene());
@@ -63,6 +68,40 @@ public class MenuScript : Singleton<MenuScript>
         BlackScreenLoader.Instance.LoadBlackScreen();
         yield return new WaitForSeconds(1.2f);
         SceneManager.LoadScene(scene);
+    }
+
+    IEnumerator WaitForLoading(int scene, GameObject loadingScreen)
+    {
+        //PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine("Timing");
+        BlackScreenLoader.Instance.LoadBlackScreen();
+        yield return new WaitForSeconds(1.2f);
+        StartCoroutine(LoadSceneAsync(scene, loadingScreen));
+        
+    }
+
+    IEnumerator LoadSceneAsync(int scene, GameObject loadingScreen)
+    {
+        yield return null;
+
+        //Begin to load the Scene you specify
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
+        //Show loading screen
+        loadingScreen.SetActive(true);
+        //Hide black screen
+        BlackScreenLoader.Instance.LoadOutBlackScreen();
+        //Don't let the Scene activate until you allow it to
+        asyncOperation.allowSceneActivation = false;
+        Debug.Log("Pro :" + asyncOperation.progress);
+        //Wait for scene to load completely
+        yield return new WaitUntil(() => asyncOperation.progress >= 0.9f);
+        yield return new WaitForSeconds(2f);
+        BlackScreenLoader.Instance.LoadBlackScreen();
+        //Wait to show black screen at full to activate the Scene
+        yield return new WaitForSeconds(1.2f);
+        //Activate the Scene
+        asyncOperation.allowSceneActivation = true;
+        BlackScreenLoader.Instance.LoadOutBlackScreen();
     }
 
     IEnumerator Timing()
