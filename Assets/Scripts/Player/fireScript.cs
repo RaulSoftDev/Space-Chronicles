@@ -51,6 +51,8 @@ public class fireScript : MonoBehaviour
     {
         PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
 
+        enableAttack = false;
+
         audioSourcePlayer = GetComponent<AudioSource>();
         inputManager = InputManager.Instance;
 

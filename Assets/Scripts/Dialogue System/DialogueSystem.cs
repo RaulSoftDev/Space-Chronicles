@@ -99,4 +99,9 @@ public class DialogueSystem : MonoBehaviour
     {
         continueButton.SetTrigger("HideButton");
     }
+
+    private void OnDisable()
+    {
+        isDialogueClosed = false;
+    }
 }

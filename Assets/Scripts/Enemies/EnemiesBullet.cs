@@ -8,6 +8,7 @@ public class EnemiesBullet : MonoBehaviour
     public GameObject enemiesExplosionFx;
     private float timeToHide = 3;
     private float currentTime = 0;
+    private bool shotMissed = true;
 
     private void Start()
     {
@@ -21,6 +22,11 @@ public class EnemiesBullet : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
+            if (TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.currentShot--;
+                shotMissed = false;
+            }
             GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
@@ -49,6 +55,15 @@ public class EnemiesBullet : MonoBehaviour
         if (currentTime >= timeToHide)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnDisable()
+    {
+        //ONLY FOR TUTORIAL
+        if(TutorialManager.Instance != null && shotMissed)
+        {
+            TutorialManager.Instance.currentShot++;
         }
     }
 }

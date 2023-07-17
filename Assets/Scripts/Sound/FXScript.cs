@@ -23,14 +23,23 @@ public class FXScript : MonoBehaviour
     public void PlaySoundFXOnEnemies(AudioClip clip)
     {
         Debug.LogWarning("Enemy damaged");
-        if (clip.name == "EnemiesShield")
+        if (LevelManager.instance.enabled)
         {
-            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().clip = clip;
-            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().Play();
+            //Current Level
+            if(clip.name == "EnemiesShield")
+            {
+                LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().clip = clip;
+                LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().Play();
+            }
+            else
+            {
+                LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+            }
         }
         else
         {
-            LevelManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+            //Tutorial Level
+            TutorialManager.Instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
         }
     }
 }

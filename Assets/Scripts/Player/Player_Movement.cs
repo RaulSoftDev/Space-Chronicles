@@ -18,12 +18,15 @@ public class Player_Movement : Singleton<Player_Movement>
     private InputManager inputManager;
     private float touchXPosition;
     public bool playerInPos = false;
+    public bool enableMovement = false;
 
     private void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         swipeDetection = SwipeDetection.Instance;
         inputManager = InputManager.Instance;
+
+        enableMovement = false;
 
         StartCoroutine(SetUpPlayer());
         StartCoroutine(disableArrowsRuntime());
@@ -33,7 +36,7 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         //touchXPosition = swipeDetection.startPosition.x - inputManager.PrimaryPosition().x;
 
-        if (playerInPos && PlayerHealth.instance.playerHealth > 0)
+        if (enableMovement && playerInPos && PlayerHealth.instance.playerHealth > 0)
         {
             if (!inputManager.joystickMode)
             {

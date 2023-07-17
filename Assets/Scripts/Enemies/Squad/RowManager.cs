@@ -52,7 +52,10 @@ public class RowManager : MonoBehaviour
     {
         while (archive.lerpStatus() <= 1)
         {
-            transform.position = archive.LerpPosition(new Vector3(0.65f, transform.position.y, transform.position.z), new Vector3(-0.65f, transform.position.y, transform.position.z), speed);
+            if (rightMoveLoop)
+            {
+                transform.position = archive.LerpPosition(new Vector3(0.65f, transform.position.y, transform.position.z), new Vector3(-0.65f, transform.position.y, transform.position.z), speed);
+            }
             yield return null;
         }
         archive.elapsedTime = 0;
@@ -64,7 +67,10 @@ public class RowManager : MonoBehaviour
     {
         while (archive.lerpStatus() <= 1)
         {
-            transform.position = archive.LerpPosition(new Vector3(-0.65f, transform.position.y, transform.position.z), new Vector3(0.65f, transform.position.y, transform.position.z), speed);
+            if (rightMoveLoop)
+            {
+                transform.position = archive.LerpPosition(new Vector3(-0.65f, transform.position.y, transform.position.z), new Vector3(0.65f, transform.position.y, transform.position.z), speed);
+            }
             yield return null;
         }
         archive.elapsedTime = 0;
