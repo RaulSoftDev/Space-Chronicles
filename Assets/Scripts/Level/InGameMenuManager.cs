@@ -31,8 +31,6 @@ public class InGameMenuManager : MonoBehaviour
             inGameMenuHide = false;
         }
 
-        Debug.Log(inGameMenuTime);
-
         //SETTINGS MENU
         AnimatorStateInfo settingsState = settingsMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 

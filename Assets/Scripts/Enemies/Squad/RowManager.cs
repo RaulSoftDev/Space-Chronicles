@@ -10,6 +10,7 @@ public class RowManager : MonoBehaviour
     float moveDistance = 0.75f;
     float speed = 2f;
     public bool rightMoveLoop = false;
+    public float xPosition = 0.65f;
 
     //Move To Point
     float lerpTime = 100f;
@@ -29,7 +30,7 @@ public class RowManager : MonoBehaviour
     protected void Update()
     {
         //archive.LoopMovement(transform, startPos, moveDistance, speed, rightMoveLoop);
-        endPos = new Vector3(0.65f, transform.position.y, transform.position.z);
+        endPos = new Vector3(xPosition, transform.position.y, transform.position.z);
     }
 
     IEnumerator StartLerp()
@@ -54,7 +55,7 @@ public class RowManager : MonoBehaviour
         {
             if (rightMoveLoop)
             {
-                transform.position = archive.LerpPosition(new Vector3(0.65f, transform.position.y, transform.position.z), new Vector3(-0.65f, transform.position.y, transform.position.z), speed);
+                transform.position = archive.LerpPosition(new Vector3(xPosition, transform.position.y, transform.position.z), new Vector3(-xPosition, transform.position.y, transform.position.z), speed);
             }
             yield return null;
         }
@@ -69,7 +70,7 @@ public class RowManager : MonoBehaviour
         {
             if (rightMoveLoop)
             {
-                transform.position = archive.LerpPosition(new Vector3(-0.65f, transform.position.y, transform.position.z), new Vector3(0.65f, transform.position.y, transform.position.z), speed);
+                transform.position = archive.LerpPosition(new Vector3(-xPosition, transform.position.y, transform.position.z), new Vector3(xPosition, transform.position.y, transform.position.z), speed);
             }
             yield return null;
         }

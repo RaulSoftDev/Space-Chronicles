@@ -9,17 +9,20 @@ public class TutorialManager : Singleton<TutorialManager>
     [SerializeField] Animator movementArrows;
     [SerializeField] Animator basicAttack;
     [SerializeField] GameObject enemyTestSquad;
+    [SerializeField] GameObject enemyTestSquad02;
     [SerializeField] GameObject spawnPoint;
+    [SerializeField] Animator shieldButton;
+    [SerializeField] Animator rocketButton;
     [SerializeField] float enemySpeed = 1000;
     public GameObject currentSquad;
+    private bool isRocketDisabled = false;
     private float maxShots = 5;
     public float currentShot = 0;
 
     //Checking
     private bool movementDone = false;
     private bool basicAttackDone = false;
-    private bool shieldDone = false;
-    private bool rocketDone = false;
+    private bool shieldRocketDone = false;
 
     private void Start()
     {
@@ -34,12 +37,39 @@ public class TutorialManager : Singleton<TutorialManager>
             {
                 Debug.Log(child.transform.childCount);
 
-                if (child.transform.childCount < 3)
+                if (child.transform.childCount < 1)
                 {
-                    Debug.LogWarning("BA Done");
-                    basicAttackDone = true;
+                    if (!basicAttackDone)
+                    {
+                        Debug.LogWarning("BA Done");
+                        basicAttackDone = true;
+                        if (currentSquad != null)
+                        {
+                            Destroy(currentSquad);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("SR Done");
+                        shieldRocketDone = true;
+                        if (currentSquad != null)
+                        {
+                            Destroy(currentSquad);
+                        }
+                    }
                 }
             }
+        }
+
+        if (isRocketDisabled)
+        {
+            Debug.Log("Disable");
+            fireScript.instance.disableRocket = true;
+            fireScript.instance.HideRocketButton();
+        }
+        else
+        {
+            fireScript.instance.disableRocket = false;
         }
     }
 
@@ -51,13 +81,13 @@ public class TutorialManager : Singleton<TutorialManager>
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
         dialogueText.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.3f);
-        StartCoroutine(LoadEnemies());
+        StartCoroutine(LoadEnemies(enemyTestSquad));
         StartCoroutine(TutorialMovement());
     }
 
     IEnumerator TutorialMovement()
     {
-        yield return new WaitUntil(() => currentSquad != null && currentSquad.transform.position.y <= 3.5f);
+        yield return new WaitUntil(() => currentSquad != null && currentSquad.transform.position.y <= 4.5f);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         movementArrows.SetTrigger("ArrowsOn");
@@ -85,30 +115,64 @@ public class TutorialManager : Singleton<TutorialManager>
         dialogueText.gameObject.SetActive(false);
         EnemiesAttackState(true);
         currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
-        StartCoroutine(TutorialShield());
+        StartCoroutine(TutorialShieldRocket());
     }
 
-    IEnumerator TutorialShield()
+    IEnumerator TutorialShieldRocket()
     {
         yield return new WaitUntil(() => basicAttackDone);
-        EnemiesAttackState(false);
-        currentSquad.GetComponent<RowManager>().rightMoveLoop = false;
+        //Shield Slider 1/3
+        //EnemiesAttackState(false);
+        //currentSquad.GetComponent<RowManager>().rightMoveLoop = false;
+        //Shield button animation On
+        shieldButton.SetTrigger("TriggerOn");
+        //Show dialogue
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
+        dialogueText.gameObject.SetActive(false);
+        //Shield button animation Off
+        shieldButton.SetTrigger("TriggerOff");
+        //Rocket button animation On
+        isRocketDisabled = true;
+        rocketButton.SetTrigger("TriggerOn");
+        dialogueText.gameObject.SetActive(true);
+        dialogueText.SetTrigger("OpenDialogue");
+        yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
+        dialogueText.gameObject.SetActive(false);
+        //Rocket button animation Off
+        rocketButton.SetTrigger("TriggerOff");
+        isRocketDisabled = false;
+        fireScript.instance.enableAttack = true;
+        StartCoroutine(LoadEnemies(enemyTestSquad02));
+        EnemiesAttackState(true);
+        currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
+        StartCoroutine(TutorialEnd());
     }
 
-    IEnumerator LoadEnemies()
+    IEnumerator TutorialEnd()
     {
-        SpawnTestSquad();
+        yield return new WaitUntil(() => shieldRocketDone);
+        dialogueText.gameObject.SetActive(true);
+        dialogueText.SetTrigger("OpenDialogue");
+        yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
+        //Exit to main menu
+        bool skipLogo = true;
+        PlayerPrefs.SetInt("SkipLogo", (skipLogo ? 1 : 0));
+        MenuScript.Instance.MainMenu(1);
+    }
+
+    IEnumerator LoadEnemies(GameObject squad)
+    {
+        SpawnTestSquad(squad);
         currentSquad.GetComponent<SquadMovementManager>().lerpTime = enemySpeed;
-        yield return new WaitUntil(() => currentSquad != null && currentSquad.transform.position.y <= 3.5f);
+        yield return new WaitUntil(() => currentSquad != null && currentSquad.transform.position.y <= 4.5f);
         currentSquad.GetComponent<SquadMovementManager>().startMove = false;
     }
 
-    private void SpawnTestSquad()
+    private void SpawnTestSquad(GameObject squad)
     {
-        currentSquad = Instantiate(enemyTestSquad, spawnPoint.transform.position, spawnPoint.transform.rotation);
+        currentSquad = Instantiate(squad, spawnPoint.transform.position, spawnPoint.transform.rotation);
         Debug.LogWarning("Spawning Squad");
         currentSquad.GetComponent<SquadMovementManager>().startMove = true;
     }

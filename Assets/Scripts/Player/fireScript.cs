@@ -20,6 +20,7 @@ public class fireScript : MonoBehaviour
     [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private float bulletForce = 5;
     [SerializeField] private float rocketForce = 5;
+    public int bulletDamage = 1;
     [SerializeField] private AudioClip bulletSound;
     [SerializeField] private AudioClip rocketSound;
     [SerializeField] private Image rocketButtonBackground;
@@ -32,6 +33,7 @@ public class fireScript : MonoBehaviour
     private float currentBullet = 0;
     public bool canAttack = false;
     public bool enableAttack = false;
+    public bool disableRocket = false;
     private InputManager inputManager;
 
 
@@ -70,6 +72,7 @@ public class fireScript : MonoBehaviour
 
     private void Update()
     {
+
         SaveSlideValue();
         //Debug.Log(currentBullet);
 
@@ -89,6 +92,18 @@ public class fireScript : MonoBehaviour
             triggerButton.interactable = false;
             PlayerHealth.instance.powerSlider.value = 0;
         }
+
+
+    }
+
+    public void HideRocketButton()
+    {
+        rocketButton.image.sprite = rocketOff;
+    }
+
+    public void ShowRocketButton()
+    {
+        rocketButton.image.sprite = rocketOn;
     }
 
     private IEnumerator StopAttacksOnDeath()
@@ -117,6 +132,7 @@ public class fireScript : MonoBehaviour
         canAttack = false;
         //GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
         GameObject bullet = BulletsManager.Instance.GetPooledObject();
+        bullet.GetComponent<Bullet>().damageLevel = bulletDamage;
         bullet.transform.position = firePosition.position;
         bullet.transform.rotation = firePosition.rotation;
         bullet.SetActive(true);
@@ -153,36 +169,39 @@ public class fireScript : MonoBehaviour
     //Set the rocket current status
     public void CheckRocketAvailability()
     {
-        switch (PlayerHealth.instance.powerSlider.value)
+        if (!disableRocket)
         {
-            case 0:
-                //rocketButtonBackground.fillAmount = 0f;
-                rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
-                rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
-                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-                rocketButton.image.sprite = rocketOff;
-                rocketButton.interactable = false;
-                break;
-            case 1:
-                rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
-                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-                rocketLoadButtons[0].color = Color.white;
-                rocketButton.image.sprite = rocketOn;
-                //rocketButtonBackground.fillAmount = 0.33f;
-                //PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
-                rocketButton.interactable = true;
-                return;
-            case 2:
-                rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-                rocketLoadButtons[1].color = Color.white;
-                //rocketButtonBackground.fillAmount = 0.66f;
-                //PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
-                return;
-            case 3:
-                rocketLoadButtons[2].color = Color.white;
-                //rocketButtonBackground.fillAmount = 1f;
-                //PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
-                return;
+            switch (PlayerHealth.instance.powerSlider.value)
+            {
+                case 0:
+                    //rocketButtonBackground.fillAmount = 0f;
+                    rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
+                    rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+                    rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                    rocketButton.image.sprite = rocketOff;
+                    rocketButton.interactable = false;
+                    break;
+                case 1:
+                    rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+                    rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                    rocketLoadButtons[0].color = Color.white;
+                    rocketButton.image.sprite = rocketOn;
+                    //rocketButtonBackground.fillAmount = 0.33f;
+                    //PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
+                    rocketButton.interactable = true;
+                    return;
+                case 2:
+                    rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+                    rocketLoadButtons[1].color = Color.white;
+                    //rocketButtonBackground.fillAmount = 0.66f;
+                    //PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
+                    return;
+                case 3:
+                    rocketLoadButtons[2].color = Color.white;
+                    //rocketButtonBackground.fillAmount = 1f;
+                    //PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
+                    return;
+            }
         }
     }
 
@@ -190,7 +209,7 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 0);
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 0 && !disableRocket);
             rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
@@ -203,7 +222,7 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 1);
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 1 && !disableRocket);
             rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[0].color = Color.white;
@@ -216,7 +235,7 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 2);
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 2 && !disableRocket);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[1].color = Color.white;
         }
@@ -226,7 +245,7 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 3);
+            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 3 && !disableRocket);
             rocketLoadButtons[2].color = Color.white;
         }
     }
