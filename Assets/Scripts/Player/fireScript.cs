@@ -20,7 +20,8 @@ public class fireScript : MonoBehaviour
     [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private float bulletForce = 5;
     [SerializeField] private float rocketForce = 5;
-    public int bulletDamage = 1;
+    public int bulletDamage = 10;
+    public int rocketDamage = 30;
     [SerializeField] private AudioClip bulletSound;
     [SerializeField] private AudioClip rocketSound;
     [SerializeField] private Image rocketButtonBackground;
@@ -273,6 +274,7 @@ public class fireScript : MonoBehaviour
     void LaunchRocket()
     {
         GameObject rocket = Instantiate(rocketPrefab, firePosition.position, firePosition.rotation);
+        rocket.GetComponent<Rocket>().rocketDamage = rocketDamage;
         Rigidbody2D rb = rocket.GetComponent<Rigidbody2D>();
         rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
         audioSourcePlayer.volume = 0.7f;

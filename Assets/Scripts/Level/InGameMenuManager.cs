@@ -15,31 +15,37 @@ public class InGameMenuManager : MonoBehaviour
     private void Update()
     {
         //IN GAME MENU
-        AnimatorStateInfo inGameMenuState = inGameMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+        if (inGameMenu.activeInHierarchy)
+        {
+            AnimatorStateInfo inGameMenuState = inGameMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        if (inGameMenuState.IsName("Exit Menu") || inGameMenuState.IsName("CloseMenu"))
-        {
-            inGameMenuTime = inGameMenuState.normalizedTime;
-            if (inGameMenuTime > 1.0f)
+            if (inGameMenuState.IsName("Exit Menu") || inGameMenuState.IsName("CloseMenu"))
             {
-                inGameMenuHide = true;
+                inGameMenuTime = inGameMenuState.normalizedTime;
+                if (inGameMenuTime > 1.0f)
+                {
+                    inGameMenuHide = true;
+                }
             }
-        }
-        else
-        {
-            inGameMenuTime = 0;
-            inGameMenuHide = false;
+            else
+            {
+                inGameMenuTime = 0;
+                inGameMenuHide = false;
+            }
         }
 
         //SETTINGS MENU
-        AnimatorStateInfo settingsState = settingsMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-
-        if (settingsState.IsName("Exit Settings"))
+        if (settingsMenu.activeInHierarchy)
         {
-            float settingsTime = settingsState.normalizedTime;
-            if (settingsTime > 1.0f)
+            AnimatorStateInfo settingsState = settingsMenu.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+            if (settingsState.IsName("Exit Settings"))
             {
-                settingsClosed = true;
+                float settingsTime = settingsState.normalizedTime;
+                if (settingsTime > 1.0f)
+                {
+                    settingsClosed = true;
+                }
             }
         }
     }

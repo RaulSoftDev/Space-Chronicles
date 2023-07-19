@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  shield: 8
+  shield: 80
   enemiesAnim: {fileID: 8073571210303943336}
   basicShootSound: {fileID: 8300000, guid: 4dd05899cd82a564680fec2dbba55050, type: 3}
   misileSound: {fileID: 8300000, guid: e4946c556459be24fb24c2de01fcf744, type: 3}
@@ -164,6 +164,7 @@ MonoBehaviour:
   canAttack: 0
   enableAttack: 0
   enableCollision: 0
+  isPlayerDead: 0
 --- !u!82 &7277150168902873195
 AudioSource:
   m_ObjectHideFlags: 0

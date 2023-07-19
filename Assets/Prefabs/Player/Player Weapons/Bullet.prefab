@@ -4941,8 +4941,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionFx: {fileID: 8755856670773691837, guid: 897f6a8aaa514654b923a2c4ab8bae86, type: 3}
   damageLevel: 10
-  shieldPoints: 5
-  rocketPoints: 5
+  shieldPoints: 1
+  rocketPoints: 1
 --- !u!61 &-7045024578943527018
 BoxCollider2D:
   m_ObjectHideFlags: 0

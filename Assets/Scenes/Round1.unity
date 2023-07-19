@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1168669145417940248, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1168669145417940248, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -267,6 +267,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8269094602774562875, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
+      propertyPath: bulletDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269094602774562875, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: firePosition
       value: 
       objectReference: {fileID: 674425005}
@@ -274,6 +278,10 @@ PrefabInstance:
       propertyPath: rocketButton
       value: 
       objectReference: {fileID: 983701391}
+    - target: {fileID: 8269094602774562875, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
+      propertyPath: rocketDamage
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 8269094602774562875, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: triggerButton
       value: 
@@ -360,11 +368,11 @@ PrefabInstance:
       objectReference: {fileID: 4794043405585894037, guid: c6a97f20c845d574dbc30314880770d3, type: 3}
     - target: {fileID: 8766969694456990686, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: enemyBulletValue
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8766969694456990686, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
       propertyPath: enemyRocketValue
-      value: 30
+      value: 75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4a43c1235c5d004ba61bdc19227e70b, type: 3}
@@ -756,7 +764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -412.0109, y: -837.50024}
+  m_AnchoredPosition: {x: -412.015, y: -837.50024}
   m_SizeDelta: {x: 122.66, y: 96.600006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &44942888
@@ -1233,6 +1241,7 @@ GameObject:
   - component: {fileID: 76362967}
   - component: {fileID: 76362969}
   - component: {fileID: 76362970}
+  - component: {fileID: 76362971}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -1253,6 +1262,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   round: 0
+  enemySpeedBegins: 60
+  enemySpeed: 90
   currentSquad: {fileID: 0}
   enemyText: {fileID: 1374456309}
   spawnPoint: {fileID: 481130123}
@@ -1269,7 +1280,6 @@ MonoBehaviour:
   - {fileID: 5223822027546941498, guid: 91d562b6fef4eb84e86f2e32fc6e2efc, type: 3}
   - {fileID: 5223822027546941498, guid: a0b3fe72a910dc34dbcaeee5cb3f31bf, type: 3}
   runtimeSquads: []
-  inGameMenu: {fileID: 494690057}
   warningSign: {fileID: 870966367}
   roundSigns:
   - {fileID: 1141664420}
@@ -1278,8 +1288,6 @@ MonoBehaviour:
   roundSignDone: 0
   startPosition: {x: 0, y: 0, z: 0}
   dialogue: {fileID: 457669859}
-  inGameMenuHide: 0
-  settingsMenu: {fileID: 1984845989}
   enemiesList: []
 --- !u!4 &76362968
 Transform:
@@ -1323,6 +1331,24 @@ MonoBehaviour:
   pooledObjects: []
   objectToPool: {fileID: 6713682823303231800, guid: 4849512a9b047ba47a4e7cab720902cc, type: 3}
   amountToPool: 20
+--- !u!114 &76362971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76362966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 196fcaf39f4df98448e4409a91278da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basic: 100
+  basicII: 120
+  shieldShip: 140
+  rocket: 140
+  shield: 160
+  health: 600
 --- !u!1 &120267798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,7 +1685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -410.40244, y: -839.4371}
+  m_AnchoredPosition: {x: -410.40244, y: -839.42883}
   m_SizeDelta: {x: 68.82, y: 42.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &136303651
@@ -2087,8 +2113,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: RestartScene
         m_Mode: 1
         m_Arguments:
@@ -2627,8 +2653,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: OpenSettings
         m_Mode: 1
         m_Arguments:
@@ -4030,8 +4056,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: ExitToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -4659,7 +4685,7 @@ PrefabInstance:
     - target: {fileID: 4230002304911689448, guid: 1334646c8f59287408190ae75ee6966f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 76362967}
+      objectReference: {fileID: 1861755272}
     - target: {fileID: 4230002304911689448, guid: 1334646c8f59287408190ae75ee6966f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -4670,7 +4696,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4230002304911689448, guid: 1334646c8f59287408190ae75ee6966f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: LevelManager, Assembly-CSharp
+      value: InGameMenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4230002304911689448, guid: 1334646c8f59287408190ae75ee6966f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -8954,7 +8980,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431147581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.01, z: -1.5895298}
+  m_LocalPosition: {x: 0, y: 4.525, z: -1.5895298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9454,8 +9480,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: CloseInGameMenu
         m_Mode: 1
         m_Arguments:
@@ -10670,8 +10696,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: OpenInGameMenu
         m_Mode: 1
         m_Arguments:
@@ -11246,6 +11272,7 @@ GameObject:
   - component: {fileID: 1861755270}
   - component: {fileID: 1861755269}
   - component: {fileID: 1861755268}
+  - component: {fileID: 1861755272}
   m_Layer: 5
   m_Name: UI INTERFACE
   m_TagString: Untagged
@@ -11339,13 +11366,28 @@ RectTransform:
   - {fileID: 1954808447}
   - {fileID: 1932243015}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1861755272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861755267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7891c76dd908ab2439ba18e10b502329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inGameMenuHide: 0
+  settingsMenu: {fileID: 1984845989}
+  inGameMenu: {fileID: 494690057}
 --- !u!1 &1862451982
 GameObject:
   m_ObjectHideFlags: 0
@@ -11605,8 +11647,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 76362967}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 1861755272}
+        m_TargetAssemblyTypeName: InGameMenuManager, Assembly-CSharp
         m_MethodName: ExitToMainMenu
         m_Mode: 1
         m_Arguments:

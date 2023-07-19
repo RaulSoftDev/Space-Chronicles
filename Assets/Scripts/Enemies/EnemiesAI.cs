@@ -48,6 +48,8 @@ public class EnemiesAI : MonoBehaviour
 
     public GameObject deathAnimation;
 
+    public Vector3 currentPosition;
+
     //Enemies Booleans
     public bool canAttack = false;
     public bool enableAttack = false;
@@ -70,8 +72,9 @@ public class EnemiesAI : MonoBehaviour
 
     private void Awake()
     {
-        healthI = PlayerPrefs.GetInt("BHealth");
-        healthII = PlayerPrefs.GetInt("RocketHealth");
+        healthI = PlayerPrefs.GetInt("BHealth", 40);
+        healthII = PlayerPrefs.GetInt("RocketHealth", 80);
+        shield = PlayerPrefs.GetInt("ShieldValue", 60);
     }
 
     private void Start()
@@ -85,7 +88,6 @@ public class EnemiesAI : MonoBehaviour
         //canAttack = true;
         center = transform.localPosition;
 
-        StartCoroutine(EnableCollision());
         StartCoroutine(EnemyDeathCheck());
         StartCoroutine(PlayerDead());
     }
@@ -95,24 +97,24 @@ public class EnemiesAI : MonoBehaviour
         switch (gameObject.tag)
         {
             case "IBasic":
-                currentHealth = healthI;
+                currentHealth = PlayerPrefs.GetInt("BHealth", 40);
                 StartCoroutine(WaitingForAimBasicShoot());
                 //StartCoroutine(basicMovement());
                 //StartCoroutine(basicEnemiesRotation(transform));
                 return;
             case "IIBasic":
-                currentHealth = healthI;
+                currentHealth = PlayerPrefs.GetInt("BIIHealth", 60);
                 StartCoroutine(WaitingForAimBasicShootLV2());
                 //StartCoroutine(basicMovement());
                 //StartCoroutine(basicEnemiesRotation(transform));
                 return;
             case "IIMisile":
-                currentHealth = healthII;
+                currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
                 StartCoroutine(WaitingForAimMisile());
                 //StartCoroutine(basicMovement());
                 return;
             case "IIShield":
-                currentHealth = healthII;
+                currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
                 //StartCoroutine(WaitingForAimBasicShoot());
                 //StartCoroutine(basicMovement());
                 return;
@@ -142,6 +144,8 @@ public class EnemiesAI : MonoBehaviour
             BasicShoot();
             MisileShoot();
         }
+
+        currentPosition = transform.position;
     }
 
     private IEnumerator PlayerDead()
@@ -163,8 +167,9 @@ public class EnemiesAI : MonoBehaviour
 
     private IEnumerator EnableCollision()
     {
-        yield return new WaitUntil(() => transform.position.y < -1);
+        yield return new WaitUntil(() => transform.position.y < 4f);
         GetComponent<BoxCollider2D>().enabled = true;
+        canAttack = true;
     }
 
     private IEnumerator basicEnemiesRotation(Transform t)

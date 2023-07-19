@@ -5,36 +5,42 @@ using UnityEngine;
 public class DataControl : Singleton<DataControl>
 {
     //Enemies Values
-    public int basic = 2;
-    public int basicII = 4;
-    public int shieldShip = 6;
-    public int rocket = 8;
+    public int basic = 20;
+    public int basicII = 40;
+    public int shieldShip = 60;
+    public int rocket = 80;
 
-    public int shield = 3;
+    public int shield = 40;
 
     //Player Values
     public int health = 500;
 
     private void Awake()
     {
+        
+    }
+
+    private void Start()
+    {
         ResetData();
     }
 
     public void ResetData()
     {
-        //Enemies Values
-        basic = 2;
-        basicII = 4;
-        shieldShip = 6;
-        rocket = 8;
+        /*//Enemies Values
+        basic = 20;
+        basicII = 40;
+        shieldShip = 60;
+        rocket = 80;
 
-        shield = 3;
+        shield = 40;
 
         //Player Values
-        health = 500;
+        health = 500;*/
 
         //Set values
         SaveValues();
+        Debug.Log("DATA SAVED");
     }
 
     public void SetPussycatDifficultyData()

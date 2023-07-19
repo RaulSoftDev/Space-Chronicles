@@ -53,7 +53,6 @@ public class Player_Movement : Singleton<Player_Movement>
 
                 if (rightPad.Horizontal > 0)
                 {
-                    Debug.Log(rightPad.Horizontal);
                     Vector2 directionX = Vector2.right * rightPad.Horizontal;
                     Debug.LogWarning(directionX);
                     gameObject.transform.Translate(new Vector3(directionX.x, 0, 0) * playerSpeed * Time.deltaTime);

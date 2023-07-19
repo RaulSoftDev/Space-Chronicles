@@ -9241,7 +9241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ef5566a6ceb81d4baed43e5ef8787b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 0}
+  loadingScreen: {fileID: 771176166}
 --- !u!114 &2032265828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9288,12 +9288,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2032265827}
         m_TargetAssemblyTypeName: SceneShortcut, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: LoadingScreenToScene
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -9665,13 +9665,41 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6600150876064391613, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_Value
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600150876105175088, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6600150876105175088, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6600150876105175091, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600150876105175091, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600150876105175091, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600150876478826063, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6600150876478826063, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6600150876478826063, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6600150876509250176, guid: ebbb59892607187478bfcfa59267a4b7, type: 3}
       propertyPath: m_AnchorMax.y

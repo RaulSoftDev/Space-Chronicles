@@ -10,6 +10,8 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     [SerializeField] private int round = 0;
+    [SerializeField] float enemySpeedBegins = 1000;
+    [SerializeField] float enemySpeed = 1000;
     private int squadNumber = -1;
     private bool noEnemiesLeft = false;
     public GameObject currentSquad;
@@ -25,6 +27,7 @@ public class LevelManager : MonoBehaviour
     public Vector3 startPosition;
     public GameObject dialogue;
     private bool unlockNext = false;
+    private float yPosition = 0;
 
     public GameObject[] enemiesList;
 
@@ -42,6 +45,9 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        //Player cannot attack until Round 1
+        fireScript.instance.enableAttack = false;
+
         StartCoroutine(RoundsManager());
         StartCoroutine(PlayerHealthCheck());
     }
@@ -83,6 +89,8 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
 
+        Player_Movement.Instance.enableMovement = true;
+
         //AI MESSAGE
         ShowDialogue();
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
@@ -96,6 +104,9 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitUntil(() => round == 1);
 
+        //Player cannot attack until next round
+        fireScript.instance.enableAttack = false;
+
         //ROUND 2
         Debug.LogWarning("Round 2");
 
@@ -106,6 +117,9 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(GenerateRound());
 
         yield return new WaitUntil(() => round == 2);
+
+        //Player cannot attack until next round
+        fireScript.instance.enableAttack = false;
 
         //ROUND 3
 
@@ -118,6 +132,9 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(GenerateRound());
 
         yield return new WaitUntil(() => round == 3);
+
+        //Player cannot attack, end of mission
+        fireScript.instance.enableAttack = false;
 
         //VICTORY SCENE
         ShowDialogue();
@@ -155,9 +172,10 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => roundSignDone);
 
         //BEGIN FIGHT
+        startPosition = currentSquad.transform.position;
+        RuntimeEnemySpeed();
         currentSquad.GetComponent<SquadMovementManager>().startMove = true;
         currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
-        startPosition = currentSquad.transform.position;
         foreach (Transform child in currentSquad.transform)
         {
             foreach(Transform child2 in child.transform)
@@ -169,7 +187,7 @@ public class LevelManager : MonoBehaviour
         //ENABLE ATTACKS
         fireScript.instance.enableAttack = true;
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= yPosition || runtimeSquads.Count == 0);
         SpawnSquad();
         currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
         foreach (Transform child in currentSquad.transform)
@@ -180,7 +198,7 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        yield return new WaitUntil(() => currentSquad.transform.position.y <= 0 || runtimeSquads.Count == 0);
+        yield return new WaitUntil(() => currentSquad.transform.position.y <= yPosition || runtimeSquads.Count == 0);
         SpawnSquad();
         currentSquad.GetComponent<RowManager>().rightMoveLoop = true;
         foreach (Transform child in currentSquad.transform)
@@ -195,6 +213,12 @@ public class LevelManager : MonoBehaviour
         round++;
     }
 
+    private void RuntimeEnemySpeed()
+    {
+        currentSquad.GetComponent<SquadMovementManager>().startPos = startPosition;
+        currentSquad.GetComponent<SquadMovementManager>().lerpTime = enemySpeed;
+    }
+
     private void SpawnSquad()
     {
         squadNumber++;
@@ -202,22 +226,14 @@ public class LevelManager : MonoBehaviour
         switch (round)
         {
             case 0:
-                currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
-                runtimeSquads.Add(currentSquad);
-                Debug.LogWarning("Spawning Squad");
-                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                GetSquad(squads, squadNumber);
                 break;
             case 1:
-                currentSquad = Instantiate(squadsLV2[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
-                runtimeSquads.Add(currentSquad);
-                Debug.LogWarning("Spawning Squad");
-                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                GetSquad(squadsLV2, squadNumber);
                 break;
             case 2:
-                currentSquad = Instantiate(squadsLV3[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
-                runtimeSquads.Add(currentSquad);
-                Debug.LogWarning("Spawning Squad");
-                currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+                yPosition = -1;
+                GetSquad(squadsLV3, squadNumber);
                 break;
             default:
                 break;
@@ -235,6 +251,23 @@ public class LevelManager : MonoBehaviour
         //yield return new WaitUntil(() => noEnemiesLeft);
 
         //Destroy(currentSquad);
+    }
+
+    private void GetSquad(GameObject[] squad, int squadNumber)
+    {
+        currentSquad = Instantiate(squad[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
+        runtimeSquads.Add(currentSquad);
+        Debug.LogWarning("Spawning Squad");
+        if (squadNumber == 0)
+        {
+            currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+            currentSquad.GetComponent<SquadMovementManager>().lerpTime = enemySpeedBegins;
+        }
+        else
+        {
+            currentSquad.GetComponent<SquadMovementManager>().startMove = true;
+            currentSquad.GetComponent<SquadMovementManager>().lerpTime = enemySpeed;
+        }
     }
 
     private IEnumerator CheckEnemiesState()

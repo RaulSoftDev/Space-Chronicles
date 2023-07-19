@@ -82,25 +82,9 @@ public class Bullet : MonoBehaviour
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
                     Destroy(hit, 1.6f);
-                    //In case of shield enemy we take 1 enemy shield point
-                    collision.gameObject.GetComponent<EnemiesAI>().shield -= damageLevel;
                     PlayerHealth.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
-                    //Then we check for shield points and activate the animation needed
-                    if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
-                    {
-                        collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
-                    }
-                    else if (collision.gameObject.GetComponent<EnemiesAI>().shield == 0)
-                    {
-                        collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
-                    }
-                    else
-                    {
-                        //Once it has no more shield points start to take life points
-                        collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
-                        collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                    }
+                    CheckEnemiesShield(collision);
                     gameObject.SetActive(false);
                 }
                 break;
@@ -194,6 +178,38 @@ public class Bullet : MonoBehaviour
             Debug.LogWarning("Disabled");
             GetComponent<BoxCollider2D>().enabled = false;
         }*/
+    }
+
+    private void CheckEnemiesShield(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
+        {
+            if (collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("ActivateShield") && collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetBool("ShieldOn") == true)
+            {
+                collision.gameObject.GetComponent<EnemiesAI>().shield -= damageLevel;
+                collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
+            }
+            else
+            {
+                Debug.LogError("ShieldOn");
+                collision.gameObject.GetComponent<EnemiesAI>().shield -= damageLevel;
+                collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetBool("ShieldOn", true);
+            }
+        }
+        else if (collision.gameObject.GetComponent<EnemiesAI>().shield <= 0)
+        {
+            if (collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("TurnOffShield") && collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0)
+            {
+                //Once it has no more shield points start to take life points
+                collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
+                collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+            }
+            else
+            {
+                collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
+                collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
+            }
+        }
     }
 
     private IEnumerator DestroyOnSeconds()
