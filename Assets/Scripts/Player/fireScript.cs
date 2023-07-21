@@ -14,27 +14,53 @@ public class fireScript : MonoBehaviour
 {
     public static fireScript instance;
 
+    [Header("AUDIO SOURCE")]
     AudioSource audioSourcePlayer;
+
+    [Header("PLAYER SHOT POSITION")]
     [SerializeField] private Transform firePosition;
+
+    [Header("WEAPONS INSTANCES")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject rocketPrefab;
+
+    [Header("WEAPONS SPEED")]
     [SerializeField] private float bulletForce = 5;
     [SerializeField] private float rocketForce = 5;
+
+    [Header("WEAPONS DAMAGE")]
     public int bulletDamage = 10;
     public int rocketDamage = 30;
-    [SerializeField] private AudioClip bulletSound;
-    [SerializeField] private AudioClip rocketSound;
+
+    [Header("WEAPONS IMAGES")]
     [SerializeField] private Image rocketButtonBackground;
     [SerializeField] private Button rocketButton;
-    [SerializeField] private Button basicAttackButton;
     [SerializeField] private Image[] rocketLoadButtons;
     [SerializeField] private Sprite rocketOn;
     [SerializeField] private Sprite rocketOff;
     [SerializeField] private Button triggerButton;
+
+    [Header("ROCKET SLIDER")]
+    public Slider powerSlider;
+    internal int playerPoints = 0;
+
+    [Header("POINTS PER SHOT")]
+    [SerializeField] public int shieldPointsPerShot = 1;
+    [SerializeField] public int rocketPointsPerShot = 1;
+
+    [Header("AUDIO CLIPS")]
+    [SerializeField] private AudioClip bulletSound;
+    [SerializeField] private AudioClip rocketSound;
+
+    //Bullet count
     private float currentBullet = 0;
+
+    [Header("BOOLEANS")]
     public bool canAttack = false;
     public bool enableAttack = false;
     public bool disableRocket = false;
+
+    //Input Manager
     private InputManager inputManager;
 
 
@@ -59,42 +85,55 @@ public class fireScript : MonoBehaviour
         audioSourcePlayer = GetComponent<AudioSource>();
         inputManager = InputManager.Instance;
 
-        StartCoroutine(ShootBlast());
-        StartCoroutine(LoadRocketOff());
-        StartCoroutine(LoadRocket01());
-        StartCoroutine(LoadRocket02());
-        StartCoroutine(LoadRocket03());
+        SetPlayerPoints();
 
-        StartCoroutine(StopAttacksOnDeath());
+        StartCoroutine(ShootBlast());
+        LoadRocketSlots();
+        StartCoroutine(DisableAttacksOnDeath());
 
         canAttack = true;
+    }
+
+    private void SetPlayerPoints()
+    {
+        /*PlayerPrefs.SetInt("ShieldPoints", shieldPointsPerShot);
+        PlayerPrefs.SetInt("RocketPoints", rocketPointsPerShot);*/
+        shieldPointsPerShot = PlayerPrefs.GetInt("ShieldPoints");
+        rocketPointsPerShot = PlayerPrefs.GetInt("RocketPoints");
+        Debug.Log("POINTS SAVED");
     }
 
 
     private void Update()
     {
+        SetSliderValue();
+        SetRocketThreshold();
+        OnPlayerDeath();
+    }
 
-        SaveSlideValue();
-        //Debug.Log(currentBullet);
-
-        //CheckRocketAvailability();
-
-        if (!inputManager.joystickMode)
-        {
-            /*if (SwipeDetection.Instance.touchStart && !EventSystem.current.IsPointerOverGameObject()) canAttack = true;
-            else canAttack = false;*/
-        }
-
-        if(PlayerHealth.instance.playerHealth <= 0)
+    private void OnPlayerDeath()
+    {
+        if (PlayerHealth.instance.playerHealth <= 0)
         {
             StopAllCoroutines();
             rocketButton.image.sprite = rocketOff;
             rocketButton.interactable = false;
             triggerButton.interactable = false;
-            PlayerHealth.instance.powerSlider.value = 0;
+            powerSlider.value = 0;
+        }
+    }
+
+    private void SetRocketThreshold()
+    {
+        if (playerPoints < 0)
+        {
+            playerPoints = 0;
         }
 
-
+        if (playerPoints > 30)
+        {
+            playerPoints = 30;
+        }
     }
 
     public void HideRocketButton()
@@ -107,7 +146,7 @@ public class fireScript : MonoBehaviour
         rocketButton.image.sprite = rocketOn;
     }
 
-    private IEnumerator StopAttacksOnDeath()
+    private IEnumerator DisableAttacksOnDeath()
     {
         yield return new WaitUntil(() => PlayerHealth.instance.playerHealth <= 0);
         triggerButton.interactable = false;
@@ -117,21 +156,15 @@ public class fireScript : MonoBehaviour
 
 
     //Set the player health slider current value
-    private void SaveSlideValue()
+    private void SetSliderValue()
     {
-        PlayerHealth.instance.powerSlider.value = PlayerHealth.instance.playerPoints / 10;
-    }
-
-    public void ShootingButtonMode()
-    {
-        //canAttack = true;
+        powerSlider.value = playerPoints / 10;
     }
 
     //Instantiate the basic bullet
-    public IEnumerator ShootBullet()
+    private IEnumerator ShootBullet()
     {
         canAttack = false;
-        //GameObject bullet = Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
         GameObject bullet = BulletsManager.Instance.GetPooledObject();
         bullet.GetComponent<Bullet>().damageLevel = bulletDamage;
         bullet.transform.position = firePosition.position;
@@ -167,15 +200,15 @@ public class fireScript : MonoBehaviour
         }
     }
 
-    //Set the rocket current status
+    //Set the rocket button current status
     public void CheckRocketAvailability()
     {
         if (!disableRocket)
         {
-            switch (PlayerHealth.instance.powerSlider.value)
+            switch (powerSlider.value)
             {
                 case 0:
-                    //rocketButtonBackground.fillAmount = 0f;
+                    //Rocket Button Slots Empty
                     rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
                     rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
                     rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
@@ -183,34 +216,31 @@ public class fireScript : MonoBehaviour
                     rocketButton.interactable = false;
                     break;
                 case 1:
+                    //Rocket Button Slot 1 Available
                     rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
                     rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
                     rocketLoadButtons[0].color = Color.white;
                     rocketButton.image.sprite = rocketOn;
-                    //rocketButtonBackground.fillAmount = 0.33f;
-                    //PlayerHealth.instance.shoot1.color = Color.HSVToRGB(0, 0, 1);
                     rocketButton.interactable = true;
                     return;
                 case 2:
+                    //Rocket Button Slot 2 Available
                     rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
                     rocketLoadButtons[1].color = Color.white;
-                    //rocketButtonBackground.fillAmount = 0.66f;
-                    //PlayerHealth.instance.shoot2.color = Color.HSVToRGB(0, 0, 1);
                     return;
                 case 3:
+                    //Rocket Button Slot 3 Available
                     rocketLoadButtons[2].color = Color.white;
-                    //rocketButtonBackground.fillAmount = 1f;
-                    //PlayerHealth.instance.shoot3.color = Color.HSVToRGB(0, 0, 1);
                     return;
             }
         }
     }
 
-    private IEnumerator LoadRocketOff()
+    private IEnumerator UnloadRocket()
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 0 && !disableRocket);
+            yield return new WaitUntil(() => powerSlider.value == 0 && !disableRocket);
             rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
@@ -219,11 +249,19 @@ public class fireScript : MonoBehaviour
         }
     }
 
+    private void LoadRocketSlots()
+    {
+        StartCoroutine(UnloadRocket());
+        StartCoroutine(LoadRocket01());
+        StartCoroutine(LoadRocket02());
+        StartCoroutine(LoadRocket03());
+    }
+
     private IEnumerator LoadRocket01()
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 1 && !disableRocket);
+            yield return new WaitUntil(() => powerSlider.value == 1 && !disableRocket);
             rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[0].color = Color.white;
@@ -236,7 +274,7 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 2 && !disableRocket);
+            yield return new WaitUntil(() => powerSlider.value == 2 && !disableRocket);
             rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
             rocketLoadButtons[1].color = Color.white;
         }
@@ -246,26 +284,26 @@ public class fireScript : MonoBehaviour
     {
         while (Application.isPlaying)
         {
-            yield return new WaitUntil(() => PlayerHealth.instance.powerSlider.value == 3 && !disableRocket);
+            yield return new WaitUntil(() => powerSlider.value == 3 && !disableRocket);
             rocketLoadButtons[2].color = Color.white;
         }
     }
 
     public void RocketManagement()
     {
-        switch (PlayerHealth.instance.powerSlider.value)
+        switch (powerSlider.value)
         {
             case 1:
                 LaunchRocket();
-                PlayerHealth.instance.playerPoints = 0;
+                playerPoints = 0;
                 break;
             case 2:
                 LaunchRocket();
-                PlayerHealth.instance.playerPoints = 10;
+                playerPoints = 10;
                 break;
             case 3:
                 LaunchRocket();
-                PlayerHealth.instance.playerPoints = 20;
+                playerPoints = 20;
                 break;
         }
     }

@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class ShieldController : MonoBehaviour
 {
-    public GameObject shieldObject;
-    public Slider shieldSlider;
-    public Image shieldSliderColor;
-    public bool shieldActive = false;
-    public Button shieldButton;
-    public Image buttonBackground360;
-    public Sprite buttonOnMode;
-    public Sprite buttonOffMode;
+    [Header("SHIELD INSTANCE")]
+    [SerializeField] private GameObject shieldObject;
 
+    [Header("SHIELD IMAGES")]
+    [SerializeField] private Button shieldButton;
+    [SerializeField] private Image buttonBackground360;
+    [SerializeField] private Sprite buttonOnMode;
+    [SerializeField] private Sprite buttonOffMode;
+
+    //Booleans
+    private bool shieldActive = false;
+
+    //Floats
     private float sliderValue = 10;
 
     private void Start()
@@ -25,14 +29,22 @@ public class ShieldController : MonoBehaviour
     {
         SaveCurrentShieldValue();
         DecreaseShieldValueOverTime();
-        
-        if(shieldActive)
+        ShieldOnState();
+        DisableShieldOnDeath();
+    }
+
+    private void ShieldOnState()
+    {
+        if (shieldActive)
         {
             shieldButton.interactable = false;
             shieldButton.image.sprite = buttonOffMode;
         }
+    }
 
-        if(PlayerHealth.instance.playerHealth <= 0)
+    private void DisableShieldOnDeath()
+    {
+        if (PlayerHealth.instance.playerHealth <= 0)
         {
             StopAllCoroutines();
             shieldButton.interactable = false;
@@ -44,7 +56,6 @@ public class ShieldController : MonoBehaviour
     {
         if (!shieldActive)
         {
-            //shieldSlider.value = PlayerHealth.instance.playerShieldPoints;
             buttonBackground360.fillAmount = (PlayerHealth.instance.playerShieldPoints / 2) / 10;
         }
     }
@@ -55,7 +66,6 @@ public class ShieldController : MonoBehaviour
         {
             sliderValue = Mathf.Clamp(sliderValue - 1 * Time.deltaTime, 0, 10);
             buttonBackground360.fillAmount = sliderValue / 10;
-            //Debug.Log(sliderValue);
         }
     }
 
@@ -63,11 +73,7 @@ public class ShieldController : MonoBehaviour
     {
         PlayerHealth.instance.GetDamage = false;
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
-        //shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", true);
         yield return new WaitForSecondsRealtime(10);
-        /*shieldSlider.GetComponent<Animator>().SetBool("ActivateShieldSlider", false);
-        shieldSliderColor.color = new Color(0, 242, 255);*/
-        //buttonBackground360.fillAmount = 0;
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
         PlayerHealth.instance.GetDamage = true;
         PlayerHealth.instance.playerShieldPoints = 0;

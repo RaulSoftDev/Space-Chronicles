@@ -39,7 +39,7 @@ public class FXScript : MonoBehaviour
         else
         {
             //Tutorial Level
-            TutorialManager.Instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+            TutorialManager.instance.currentSquad.gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
         }
     }
 }

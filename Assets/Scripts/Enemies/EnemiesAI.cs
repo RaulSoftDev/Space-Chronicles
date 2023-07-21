@@ -5,60 +5,72 @@ using System.Linq;
 
 public class EnemiesAI : MonoBehaviour
 {
+    public enum enemyShip
+    {
+        Basic = 0,
+        BasicII = 1,
+        Rocket = 2,
+        Shield = 3
+    }
 
+    public enemyShip enemy;
 
-    //Variables Assignment
-    //Var Health
-    int healthI = 20;
-    int healthII = 40;
-    int healthIII = 80;
-    int healthIV = 160;
+    //All Enemies Health Set Up
+    public int healthI = 20;
+    private int healthII = 40;
+    private int healthIII = 80;
+    private int healthIV = 160;
 
+    //Current Enemy Health
     public int currentHealth;
 
     //Enemies Tags
     private string[] enemiesTags = {"IBasic", "IIMisile", "IIShield", "IIIMisile", "IIIShield", "Boss"};
 
-    //Var Shield
-    public int shield = 80;
+    //Shield Value
+    internal int shield = 80;
 
 
-    //Var Components
-    public Animator enemiesAnim;
+    //Components
+    internal Animator enemiesAnim;
     private AudioSource audioSourceEnemies;
 
-    //AudioClips
-    public AudioClip basicShootSound;
-    public AudioClip misileSound;
-    public AudioClip enemiesDeath;
+    [Header("AUDIO CLIPS")]
+    [SerializeField] private AudioClip basicShootSound;
+    [SerializeField] private AudioClip misileSound;
+    [SerializeField] private AudioClip enemiesDeath;
 
+    [Header("SHOT POSITION INSTANCE")]
+    [SerializeField] private Transform firePositionEnemies;
 
-    //Var Enemies Basic Attack
-    public Transform firePositionEnemies;
-    
-    public GameObject bulletEnemiesPrefab;
-    public float bulletForce = 5;
-    
-    public GameObject misileEnemiesPrefab;
-    public float misileForce = 2.5f;
+    [Header("ENEMY WEAPONS INSTANCES")]
+    [SerializeField] private GameObject bulletEnemiesPrefab;
+    [SerializeField] private GameObject misileEnemiesPrefab;
 
+    [Header("ENEMY WEAPONS SPEED")]
+    [SerializeField] private float bulletForce = 5;
+    [SerializeField] private float misileForce = 2.5f;
+
+    [Header("SHIELD")]
     public GameObject shieldObject;
 
-    public GameObject group;
+    //public GameObject group;
 
+    [Header("DEATH EXPLOSION")]
     public GameObject deathAnimation;
 
-    public Vector3 currentPosition;
+    //CURRENT POSITION
+    private Vector3 currentPosition;
 
     //Enemies Booleans
-    public bool canAttack = false;
-    public bool enableAttack = false;
+    private bool canAttack = false;
+    internal bool enableAttack = false;
     bool canBeAttacked = false;
     bool shieldDisable = false;
-    public bool enableCollision = false;
+    internal bool enableCollision = false;
     private bool canMissile = false;
     private bool canBasic = false;
-    public bool isPlayerDead = false;
+    //public bool isPlayerDead = false;
 
     //External Scripts
     PlayerHealth playerScript;
@@ -72,15 +84,13 @@ public class EnemiesAI : MonoBehaviour
 
     private void Awake()
     {
-        healthI = PlayerPrefs.GetInt("BHealth", 40);
+        /*healthI = PlayerPrefs.GetInt("BHealth", 40);
         healthII = PlayerPrefs.GetInt("RocketHealth", 80);
-        shield = PlayerPrefs.GetInt("ShieldValue", 60);
+        shield = PlayerPrefs.GetInt("ShieldValue", 60);*/
     }
 
     private void Start()
     {
-        LoadShipsAttacks();
-
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         enemiesAnim = GetComponent<Animator>();
         audioSourceEnemies = GetComponent<AudioSource>();
@@ -88,52 +98,33 @@ public class EnemiesAI : MonoBehaviour
         //canAttack = true;
         center = transform.localPosition;
 
+        LoadShipsAttacks();
+
         StartCoroutine(EnemyDeathCheck());
         StartCoroutine(PlayerDead());
     }
 
     private void LoadShipsAttacks()
     {
-        switch (gameObject.tag)
+        switch (enemy)
         {
-            case "IBasic":
+            case enemyShip.Basic:
                 currentHealth = PlayerPrefs.GetInt("BHealth", 40);
-                StartCoroutine(WaitingForAimBasicShoot());
-                //StartCoroutine(basicMovement());
-                //StartCoroutine(basicEnemiesRotation(transform));
+                StartCoroutine(WaitingForAimBasicShoot(2, 8));
                 return;
-            case "IIBasic":
+            case enemyShip.BasicII:
                 currentHealth = PlayerPrefs.GetInt("BIIHealth", 60);
-                StartCoroutine(WaitingForAimBasicShootLV2());
-                //StartCoroutine(basicMovement());
-                //StartCoroutine(basicEnemiesRotation(transform));
+                StartCoroutine(WaitingForAimBasicShoot(1, 5));
                 return;
-            case "IIMisile":
+            case enemyShip.Rocket:
                 currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
                 StartCoroutine(WaitingForAimMisile());
-                //StartCoroutine(basicMovement());
                 return;
-            case "IIShield":
+            case enemyShip.Shield:
                 currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
-                //StartCoroutine(WaitingForAimBasicShoot());
-                //StartCoroutine(basicMovement());
                 return;
             default:
                 return;
-            /*case "IIIMisile":
-                currentHealth = healthIII;
-                StartCoroutine(WaitingForAimBasicShoot());
-                StartCoroutine(WaitingForAimMisile());
-                return;
-            case "IIIShield":
-                currentHealth = healthIII;
-                StartCoroutine(WaitingForAimBasicShoot());
-                return;
-            case "Boss":
-                currentHealth = healthIV;
-                StartCoroutine(WaitingForAimBasicShoot());
-                StartCoroutine(WaitingForAimMisile());
-                return;*/
         }
     }
 
@@ -161,123 +152,18 @@ public class EnemiesAI : MonoBehaviour
         Debug.LogWarning("Enemy death");
         transform.parent = null;
         GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation, transform.parent);
-        //EnemySquadMove.instance.GetComponent<AudioSource>().PlayOneShot(enemiesDeath);
         Destroy(gameObject);
     }
 
-    private IEnumerator EnableCollision()
-    {
-        yield return new WaitUntil(() => transform.position.y < 4f);
-        GetComponent<BoxCollider2D>().enabled = true;
-        canAttack = true;
-    }
-
-    private IEnumerator basicEnemiesRotation(Transform t)
-    {
-        while(Application.isPlaying)
-        {
-            yield return new WaitUntil(() => gameObject.tag == "IBasic");
-            angle += rotateSpeed * Time.deltaTime;
-            var offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
-            t.localPosition = new Vector2(transform.parent.GetChild(3).transform.localPosition.x, transform.parent.GetChild(3).transform.localPosition.y) + offset;
-        }
-    }
-
-    //Sets up that if the enemy have another enemy under then cannot attack player until this enemy is destroyed
-    /*private void FixedUpdate()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 0.4f), -Vector2.up);
-
-        if(hit.collider == null)
-        {
-            return;
-        }
-        else if(enemiesTags.Contains(hit.collider.tag))
-        {
-            Debug.DrawRay(new Vector2(transform.position.x, transform.position.y - 0.4f), -Vector2.up, Color.red);
-            canAttack = false;
-        }
-        else
-        {
-            canAttack = true;
-        }
-    }*/
-
-    private IEnumerator basicMovement()
-    {
-        Vector3 position1 = new Vector3(transform.localPosition.x, transform.localPosition.y - 1, transform.localPosition.z);
-        Vector3 position2 = new Vector3(transform.localPosition.x, transform.localPosition.y + 1, transform.localPosition.z);
-
-        yield return new WaitUntil(() => LevelManager.instance.currentSquad.transform.position.y <= 2.2f);
-        while (Application.isPlaying)
-        {
-            float counter = 0f;
-            while (counter < 2)
-            {
-                transform.localPosition = Vector3.Lerp(position2, position1, counter / 2);
-                counter += Time.deltaTime;
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.01f);
-            counter = 0f;
-            while (counter < 2)
-            {
-                transform.localPosition = Vector3.Lerp(position1, position2, counter / 2);
-                counter += Time.deltaTime;
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
-
-    //To be implemented later
-    private IEnumerator circleMovement()
-    {
-        Vector3 localOriginalPosition = transform.localPosition;
-        while (Application.isPlaying)
-        {
-            float counter = 0f;
-            while(counter < 2)
-            {
-                transform.localPosition = Vector3.Slerp(new Vector3(localOriginalPosition.x, localOriginalPosition.y, localOriginalPosition.z), new Vector3(localOriginalPosition.x, -0.15f, localOriginalPosition.z), counter / 2);
-                counter += Time.deltaTime;
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.01f);
-            counter = 0;
-            while (counter < 2)
-            {
-                transform.localPosition = Vector3.Slerp(new Vector3(localOriginalPosition.x, -0.15f, localOriginalPosition.z), new Vector3(localOriginalPosition.x, localOriginalPosition.y, localOriginalPosition.z), counter / 2);
-                counter += Time.deltaTime;
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
-
     //Assignment for Aim&Shoot
-    IEnumerator WaitingForAimBasicShoot()
+    IEnumerator WaitingForAimBasicShoot(int rangeA, int rangeB)
     {
         yield return new WaitUntil(() => canAttack);
 
         while (true)
         {
             yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
-            //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
             yield return new WaitForSeconds(Random.Range(2, 8));
-            canBasic = true;
-        }
-    }
-
-    IEnumerator WaitingForAimBasicShootLV2()
-    {
-        yield return new WaitUntil(() => canAttack);
-
-        while (true)
-        {
-            yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
-            //firePositionEnemies.up = (GameObject.FindGameObjectWithTag("Player").transform.position - firePositionEnemies.position) * -1;
-            yield return new WaitForSeconds(Random.Range(1, 5));
             canBasic = true;
         }
     }
@@ -296,49 +182,6 @@ public class EnemiesAI : MonoBehaviour
             //MisileShoot();
             canMissile = true;
         }
-    }
-
-    //Show up enemy Active Shield damage animation
-    public void ActivateEnemyShieldAnimation()
-    {
-        shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
-    }
-
-    //Show up enemy Deactive Shield animation
-    public void DeactivateEnemyShieldAnimation()
-    {
-        shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
-        shieldDisable = true;
-    }
-
-
-    //On enable script, sets up current animations coroutines
-    private void OnEnable()
-    {
-        if (shieldObject != null)
-        {
-            StartCoroutine(shieldWait());
-        }
-        else
-        {
-            StartCoroutine(attackWait());
-        }
-    }
-
-    //Activate shield enemy mode, cannot be attacked
-    IEnumerator shieldWait()
-    {
-        yield return new WaitForSeconds(0.5f);
-        /*shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
-        yield return new WaitForSeconds(0.27f);*/
-        canBeAttacked = true;
-    }
-
-    //Sets up that the enemy can be attacked after 0.5f seconds from the beginning
-    IEnumerator attackWait()
-    {
-        yield return new WaitForSeconds(0.5f);
-        canBeAttacked = true;
     }
 
     //Sets the enemy basic shoot instance

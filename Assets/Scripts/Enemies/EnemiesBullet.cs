@@ -22,9 +22,9 @@ public class EnemiesBullet : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            if (TutorialManager.Instance != null)
+            if (TutorialManager.instance != null)
             {
-                TutorialManager.Instance.currentShot--;
+                TutorialManager.instance.currentShot--;
                 shotMissed = false;
             }
             GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
@@ -61,9 +61,9 @@ public class EnemiesBullet : MonoBehaviour
     private void OnDisable()
     {
         //ONLY FOR TUTORIAL
-        if(TutorialManager.Instance != null && shotMissed)
+        if(TutorialManager.instance != null && shotMissed)
         {
-            TutorialManager.Instance.currentShot++;
+            TutorialManager.instance.currentShot++;
         }
     }
 }

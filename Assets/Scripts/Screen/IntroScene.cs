@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class IntroScene : MonoBehaviour
 {
+    private bool skipLogo = false;
+
     private void Start()
     {
+        PlayerPrefs.SetInt("SkipLogo", skipLogo ? 1 : 0);
         StartCoroutine(LoadMainMenu());
     }
 

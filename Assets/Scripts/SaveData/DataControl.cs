@@ -4,48 +4,73 @@ using UnityEngine;
 
 public class DataControl : Singleton<DataControl>
 {
+    //Difficulty
+    public enum Difficulty
+    {
+        Pussycat = 0,
+        Average = 1,
+        Foolish = 2,
+        Insane = 3
+    }
+
+    private Difficulty difficulty;
+
     //Enemies Values
+    public int enemySpeed = 150;
+
+    public int enemyBulletDamage = 10;
+    public int enemyRocketDamage = 30;
+
     public int basic = 20;
     public int basicII = 40;
-    public int shieldShip = 60;
+    public int shieldShip = 80;
     public int rocket = 80;
 
     public int shield = 40;
 
-    //Player Values
-    public int health = 500;
 
-    private void Awake()
-    {
-        
-    }
+    //Player Values
+    public int shieldPoints = 1;
+    public int rocketPoints = 1;
+    public int health = 600;
 
     private void Start()
     {
-        ResetData();
+        //ResetData();
     }
 
     public void ResetData()
     {
-        /*//Enemies Values
-        basic = 20;
-        basicII = 40;
-        shieldShip = 60;
-        rocket = 80;
-
-        shield = 40;
-
-        //Player Values
-        health = 500;*/
-
-        //Set values
+        //Reset values
+        difficulty = Difficulty.Pussycat;
+        PlayerPrefs.SetInt("LevelToUnlock", 0);
+        PlayerPrefs.DeleteKey("PussycatDone");
+        PlayerPrefs.DeleteKey("AverageDone");
+        PlayerPrefs.DeleteKey("FoolishDone");
+        PlayerPrefs.DeleteKey("InsaneDone");
         SaveValues();
         Debug.Log("DATA SAVED");
     }
 
     public void SetPussycatDifficultyData()
     {
-        ResetData();
+        //Enemies Values
+        enemySpeed = 150;
+
+        enemyBulletDamage = 10;
+        enemyRocketDamage = 30;
+
+        basic = 20;
+        basicII = 40;
+        shieldShip = 80;
+        rocket = 80;
+
+        shield = 80;
+
+        //Player Values
+        shieldPoints = 1;
+        rocketPoints = 1;
+        health = 600;
 
         //Set values
         SaveValues();
@@ -54,15 +79,20 @@ public class DataControl : Singleton<DataControl>
     public void SetAverageDifficultyData()
     {
         //Enemies Values
-        basic *= 2;
-        basicII *= 2;
-        shieldShip *= 2;
-        rocket *= 2;
+        enemySpeed = 120;
 
-        shield *= 2;
+        enemyBulletDamage = 15;
+        enemyRocketDamage = 45;
+
+        basic = 60;
+        basicII = 80;
+        shieldShip = 100;
+        rocket = 100;
+
+        shield = 120;
 
         //Player Values
-        health = 400;
+        health = 600;
 
         //Set values
         SaveValues();
@@ -72,15 +102,20 @@ public class DataControl : Singleton<DataControl>
     public void SetFoolishDifficultyData()
     {
         //Enemies Values
-        basic *= 3; ;
-        basicII *= 3;
-        shieldShip *= 3;
-        rocket *= 3;
+        enemySpeed = 100;
 
-        shield *= 3;
+        enemyBulletDamage = 20;
+        enemyRocketDamage = 60;
+
+        basic = 80;
+        basicII = 100;
+        shieldShip = 120;
+        rocket = 120;
+
+        shield = 140;
 
         //Player Values
-        health = 300;
+        health = 600;
 
         //Set values
         SaveValues();
@@ -90,15 +125,20 @@ public class DataControl : Singleton<DataControl>
     public void SetInsaneDifficultyData()
     {
         //Enemies Values
-        basic *= 5; ;
-        basicII *= 5;
-        shieldShip *= 5;
-        rocket *= 5;
+        enemySpeed = 90;
 
-        shield *= 5;
+        enemyBulletDamage = 25;
+        enemyRocketDamage = 75;
+
+        basic = 100;
+        basicII = 120;
+        shieldShip = 140;
+        rocket = 140;
+
+        shield = 160;
 
         //Player Values
-        health = 150;
+        health = 600;
 
         //Set values
         SaveValues();
@@ -107,11 +147,19 @@ public class DataControl : Singleton<DataControl>
 
     private void SaveValues()
     {
+        //Enemy values
+        PlayerPrefs.SetInt("EnemySpeed", enemySpeed);
+        PlayerPrefs.SetInt("EnemyBulletDamage", enemyBulletDamage);
+        PlayerPrefs.SetInt("EnemyRocketDamage", enemyRocketDamage);
         PlayerPrefs.SetInt("BHealth", basic);
         PlayerPrefs.SetInt("BIIHealth", basicII);
         PlayerPrefs.SetInt("ShieldShipHealth", shieldShip);
         PlayerPrefs.SetInt("ShieldValue", shield);
         PlayerPrefs.SetInt("RocketHealth", rocket);
+
+        //Player values
+        PlayerPrefs.SetInt("ShieldPoints", shieldPoints);
+        PlayerPrefs.SetInt("RocketPoints", rocketPoints);
         PlayerPrefs.SetInt("PlayerHealth", health);
     }
 }

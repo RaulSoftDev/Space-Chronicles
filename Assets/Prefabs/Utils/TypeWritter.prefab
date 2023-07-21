@@ -217,7 +217,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: AI Talking
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 54bd8a51589779d44b1a82ba3fc6917a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8724f70841aa4b248914857507a812a3, type: 2}
   m_sharedMaterial: {fileID: -4293335112186504786, guid: 54bd8a51589779d44b1a82ba3fc6917a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -281,7 +281,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3367152778760259179
@@ -351,7 +351,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 54bd8a51589779d44b1a82ba3fc6917a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8724f70841aa4b248914857507a812a3, type: 2}
   m_sharedMaterial: {fileID: -4293335112186504786, guid: 54bd8a51589779d44b1a82ba3fc6917a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3367152779174102501
@@ -435,7 +435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3367152779174102498
 RectTransform:
   m_ObjectHideFlags: 0
@@ -473,11 +473,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textDisplay: {fileID: 3367152778760259177}
-  sentences:
-  - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-    Ipsum has been the industry's standard dummy text ever since the 1500s, when
-    an unknown printer took a galley of type and scrambled it to make a type specimen
-    book.
   typingSpeed: 0.01
   continueButton: {fileID: 4066943117220460656}
   isDialogueClosed: 0

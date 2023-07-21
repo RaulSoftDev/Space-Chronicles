@@ -15,7 +15,13 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(DestroyOnSeconds());
+        LoadPlayerPoints();
+    }
+
+    private void LoadPlayerPoints()
+    {
+        shieldPoints = PlayerPrefs.GetInt("ShieldPoints");
+        rocketPoints = PlayerPrefs.GetInt("RocketPoints");
     }
 
     private void OnEnable()
@@ -40,7 +46,7 @@ public class Bullet : MonoBehaviour
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                    PlayerHealth.instance.playerPoints += rocketPoints;
+                    fireScript.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
                     //Destroy(gameObject);
                     gameObject.SetActive(false);
@@ -55,7 +61,7 @@ public class Bullet : MonoBehaviour
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                    PlayerHealth.instance.playerPoints += rocketPoints;
+                    fireScript.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
                     //Destroy(gameObject);
                     gameObject.SetActive(false);
@@ -70,7 +76,7 @@ public class Bullet : MonoBehaviour
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
                     collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                    PlayerHealth.instance.playerPoints += rocketPoints;
+                    fireScript.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
                     //Destroy(gameObject);
                     gameObject.SetActive(false);
@@ -82,7 +88,7 @@ public class Bullet : MonoBehaviour
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
                     Destroy(hit, 1.6f);
-                    PlayerHealth.instance.playerPoints += rocketPoints;
+                    fireScript.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
                     CheckEnemiesShield(collision);
                     gameObject.SetActive(false);
@@ -95,7 +101,7 @@ public class Bullet : MonoBehaviour
                 //In case of no shield enemy we take 1 enemy life point
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth--;
                 collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
-                PlayerHealth.instance.playerPoints += rocketPoints;
+                fireScript.instance.playerPoints += rocketPoints;
                 PlayerHealth.instance.playerShieldPoints += shieldPoints;
                 Destroy(gameObject);
                 break;
@@ -105,7 +111,7 @@ public class Bullet : MonoBehaviour
                 Destroy(hit, 1.6f);
                 //In case of shield enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield--;
-                PlayerHealth.instance.playerPoints += rocketPoints;
+                fireScript.instance.playerPoints += rocketPoints;
                 PlayerHealth.instance.playerShieldPoints += shieldPoints;
                 //Then we check for shield points and activate the animation needed
                 if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
@@ -130,7 +136,7 @@ public class Bullet : MonoBehaviour
                 Destroy(hit, 1.6f);
                 //In case of boss enemy we take 1 enemy shield point
                 collision.gameObject.GetComponent<EnemiesAI>().shield--;
-                PlayerHealth.instance.playerPoints += rocketPoints;
+                fireScript.instance.playerPoints += rocketPoints;
                 PlayerHealth.instance.playerShieldPoints += shieldPoints;
                 //Then we check for shield points and activate the animation needed
                 if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)

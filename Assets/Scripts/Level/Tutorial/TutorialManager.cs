@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TutorialManager : Singleton<TutorialManager>
+public class TutorialManager : MonoBehaviour
 {
+    public static TutorialManager instance;
+
     [SerializeField] Animator dialogueText;
     [SerializeField] Animator movementArrows;
     [SerializeField] Animator basicAttack;
@@ -13,7 +15,9 @@ public class TutorialManager : Singleton<TutorialManager>
     [SerializeField] GameObject spawnPoint;
     [SerializeField] Animator shieldButton;
     [SerializeField] Animator rocketButton;
-    [SerializeField] float enemySpeed = 1000;
+    [SerializeField] float enemySpeed = 90;
+    [SerializeField] int shieldPointsTutorial = 5;
+    [SerializeField] int rocketPointsTutorial = 5;
     public GameObject currentSquad;
     private bool isRocketDisabled = false;
     private float maxShots = 5;
@@ -23,6 +27,20 @@ public class TutorialManager : Singleton<TutorialManager>
     private bool movementDone = false;
     private bool basicAttackDone = false;
     private bool shieldRocketDone = false;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
+        SetTutorialStats();
+    }
 
     private void Start()
     {
@@ -73,9 +91,17 @@ public class TutorialManager : Singleton<TutorialManager>
         }
     }
 
+    private void SetTutorialStats()
+    {
+        PlayerPrefs.SetInt("ShieldPoints", shieldPointsTutorial);
+        PlayerPrefs.SetInt("RocketPoints", rocketPointsTutorial);
+        PlayerPrefs.SetInt("BHealth", 30);
+    }
+
     IEnumerator TutorialIntro()
     {
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_Intro);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
@@ -88,6 +114,7 @@ public class TutorialManager : Singleton<TutorialManager>
     IEnumerator TutorialMovement()
     {
         yield return new WaitUntil(() => currentSquad != null && currentSquad.transform.position.y <= 4.5f);
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_Movement);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         movementArrows.SetTrigger("ArrowsOn");
@@ -106,6 +133,7 @@ public class TutorialManager : Singleton<TutorialManager>
         yield return new WaitUntil(() => currentShot >= maxShots);
         EnemiesAttackState(false);
         currentSquad.GetComponent<RowManager>().rightMoveLoop = false;
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_Attack);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         basicAttack.SetTrigger("TriggerOn");
@@ -127,6 +155,7 @@ public class TutorialManager : Singleton<TutorialManager>
         //Shield button animation On
         shieldButton.SetTrigger("TriggerOn");
         //Show dialogue
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_Defence);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
@@ -136,6 +165,7 @@ public class TutorialManager : Singleton<TutorialManager>
         //Rocket button animation On
         isRocketDisabled = true;
         rocketButton.SetTrigger("TriggerOn");
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_Rocket);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
@@ -153,6 +183,8 @@ public class TutorialManager : Singleton<TutorialManager>
     IEnumerator TutorialEnd()
     {
         yield return new WaitUntil(() => shieldRocketDone);
+
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Tutorial_End);
         dialogueText.gameObject.SetActive(true);
         dialogueText.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogueText.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);

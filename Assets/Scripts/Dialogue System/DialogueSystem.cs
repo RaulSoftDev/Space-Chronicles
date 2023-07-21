@@ -6,7 +6,7 @@ using UnityEngine;
 public class DialogueSystem : MonoBehaviour
 {
     public TextMeshProUGUI textDisplay;
-    public string[] sentences;
+    public DialogueIndex textIndex;
     private int index;
     public float typingSpeed;
     public Animator continueButton;
@@ -15,6 +15,7 @@ public class DialogueSystem : MonoBehaviour
 
     private void OnEnable()
     {
+        //SetDialogue();
         StartCoroutine(ShowButton());
     }
 
@@ -25,11 +26,6 @@ public class DialogueSystem : MonoBehaviour
 
     private void Update()
     {
-        /*if(textDisplay.text == sentences[index])
-        {
-            continueButton.SetActive(true);
-        }*/
-
         if (gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Close Dialogue"))
         {
             float ATime = gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime;
@@ -51,7 +47,7 @@ public class DialogueSystem : MonoBehaviour
 
     IEnumerator Type()
     {
-        foreach (char letter in sentences[index].ToCharArray())
+        foreach (char letter in textIndex.DialogueOutput[index].ToCharArray())
         {
             textDisplay.text += letter;
             yield return new WaitForSeconds(typingSpeed);
@@ -62,7 +58,7 @@ public class DialogueSystem : MonoBehaviour
     {
         HideButton();
 
-        if (index < sentences.Length - 1)
+        if (index < textIndex.DialogueOutput.Count - 1)
         {
             index++;
             textDisplay.text = "";
@@ -89,9 +85,15 @@ public class DialogueSystem : MonoBehaviour
         StartCoroutine(Type());
     }
 
+    private void SetDialogue()
+    {
+        textIndex.DialogueOutput.Clear();
+        textIndex.Dialogue_System1_Intro();
+    }
+
     IEnumerator ShowButton()
     {
-        yield return new WaitUntil(() => textDisplay.text == sentences[index]);
+        yield return new WaitUntil(() => textDisplay.text == textIndex.DialogueOutput[index]);
         continueButton.SetTrigger("ShowButton");
     }
 

@@ -8,52 +8,44 @@ public class PlayerHealth : MonoBehaviour
 {
     public static PlayerHealth instance;
 
+    [Header("HEALTH")]
     public float playerHealth = 11;
     private float maxHealth;
-    public bool GetDamage;
-    public Slider healthSlider;
-    public Slider powerSlider;
-    public int playerPoints = 0;
-    public int rocketPoints = 0;
-    public float playerShieldPoints = 0;
-    public float hueValue = 124;
-    public float saturationValue = 100;
-    public float brightnessValue = 100;
-    private float redBGAlpha = 0.1f;
+    internal bool GetDamage;
+
+    [Header("SLIDER INSTANCE")]
+    [SerializeField] private Slider healthSlider;
+    internal float playerShieldPoints = 0;
     private float redGradientAlpha = 0.85f;
 
-    public Animator healthBar;
+    [Header("BAR COLOR")]
+    [SerializeField] private Image healthColor;
 
-    //Health Bar Color
-    public Image healthColor;
+    [Header("ENEMY WEAPONS DAMAGE")]
+    [SerializeField] private float enemyBulletValue = 10;
+    [SerializeField] private float enemyRocketValue = 30;
 
-    public float enemyBulletValue = 1;
-    public float enemyRocketValue = 3;
+    [Header("DEATH EXPLOSION")]
+    [SerializeField] private GameObject playerExplosion;
 
-    public GameObject playerExplosion;
+    //AUDIO SOURCE
+    private AudioSource playerAudiosource;
 
-    AudioSource playerAudiosource;
-    public AudioClip rocketAvailable;
-    public AudioClip shieldAvailable;
-
-    //Red Background Variables
-    public Image redBG;
-    public Image redGradient;
+    [Header("RED BACKGROUND")]
+    [SerializeField] private Image redBG;
+    [SerializeField] private Image redGradient;
     private float desiredDurationBG = 2f;
     private float desiredDuration = 2f;
     private float elapsedTimeBG;
     private float elapsedTime;
     private float percentageCompleteBG;
     private float percentageComplete;
-    private bool restartPercentage = false;
     private bool isLooping = true;
-    private bool isPlayerDead = false;
-    private Color redColor1;
-    private Color redColor2;
+    private Color redColor;
 
-    //Death Screen Variables
-    public GameObject deathScreen;
-    public GameObject pauseButton;
+    [Header("DEATH SCREEN INSTANCES")]
+    [SerializeField] private GameObject deathScreen;
+    [SerializeField] private GameObject pauseButton;
 
     private void Awake()
     {
@@ -68,6 +60,14 @@ public class PlayerHealth : MonoBehaviour
 
         playerHealth = PlayerPrefs.GetInt("PlayerHealth");
         maxHealth = playerHealth;
+
+        SetEnemyDamage();
+    }
+
+    private void SetEnemyDamage()
+    {
+        enemyBulletValue = PlayerPrefs.GetInt("EnemyBulletDamage", 10);
+        enemyRocketValue = PlayerPrefs.GetInt("EnemyRocketDamage", 30);
     }
 
     private void Start()
@@ -85,18 +85,23 @@ public class PlayerHealth : MonoBehaviour
         GameObject explotionInstance = Instantiate(playerExplosion, transform.position, transform.rotation);
         explotionInstance.transform.parent = transform;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        //Load scene
-        //MenuScript.Instance.StartMenu(4)
+        //Set Background On Red
         StartCoroutine(LerpColorOnDeath());
         pauseButton.SetActive(false);
+        //Show Death Screen
         deathScreen.SetActive(true);
     } 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (GetDamage)
+        SetEnemyWeaponsDamage(collision, GetDamage);
+    }
+
+    private void SetEnemyWeaponsDamage(Collider2D collision, bool enableDamage)
+    {
+        if (enableDamage)
         {
-            if(playerHealth >= 1)
+            if (playerHealth >= 1)
             {
                 switch (collision.tag)
                 {
@@ -116,27 +121,20 @@ public class PlayerHealth : MonoBehaviour
                         playerHealth -= enemyBulletValue;
                         gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
                         return;
-                    /*case "Missile":
-                        playerHealth -= 3;
-                        gameObject.GetComponent<Animator>().SetTrigger("DamagePlayerOn");
-                        return;*/
                 }
             }
-        } 
+        }
     }
 
     private void Update()
     {
-        if(playerPoints < 0)
-        {
-            playerPoints = 0;
-        }
+        SetShieldThreshold();
+        HealthSliderValues();
+        SetRedScreenState();
+    }
 
-        if(playerPoints > 30)
-        {
-            playerPoints = 30;
-        }
-
+    private void SetShieldThreshold()
+    {
         if (playerShieldPoints < 0)
         {
             playerShieldPoints = 0;
@@ -146,14 +144,15 @@ public class PlayerHealth : MonoBehaviour
         {
             playerShieldPoints = 20;
         }
+    }
 
-        HealthSliderValues();
-        
-        if(healthSlider.value < (healthSlider.maxValue * 50) / 100)
+    private void SetRedScreenState()
+    {
+        if (healthSlider.value < (healthSlider.maxValue * 50) / 100)
         {
             elapsedTimeBG += Time.deltaTime;
             percentageCompleteBG = elapsedTimeBG / desiredDurationBG;
-            redBG.color = Color.Lerp(Color.clear, redColor1, percentageCompleteBG);
+            redBG.color = Color.Lerp(Color.clear, redColor, percentageCompleteBG);
         }
 
         if (healthSlider.value < (healthSlider.maxValue * 25) / 100)
@@ -162,34 +161,17 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    //Set health bar values
     private void HealthSliderValues()
     {
         healthSlider.value = playerHealth;
     }
 
+    //Health bar gradually change color from green to red while losing health points
     public void HealthBarColor()
     {
         healthColor.color = Color.Lerp(Color.red, new Color(0, 1, 0.06043053f, 1), healthSlider.value / maxHealth);
-        redColor1 = Color.Lerp(new Color(1, 1, 1, 0.15f), new Color(1, 1, 1, 0.01f), healthSlider.value / maxHealth);
-    }
-
-    private void loadPercentage()
-    {
-        elapsedTime += Time.deltaTime;
-
-        if (restartPercentage)
-        {
-            elapsedTime = 0;
-            restartPercentage = false;
-        }
-    }
-
-    private void RedColorAnimation()
-    {
-        float percentageComplete = elapsedTime / desiredDuration;
-        Debug.Log(percentageComplete);
-
-        redBG.color = Color.Lerp(Color.clear, Color.white, percentageComplete);
+        redColor = Color.Lerp(new Color(1, 1, 1, 0.15f), new Color(1, 1, 1, 0.01f), healthSlider.value / maxHealth);
     }
 
     private IEnumerator LerpColorOn()
@@ -213,13 +195,11 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator LerpColorOnDeath()
     {
         Color currentColor = redBG.color;
-        //Color currentGradientColor = redGradient.color;
         while (true)
         {
             elapsedTime += Time.deltaTime;
             percentageComplete = elapsedTime / desiredDuration;
             redBG.color = Color.Lerp(new Color(1, 1, 1, 0.15f), currentColor, percentageComplete);
-            //redGradient.color = Color.Lerp(new Color(1, 1, 1, 0.85f), currentGradientColor, percentageComplete);
             yield return null;
         }
     }

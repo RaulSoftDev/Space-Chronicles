@@ -37,10 +37,10 @@ public class MenuBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        if (resetDifficulty)
+        /*if (resetDifficulty)
         {
             PlayerPrefs.SetInt("LevelToUnlock", 0);
-        }
+        }*/
 
         unlockLevel = PlayerPrefs.GetInt("UnlockLevel") != 0;
         levelToUnlock = PlayerPrefs.GetInt("LevelToUnlock");
@@ -676,31 +676,31 @@ public class MenuBehaviour : MonoBehaviour
             switch (button.name)
             {
                 case "Average":
-                    if (PlayerPrefs.GetInt("LevelToUnlock") < 1)
+                    if (!PlayerPrefs.HasKey("PussycatDone") || PlayerPrefs.GetInt("PussycatDone") == 0)
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[0];
                     }
-                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 1)
+                    else
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[0];
                     }
                     break;
                 case "Foolish":
-                    if (PlayerPrefs.GetInt("LevelToUnlock") < 2)
+                    if (!PlayerPrefs.HasKey("AverageDone") || PlayerPrefs.GetInt("AverageDone") == 0)
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[1];
                     }
-                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 2)
+                    else
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[1];
                     }
                     break;
                 case "Insane":
-                    if (PlayerPrefs.GetInt("LevelToUnlock") < 3)
+                    if (!PlayerPrefs.HasKey("FoolishDone") || PlayerPrefs.GetInt("FoolishDone") == 0)
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = lockedDifficultiesSprites[2];
                     }
-                    else if (PlayerPrefs.GetInt("LevelToUnlock") >= 3)
+                    else
                     {
                         button.gameObject.GetComponent<Button>().image.sprite = unlockedDifficultiesSprites[2];
                     }
@@ -722,6 +722,7 @@ public class MenuBehaviour : MonoBehaviour
     IEnumerator NewDifficultyUnlocked()
     {
         yield return new WaitUntil(() => enableDifficultyButtons);
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.Unlock_Difficulty);
         dialogSystem.gameObject.SetActive(true);
         dialogSystem.SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogSystem.gameObject.GetComponent<DialogueSystem>().isDialogueClosed);
@@ -729,35 +730,48 @@ public class MenuBehaviour : MonoBehaviour
         dialogSystem.gameObject.SetActive(false);
     }
 
-    public void CurrentDifficulty(int minLevel)
+    public void SetCurrentDifficultyData(int level)
     {
-        if (PlayerPrefs.GetInt("LevelToUnlock") >= minLevel)
-        {
-            SetCurrentDifficultyData(minLevel);
-            MoveOutDifficultyButtons();
-        }
-        else
-        {
-            OnDisableDifficultyMenuButton();
-        }
-    }
+        PlayerPrefs.SetInt("Difficulty", level);
 
-    private void SetCurrentDifficultyData(int level)
-    {
-        DataControl.Instance.ResetData();
         switch (level)
         {
             case 0:
                 DataControl.Instance.SetPussycatDifficultyData();
+                MoveOutDifficultyButtons();
                 break;
             case 1:
-                DataControl.Instance.SetAverageDifficultyData();
+                if(PlayerPrefs.GetInt("PussycatDone") == 1)
+                {
+                    DataControl.Instance.SetAverageDifficultyData();
+                    MoveOutDifficultyButtons();
+                }
+                else
+                {
+                    OnDisableDifficultyMenuButton();
+                }
                 break;
             case 2:
-                DataControl.Instance.SetFoolishDifficultyData();
+                if (PlayerPrefs.GetInt("AverageDone") == 1)
+                {
+                    DataControl.Instance.SetFoolishDifficultyData();
+                    MoveOutDifficultyButtons();
+                }
+                else
+                {
+                    OnDisableDifficultyMenuButton();
+                }
                 break;
             case 3:
-                DataControl.Instance.SetInsaneDifficultyData();
+                if (PlayerPrefs.GetInt("FoolishDone") == 1)
+                {
+                    DataControl.Instance.SetInsaneDifficultyData();
+                    MoveOutDifficultyButtons();
+                }
+                else
+                {
+                    OnDisableDifficultyMenuButton();
+                }
                 break;
             default:
                 DataControl.Instance.SetPussycatDifficultyData();

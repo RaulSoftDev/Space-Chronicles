@@ -4,14 +4,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
     [SerializeField] private int round = 0;
-    [SerializeField] float enemySpeedBegins = 1000;
-    [SerializeField] float enemySpeed = 1000;
+    [SerializeField] float enemySpeedBegins = 60;
+    [SerializeField] float enemySpeed = 150;
     private int squadNumber = -1;
     private bool noEnemiesLeft = false;
     public GameObject currentSquad;
@@ -26,6 +27,7 @@ public class LevelManager : MonoBehaviour
     public bool roundSignDone = false;
     public Vector3 startPosition;
     public GameObject dialogue;
+    private bool levelAlreadyFinished = false;
     private bool unlockNext = false;
     private float yPosition = 0;
 
@@ -41,6 +43,13 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        SetEnemySpeed();
+    }
+
+    private void SetEnemySpeed()
+    {
+        enemySpeed = PlayerPrefs.GetInt("EnemySpeed", 150);
     }
 
     private void Start()
@@ -50,6 +59,8 @@ public class LevelManager : MonoBehaviour
 
         StartCoroutine(RoundsManager());
         StartCoroutine(PlayerHealthCheck());
+
+        //SaveLevelData();
     }
 
     private void Update()
@@ -62,17 +73,17 @@ public class LevelManager : MonoBehaviour
             roundSignDone = true;
         }
 
-        foreach (GameObject squad in runtimeSquads)
+        foreach (GameObject squad in runtimeSquads.ToList())
         {
-            foreach(Transform child in squad.transform)
+            foreach (Transform child in squad.transform)
             {
-                if(child.childCount < 1)
+                if (child.childCount < 1)
                 {
                     Destroy(child.gameObject);
                 }
             }
 
-            if(squad.transform.childCount < 1)
+            if (squad.transform.childCount < 1)
             {
                 runtimeSquads.Remove(squad);
             }
@@ -92,6 +103,7 @@ public class LevelManager : MonoBehaviour
         Player_Movement.Instance.enableMovement = true;
 
         //AI MESSAGE
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.System_1_Intro);
         ShowDialogue();
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
         dialogue.GetComponent<DialogueSystem>().isDialogueClosed = false;
@@ -137,16 +149,77 @@ public class LevelManager : MonoBehaviour
         fireScript.instance.enableAttack = false;
 
         //VICTORY SCENE
+        DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.System_1_Outtro);
         ShowDialogue();
         dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
         dialogue.GetComponent<DialogueSystem>().isDialogueClosed = false;
         dialogue.gameObject.SetActive(false);
 
+        SaveLevelData();
+    }
+
+    private void SaveLevelData()
+    {
         //UNLOCK NEXT DIFFICULTY
-        unlockNext = true;
-        PlayerPrefs.SetInt("UnlockLevel", (unlockNext ? 1 : 0));
+        levelAlreadyFinished = true;
+        CheckDifficultyState();
+        bool skipLogo = true;
+        PlayerPrefs.SetInt("SkipLogo", skipLogo ? 1 : 0);
         MenuScript.Instance.StartMenu(1);
+    }
+
+    private void CheckDifficultyState()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty"))
+        {
+            case 0:
+                if(PlayerPrefs.HasKey("PussycatDone") && PlayerPrefs.GetInt("PussycatDone") == 1)
+                {
+                    unlockNext = false;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                    Debug.Log("PUSSYCAT ALREADY DONE");
+                }
+                else
+                {
+                    unlockNext = true;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                    PlayerPrefs.SetInt("PussycatDone", levelAlreadyFinished ? 1 : 0);
+                }
+                break;
+            case 1:
+                if (PlayerPrefs.HasKey("AverageDone") && PlayerPrefs.GetInt("AverageDone") == 1)
+                {
+                    unlockNext = false;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                    Debug.Log("AVERAGE ALREADY DONE");
+                }
+                else
+                {
+                    unlockNext = true;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                    PlayerPrefs.SetInt("AverageDone", levelAlreadyFinished ? 1 : 0);
+                    Debug.Log("FIRST TIME");
+                }
+                break;
+            case 2:
+                if (PlayerPrefs.HasKey("FoolishDone") && PlayerPrefs.GetInt("FoolishDone") == 1)
+                {
+                    unlockNext = false;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                }
+                else
+                {
+                    unlockNext = true;
+                    PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                    PlayerPrefs.SetInt("FoolishDone", levelAlreadyFinished ? 1 : 0);
+                }
+                break;
+            case 3:
+                unlockNext = false;
+                PlayerPrefs.SetInt("UnlockLevel", unlockNext ? 1 : 0);
+                break;
+        }
     }
 
     private IEnumerator GenerateRound()
@@ -238,19 +311,6 @@ public class LevelManager : MonoBehaviour
             default:
                 break;
         }
-        /*currentSquad = Instantiate(squads[squadNumber], spawnPoint.transform.position, spawnPoint.transform.rotation);
-        runtimeSquads.Add(currentSquad);
-        //enemyText.SetActive(true);
-        //yield return new WaitForSeconds(3f);
-        //enemyText.SetActive(false);
-        Debug.LogWarning("Spawning Squad");
-        currentSquad.GetComponent<SquadMovementManager>().startMove = true;*/
-        //StartCoroutine(EnemyBehaviour.instance.SetUpEnemies(currentSquad.transform));
-        //StartCoroutine(EnemyBehaviour.instance.WaitCoroutine(currentSquad.transform));
-        //StartCoroutine(CheckForEnemiesOnSquads());
-        //yield return new WaitUntil(() => noEnemiesLeft);
-
-        //Destroy(currentSquad);
     }
 
     private void GetSquad(GameObject[] squad, int squadNumber)
