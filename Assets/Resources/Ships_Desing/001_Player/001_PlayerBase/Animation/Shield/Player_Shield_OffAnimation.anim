@@ -1454,4 +1454,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.98333335
+    functionName: PlaySoundFXOnPlayer
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 4ae650096abfbe8488d73ad66a97068b, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

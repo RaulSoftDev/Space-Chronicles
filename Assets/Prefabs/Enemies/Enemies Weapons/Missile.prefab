@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8410266118270612775}
   - component: {fileID: 1022443851664298296}
   - component: {fileID: 5204218270000263318}
-  - component: {fileID: 5076073588600159440}
+  - component: {fileID: 5045310295540379316}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Missile
@@ -134,7 +134,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4227579, y: 0.51492256}
   m_EdgeRadius: 0
---- !u!114 &5076073588600159440
+--- !u!114 &5045310295540379316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +143,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 804413135992331832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59ca1e14c5252504e9cdaa407c249f29, type: 3}
+  m_Script: {fileID: 11500000, guid: 67bb3063c7563344c96725373c9ea131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesExplosionFx: {fileID: 8755856670773691837, guid: f9c7a2de427ee174eba234289228841f, type: 3}
+  enemyRocketImpactFX: {fileID: 8300000, guid: 91cb8c48ce7cbd14bb3ff32f15bde6e0, type: 3}
+  playerImpact: {fileID: 8300000, guid: aa1622a5f734a304e862a5091b8ccb8b, type: 3}
+  playerShieldImpact: {fileID: 8300000, guid: 90ddfb8fa5720c944a206e3bc828781a, type: 3}
 --- !u!1 &4205902192931826421
 GameObject:
   m_ObjectHideFlags: 0

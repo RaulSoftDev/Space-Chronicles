@@ -4965,3 +4965,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesExplosionFx: {fileID: 8755856670773691837, guid: 2501e5aeb55558c4b8733b5102a77ad0, type: 3}
+  enemyRocketImpactFX: {fileID: 8300000, guid: 41c43892b214cfb4f81b8afce3614bfa, type: 3}
+  playerImpact: {fileID: 8300000, guid: 737b3dd04ece55446ab32909fff5b86b, type: 3}
+  playerShieldImpact: {fileID: 8300000, guid: 90ddfb8fa5720c944a206e3bc828781a, type: 3}

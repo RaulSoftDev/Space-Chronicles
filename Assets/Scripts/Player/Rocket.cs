@@ -5,6 +5,7 @@ using UnityEngine;
 public class Rocket : MonoBehaviour
 {
     public GameObject explosionFx;
+    public AudioClip rocketImpactFX;
     public int rocketDamage = 30;
 
     private void Start()
@@ -23,6 +24,7 @@ public class Rocket : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(rocketImpactFX);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= rocketDamage;
@@ -35,6 +37,7 @@ public class Rocket : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(rocketImpactFX);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= rocketDamage;
@@ -47,6 +50,7 @@ public class Rocket : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(rocketImpactFX);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= rocketDamage;
@@ -59,6 +63,7 @@ public class Rocket : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(rocketImpactFX);
                     Destroy(hit, 1.6f);
                     //In case of shield enemy we take 1 enemy shield point
                     collision.gameObject.GetComponent<EnemiesAI>().shield -= rocketDamage;

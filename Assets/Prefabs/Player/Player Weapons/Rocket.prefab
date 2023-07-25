@@ -4894,7 +4894,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 14
+  m_SortingOrder: 9
   m_Sprite: {fileID: 0}
   m_Color: {r: 0, g: 1, b: 0.8638129, a: 0.2509804}
   m_FlipX: 0
@@ -4985,3 +4985,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionFx: {fileID: 8755856670773691837, guid: f18891162f06bdf40b22b77477129bcc, type: 3}
+  rocketImpactFX: {fileID: 8300000, guid: aa1622a5f734a304e862a5091b8ccb8b, type: 3}
+  rocketDamage: 30

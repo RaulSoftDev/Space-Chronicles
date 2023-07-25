@@ -54,10 +54,7 @@ public class BlackScreenLoader : Singleton<BlackScreenLoader>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         parent.GetComponent<Canvas>().worldCamera = Camera.main;
-        if(scene.buildIndex != 2)
-        {
-            GetComponent<Animator>().SetTrigger("SetScreenBlackOff");
-        }
+        LoadOutBlackScreen();
     }
 
     private void OnDisable()

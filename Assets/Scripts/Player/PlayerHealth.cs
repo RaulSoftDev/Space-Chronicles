@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public static PlayerHealth instance;
 
     [Header("HEALTH")]
-    public float playerHealth = 11;
+    public float playerHealth = 600;
     private float maxHealth;
     internal bool GetDamage;
 
@@ -27,6 +27,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("DEATH EXPLOSION")]
     [SerializeField] private GameObject playerExplosion;
+    [SerializeField] private AudioClip deathExplosion;
 
     //AUDIO SOURCE
     private AudioSource playerAudiosource;
@@ -58,7 +59,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(this);
         }
 
-        playerHealth = PlayerPrefs.GetInt("PlayerHealth");
+        playerHealth = PlayerPrefs.GetInt("PlayerHealth", 600);
         maxHealth = playerHealth;
 
         SetEnemyDamage();
@@ -75,21 +76,38 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.maxValue = playerHealth;
         playerAudiosource = GetComponent<AudioSource>();
         GetDamage = true;
-        StartCoroutine(PlayerStats());
+        StartCoroutine(PlayerIsDead());
     }
 
     //Load death scene if player dies
-    private IEnumerator PlayerStats()
+    private IEnumerator PlayerIsDead()
     {
         yield return new WaitUntil(() => playerHealth < 1);
-        GameObject explotionInstance = Instantiate(playerExplosion, transform.position, transform.rotation);
-        explotionInstance.transform.parent = transform;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         //Set Background On Red
         StartCoroutine(LerpColorOnDeath());
+        //If shield active then turn it off
+        if (gameObject.GetComponent<ShieldController>().shieldActive)
+        {
+            gameObject.GetComponent<ShieldController>().TurnOffShield();
+        }
+        //Begins Explosion Sound
+        gameObject.GetComponent<Animator>().SetTrigger("IsPlayerDead");
+        playerAudiosource.Stop();
+        playerAudiosource.volume = 0.35f;
+        playerAudiosource.PlayOneShot(deathExplosion);
+        //When first noise ends and hears sound explosion show it
+        yield return new WaitForSecondsRealtime(1);
+        GameObject explotionInstance = Instantiate(playerExplosion, transform.position, transform.rotation);
+        explotionInstance.transform.parent = transform;
+        gameObject.GetComponent<Animator>().SetBool("PlayerDisappears", true);
+        yield return new WaitForSecondsRealtime(3);
         pauseButton.SetActive(false);
         //Show Death Screen
         deathScreen.SetActive(true);
+        //Play Death Menu Music
+        SoundScript.instance.gameObject.GetComponent<AudioSource>().volume = 0.40f;
+        SoundScript.instance.PlayDeathMusic();
     } 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -154,10 +172,14 @@ public class PlayerHealth : MonoBehaviour
             percentageCompleteBG = elapsedTimeBG / desiredDurationBG;
             redBG.color = Color.Lerp(Color.clear, redColor, percentageCompleteBG);
         }
-
-        if (healthSlider.value < (healthSlider.maxValue * 25) / 100)
+        else if (healthSlider.value < (healthSlider.maxValue * 25) / 100)
         {
             desiredDuration = 1;
+        }
+        
+        if(healthSlider.value <= 0)
+        {
+            redBG.color = new Color(1, 1, 1, 0.15f);
         }
     }
 

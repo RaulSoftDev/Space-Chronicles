@@ -34,11 +34,11 @@ public class fireScript : MonoBehaviour
 
     [Header("WEAPONS IMAGES")]
     [SerializeField] private Image rocketButtonBackground;
-    [SerializeField] private Button rocketButton;
+    [SerializeField] internal Button rocketButton;
     [SerializeField] private Image[] rocketLoadButtons;
     [SerializeField] private Sprite rocketOn;
     [SerializeField] private Sprite rocketOff;
-    [SerializeField] private Button triggerButton;
+    [SerializeField] public Button triggerButton;
 
     [Header("ROCKET SLIDER")]
     public Slider powerSlider;
@@ -51,6 +51,7 @@ public class fireScript : MonoBehaviour
     [Header("AUDIO CLIPS")]
     [SerializeField] private AudioClip bulletSound;
     [SerializeField] private AudioClip rocketSound;
+    [SerializeField] private AudioClip activateRocket;
 
     //Bullet count
     private float currentBullet = 0;
@@ -172,6 +173,7 @@ public class fireScript : MonoBehaviour
         bullet.SetActive(true);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
+        audioSourcePlayer.volume = 0.45f;
         audioSourcePlayer.PlayOneShot(bulletSound);
         Debug.Log("ShootOut");
         currentBullet++;
@@ -201,7 +203,7 @@ public class fireScript : MonoBehaviour
     }
 
     //Set the rocket button current status
-    public void CheckRocketAvailability()
+    /*public void CheckRocketAvailability()
     {
         if (!disableRocket)
         {
@@ -234,19 +236,17 @@ public class fireScript : MonoBehaviour
                     return;
             }
         }
-    }
+    }*/
 
     private IEnumerator UnloadRocket()
     {
-        while (Application.isPlaying)
-        {
-            yield return new WaitUntil(() => powerSlider.value == 0 && !disableRocket);
-            rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
-            rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
-            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-            rocketButton.image.sprite = rocketOff;
-            rocketButton.interactable = false;
-        }
+        yield return new WaitUntil(() => powerSlider.value == 0 && !disableRocket);
+        rocketLoadButtons[0].color = new Color(1, 1, 1, 0);
+        rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+        rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+        rocketButton.image.sprite = rocketOff;
+        rocketButton.interactable = false;
+        StartCoroutine(UnloadRocket());
     }
 
     private void LoadRocketSlots()
@@ -259,34 +259,37 @@ public class fireScript : MonoBehaviour
 
     private IEnumerator LoadRocket01()
     {
-        while (Application.isPlaying)
-        {
-            yield return new WaitUntil(() => powerSlider.value == 1 && !disableRocket);
-            rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
-            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-            rocketLoadButtons[0].color = Color.white;
-            rocketButton.image.sprite = rocketOn;
-            rocketButton.interactable = true;
-        }
+        yield return new WaitUntil(() => powerSlider.value == 1 && !disableRocket);
+        rocketLoadButtons[1].color = new Color(1, 1, 1, 0);
+        rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+        rocketLoadButtons[0].color = Color.white;
+        audioSourcePlayer.volume = 1f;
+        audioSourcePlayer.PlayOneShot(activateRocket);
+        rocketButton.image.sprite = rocketOn;
+        rocketButton.interactable = true;
+        yield return new WaitUntil(() => powerSlider.value != 1 || disableRocket);
+        StartCoroutine(LoadRocket01());
     }
 
     private IEnumerator LoadRocket02()
     {
-        while (Application.isPlaying)
-        {
-            yield return new WaitUntil(() => powerSlider.value == 2 && !disableRocket);
-            rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
-            rocketLoadButtons[1].color = Color.white;
-        }
+        yield return new WaitUntil(() => powerSlider.value == 2 && !disableRocket);
+        rocketLoadButtons[2].color = new Color(1, 1, 1, 0);
+        rocketLoadButtons[1].color = Color.white;
+        audioSourcePlayer.volume = 1f;
+        audioSourcePlayer.PlayOneShot(activateRocket);
+        yield return new WaitUntil(() => powerSlider.value != 2 || disableRocket);
+        StartCoroutine(LoadRocket02());
     }
 
     private IEnumerator LoadRocket03()
     {
-        while (Application.isPlaying)
-        {
-            yield return new WaitUntil(() => powerSlider.value == 3 && !disableRocket);
-            rocketLoadButtons[2].color = Color.white;
-        }
+        yield return new WaitUntil(() => powerSlider.value == 3 && !disableRocket);
+        rocketLoadButtons[2].color = Color.white;
+        audioSourcePlayer.volume = 1f;
+        audioSourcePlayer.PlayOneShot(activateRocket);
+        yield return new WaitUntil(() => powerSlider.value != 3 || disableRocket);
+        StartCoroutine(LoadRocket03());
     }
 
     public void RocketManagement()
@@ -315,7 +318,7 @@ public class fireScript : MonoBehaviour
         rocket.GetComponent<Rocket>().rocketDamage = rocketDamage;
         Rigidbody2D rb = rocket.GetComponent<Rigidbody2D>();
         rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
-        audioSourcePlayer.volume = 0.7f;
+        audioSourcePlayer.volume = 1f;
         audioSourcePlayer.PlayOneShot(rocketSound);
     }
 }

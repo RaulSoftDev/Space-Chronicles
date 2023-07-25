@@ -18,6 +18,9 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] Animator titleScreen;
     [SerializeField] Animator dialogSystem;
     [SerializeField] Animator mainMenuSettings;
+    [SerializeField] Animator creditsScene;
+    [SerializeField] Animator skipCredits;
+    [SerializeField] Animator skipCreditsButton;
     private bool enableMenuButtons = false;
     private bool mainMenuHidden = false;
     private bool enterCampaignMenu = false;
@@ -34,6 +37,7 @@ public class MenuBehaviour : MonoBehaviour
     private bool unlockLevel = false;
     private int levelToUnlock = 0;
     public bool resetDifficulty = false;
+    private bool creditsDone = false;
 
     private void Awake()
     {
@@ -245,6 +249,22 @@ public class MenuBehaviour : MonoBehaviour
             {
                 disabledMenu.SetActive(false);
             }
+        }
+
+        //Credits Checker
+        AnimatorStateInfo creditsAnimatorStateInfo = creditsScene.GetCurrentAnimatorStateInfo(0);
+
+        if(creditsAnimatorStateInfo.IsName("Show Credits"))
+        {
+            float CTime = creditsAnimatorStateInfo.normalizedTime;
+            if(CTime > 1.0f)
+            {
+                creditsDone = true;
+            }
+        }
+        else
+        {
+            creditsDone = false;
         }
     }
     #endregion
@@ -777,6 +797,52 @@ public class MenuBehaviour : MonoBehaviour
                 DataControl.Instance.SetPussycatDifficultyData();
                 break;
         }
+    }
+    #endregion
+
+    #region Credits Titles
+    public void ShowCredits()
+    {
+        StartCoroutine(StartCredits());
+    }
+
+    IEnumerator StartCredits()
+    {
+        foreach (Animator button in mainMenuButtons)
+        {
+            button.gameObject.GetComponent<Button>().interactable = false;
+        }
+
+        menuTitles[0].SetTrigger("TitleOff");
+
+        for (int i = 0; i < mainMenuButtons.Length; i++)
+        {
+            mainMenuButtons[i].SetTrigger("Exit");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        yield return new WaitUntil(() => mainMenuHidden);
+        skipCredits.SetTrigger("TurnOnCredits");
+        creditsScene.SetBool("CreditsOff", false);
+        creditsScene.SetTrigger("ShowCredits");
+        skipCreditsButton.SetTrigger("Enter");
+        skipCreditsButton.gameObject.GetComponent<Button>().enabled = true;
+
+        //Wait Until Credits Finish
+        yield return new WaitUntil(() => creditsDone);
+        skipCreditsButton.SetTrigger("Hide");
+        creditsScene.SetBool("CreditsOff", true);
+        BackToMainMenu();
+    }
+
+    public void SkipCreditsButton()
+    {
+        skipCreditsButton.SetTrigger("Hide");
+        skipCreditsButton.gameObject.GetComponent<Button>().enabled = false;
+        skipCredits.SetTrigger("Skip");
+        creditsScene.SetBool("CreditsOff", true);
+        BackToMainMenu();
+        //Load main menu
     }
     #endregion
 }

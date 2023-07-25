@@ -6,6 +6,9 @@ public class EnemiesBullet : MonoBehaviour
 {
 
     public GameObject enemiesExplosionFx;
+    public AudioClip enemyRocketImpactFX;
+    public AudioClip playerImpact;
+    public AudioClip playerShieldImpact;
     private float timeToHide = 3;
     private float currentTime = 0;
     private bool shotMissed = true;
@@ -27,14 +30,38 @@ public class EnemiesBullet : MonoBehaviour
                 TutorialManager.instance.currentShot--;
                 shotMissed = false;
             }
-            GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
-            Destroy(hit, 1.5f);
+            if (fireScript.instance.gameObject.GetComponent<ShieldController>().shieldActive)
+            {
+                if (gameObject.tag == "Missile")
+                {
+                    GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.8f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(enemyRocketImpactFX);
+                    Destroy(hit, 1.5f);
+                }
+                else
+                {
+                    GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.4f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(playerShieldImpact);
+                    Destroy(hit, 1.5f);
+                }
+            }
+            else
+            {
+                GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
+                hit.gameObject.GetComponent<AudioSource>().volume = 0.8f;
+                hit.gameObject.GetComponent<AudioSource>().PlayOneShot(enemyRocketImpactFX);
+                Destroy(hit, 1.5f);
+            }
             Destroy(gameObject);
         }
 
         if (collision.tag == "Bullet")
         {
             GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
+            hit.gameObject.GetComponent<AudioSource>().volume = 0.5f;
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(playerImpact);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
         }
@@ -42,6 +69,8 @@ public class EnemiesBullet : MonoBehaviour
         if (collision.tag == "Rocket")
         {
             GameObject hit = Instantiate(enemiesExplosionFx, transform.position, enemiesExplosionFx.transform.rotation);
+            hit.gameObject.GetComponent<AudioSource>().volume = 0.8f;
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(playerImpact);
             Destroy(hit, 1.5f);
             Destroy(gameObject);
         }

@@ -9,13 +9,16 @@ public class ShieldController : MonoBehaviour
     [SerializeField] private GameObject shieldObject;
 
     [Header("SHIELD IMAGES")]
-    [SerializeField] private Button shieldButton;
+    [SerializeField] internal Button shieldButton;
     [SerializeField] private Image buttonBackground360;
     [SerializeField] private Sprite buttonOnMode;
     [SerializeField] private Sprite buttonOffMode;
 
+    [SerializeField] private AudioClip activateShield;
+    [SerializeField] private AudioClip shieldOn;
+
     //Booleans
-    private bool shieldActive = false;
+    internal bool shieldActive = false;
 
     //Floats
     private float sliderValue = 10;
@@ -73,6 +76,8 @@ public class ShieldController : MonoBehaviour
     {
         PlayerHealth.instance.GetDamage = false;
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOn");
+        gameObject.GetComponent<AudioSource>().volume = 0.75f;
+        gameObject.GetComponent<AudioSource>().PlayOneShot(shieldOn);
         yield return new WaitForSecondsRealtime(10);
         shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
         PlayerHealth.instance.GetDamage = true;
@@ -88,13 +93,19 @@ public class ShieldController : MonoBehaviour
         StartCoroutine(shieldTime());
     }
 
+    public void TurnOffShield()
+    {
+        shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
+    }
+
     IEnumerator EnableShield()
     {
-        while (true)
-        {
-            yield return new WaitUntil(() => PlayerHealth.instance.playerShieldPoints == 20 && !shieldActive);
-            shieldButton.interactable = true;
-            shieldButton.image.sprite = buttonOnMode;
-        }
+        yield return new WaitUntil(() => PlayerHealth.instance.playerShieldPoints == 20 && !shieldActive);
+        gameObject.GetComponent<AudioSource>().volume = 0.75f;
+        gameObject.GetComponent<AudioSource>().PlayOneShot(activateShield);
+        shieldButton.interactable = true;
+        shieldButton.image.sprite = buttonOnMode;
+        yield return new WaitUntil(() => shieldActive);
+        StartCoroutine(EnableShield());
     }
 }

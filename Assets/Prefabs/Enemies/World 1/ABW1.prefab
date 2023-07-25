@@ -147,24 +147,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f33f5111994dc84b9f3ca6452d0a3c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: 0
+  healthI: 20
   currentHealth: 0
-  shield: 80
-  enemiesAnim: {fileID: 8073571210303943336}
-  basicShootSound: {fileID: 8300000, guid: 4dd05899cd82a564680fec2dbba55050, type: 3}
-  misileSound: {fileID: 8300000, guid: e4946c556459be24fb24c2de01fcf744, type: 3}
+  enemyExplosionsFX:
+  - {fileID: 8300000, guid: 5509a600a336e0e48a23eb439928c75d, type: 3}
+  - {fileID: 8300000, guid: c3b302d83c1b1aa43969c2c27cab55ac, type: 3}
+  - {fileID: 8300000, guid: cb1032f106569f547b0a178949fd16e3, type: 3}
+  - {fileID: 8300000, guid: d0679d7325d45934a8110720923fa043, type: 3}
+  basicShootSound: {fileID: 8300000, guid: e5390ac5ffe340e479adae0ff7c008cc, type: 3}
+  misileSound: {fileID: 8300000, guid: 9f36e42203d4a384f92e69a83a74a5ff, type: 3}
   enemiesDeath: {fileID: 8300000, guid: 088fac503d8d751458306a44b831e7cf, type: 3}
   firePositionEnemies: {fileID: 1007046372358795329}
   bulletEnemiesPrefab: {fileID: 804413135992331832, guid: b522e59746d3d834b9c39d93dcb167ec, type: 3}
-  bulletForce: 5
   misileEnemiesPrefab: {fileID: 0}
+  bulletForce: 5
   misileForce: 2.5
   shieldObject: {fileID: 0}
-  group: {fileID: 0}
   deathAnimation: {fileID: 6192724089161036641, guid: d02544c5c8052b3408df223a8cf69869, type: 3}
-  canAttack: 0
-  enableAttack: 0
-  enableCollision: 0
-  isPlayerDead: 0
 --- !u!82 &7277150168902873195
 AudioSource:
   m_ObjectHideFlags: 0

@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 1481092569}
   - component: {fileID: 1481092568}
   - component: {fileID: 1481092567}
+  - component: {fileID: 1481092570}
   m_Layer: 0
   m_Name: MusicBox
   m_TagString: Music
@@ -759,9 +760,10 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   song: {fileID: 8300000, guid: 6aef848862e9770499901fb7c4581d48, type: 3}
   songMenu: {fileID: 8300000, guid: 9d9abbc699b5bf749b0930b22e7344ec, type: 3}
-  victoryClip1: {fileID: 8300000, guid: d1de8e2d7e37ab74eabb9f190b918a6e, type: 3}
+  tutorialSong: {fileID: 8300000, guid: 042ac6f42c099c441a65d15acf141ccf, type: 3}
+  victoryClip1: {fileID: 8300000, guid: e23207dea020d274994380e33b8aff81, type: 3}
   victoryClip2: {fileID: 8300000, guid: ff71eed93cd78b945807a02ab2657881, type: 3}
-  deathClip: {fileID: 8300000, guid: 07f7c787b89795e46a9ab83e9df1aae2, type: 3}
+  deathClip: {fileID: 8300000, guid: fbf4b20710f5dbe45a108bb6361284e1, type: 3}
   mixer: {fileID: 24100000, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
   play: 1
 --- !u!82 &1481092568
@@ -775,7 +777,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -282396690438057613, guid: d8a9d3fd32b57d44ba5394543168c107, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -874,6 +876,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1481092570
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481092566}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 103c98539ed40f644bd6fae1dbfba411, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1587280337
 GameObject:
   m_ObjectHideFlags: 0

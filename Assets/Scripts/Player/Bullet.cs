@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     public int damageLevel = 10;
     public int shieldPoints = 1;
     public int rocketPoints = 1;
+    public AudioClip[] impactsFX;
 
     private void Start()
     {
@@ -42,6 +43,8 @@ public class Bullet : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.65f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[0]);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
@@ -57,6 +60,8 @@ public class Bullet : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.65f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[0]);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
@@ -72,6 +77,8 @@ public class Bullet : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.65f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[0]);
                     Destroy(hit, 1.6f);
                     //In case of no shield enemy we take 1 enemy life point
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
@@ -87,10 +94,11 @@ public class Bullet : MonoBehaviour
                 {
                     //Instantiate explosion on collision
                     hit = Instantiate(explosionFx, transform.position, transform.rotation);
-                    Destroy(hit, 1.6f);
+                    hit.gameObject.GetComponent<AudioSource>().Stop();
                     fireScript.instance.playerPoints += rocketPoints;
                     PlayerHealth.instance.playerShieldPoints += shieldPoints;
-                    CheckEnemiesShield(collision);
+                    CheckEnemiesShield(collision, hit);
+                    Destroy(hit, 1.6f);
                     gameObject.SetActive(false);
                 }
                 break;
@@ -147,7 +155,7 @@ public class Bullet : MonoBehaviour
                 {
                     collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
                 }
-                else
+                else if(collision.gameObject.GetComponent<EnemiesAI>().shield <= 0)
                 {
                     //Once it has no more shield points start to take life points
                     collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
@@ -157,11 +165,13 @@ public class Bullet : MonoBehaviour
                 break;
             case "BulletIBasic":
                 hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                hit.gameObject.GetComponent<AudioSource>().volume = 1f;
                 Destroy(hit, 1.6f);
                 gameObject.SetActive(false);
                 break;
             case "Missile":
                 hit = Instantiate(explosionFx, transform.position, transform.rotation);
+                hit.gameObject.GetComponent<AudioSource>().volume = 1f;
                 Destroy(hit, 1.6f);
                 gameObject.SetActive(false);
                 break;
@@ -186,10 +196,13 @@ public class Bullet : MonoBehaviour
         }*/
     }
 
-    private void CheckEnemiesShield(Collider2D collision)
+    private void CheckEnemiesShield(Collider2D collision, GameObject hit)
     {
-        if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
+        /*if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
         {
+            hit.gameObject.GetComponent<AudioSource>().volume = 0.30f;
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[3]);
+
             if (collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("ActivateShield") && collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetBool("ShieldOn") == true)
             {
                 collision.gameObject.GetComponent<EnemiesAI>().shield -= damageLevel;
@@ -204,6 +217,9 @@ public class Bullet : MonoBehaviour
         }
         else if (collision.gameObject.GetComponent<EnemiesAI>().shield <= 0)
         {
+            hit.gameObject.GetComponent<AudioSource>().volume = 0.80f;
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[4]);
+
             if (collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("TurnOffShield") && collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0)
             {
                 //Once it has no more shield points start to take life points
@@ -215,6 +231,43 @@ public class Bullet : MonoBehaviour
                 collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
                 collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
             }
+        }*/
+
+        bool isShieldActive = collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().GetBool("ShieldOn");
+
+
+        //If shield active
+        if (collision.gameObject.GetComponent<EnemiesAI>().shield > 0)
+        {
+            if(collision.gameObject.GetComponent<EnemiesAI>().shield == PlayerPrefs.GetInt("ShieldValue", 100) && !isShieldActive)
+            {
+                hit.gameObject.GetComponent<AudioSource>().volume = 0.45f;
+                hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[1]);
+                collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetBool("ShieldOn", true);
+            }
+            else
+            {
+                collision.gameObject.GetComponent<EnemiesAI>().shield -= damageLevel;
+                if (collision.gameObject.GetComponent<EnemiesAI>().shield <= 0)
+                {
+                    hit.gameObject.GetComponent<AudioSource>().volume = 1f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[3]);
+                    collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOff");
+                }
+                else
+                {
+                    hit.gameObject.GetComponent<AudioSource>().volume = 0.35f;
+                    hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[2]);
+                    collision.gameObject.GetComponent<EnemiesAI>().shieldObject.GetComponent<Animator>().SetTrigger("ShieldOnDamage");
+                }
+            }
+        }
+        else
+        {
+            hit.gameObject.GetComponent<AudioSource>().volume = 0.65f;
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(impactsFX[0]);
+            collision.gameObject.GetComponent<EnemiesAI>().enemiesAnim.SetTrigger("DamageOn");
+            collision.gameObject.GetComponent<EnemiesAI>().currentHealth -= damageLevel;
         }
     }
 

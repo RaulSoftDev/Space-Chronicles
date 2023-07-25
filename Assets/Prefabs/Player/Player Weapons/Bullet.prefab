@@ -4894,7 +4894,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 14
+  m_SortingOrder: 9
   m_Sprite: {fileID: 21300000, guid: de7cd932501094988a25e04e44b1b9f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_FlipX: 0
@@ -4943,6 +4943,12 @@ MonoBehaviour:
   damageLevel: 10
   shieldPoints: 1
   rocketPoints: 1
+  impactsFX:
+  - {fileID: 8300000, guid: 737b3dd04ece55446ab32909fff5b86b, type: 3}
+  - {fileID: 8300000, guid: 856219e74e3c3464ea998b5d65696ede, type: 3}
+  - {fileID: 8300000, guid: a979e83d585d3664c991b8893fa6b516, type: 3}
+  - {fileID: 8300000, guid: 06d582a8ef8098b479ef8830b8c75c29, type: 3}
+  - {fileID: 8300000, guid: 91cb8c48ce7cbd14bb3ff32f15bde6e0, type: 3}
 --- !u!61 &-7045024578943527018
 BoxCollider2D:
   m_ObjectHideFlags: 0

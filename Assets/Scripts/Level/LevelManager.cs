@@ -30,6 +30,7 @@ public class LevelManager : MonoBehaviour
     private bool levelAlreadyFinished = false;
     private bool unlockNext = false;
     private float yPosition = 0;
+    public bool enemiesBeyondPlayer = false;
 
     public GameObject[] enemiesList;
 
@@ -65,18 +66,27 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        AnimatorStateInfo roundState = roundSigns[round].GetCurrentAnimatorStateInfo(0);
-        float roundSignTime = roundState.normalizedTime;
-
-        if(roundState.IsName("EnterRound") && roundSignTime > 1.0f)
+        if(round < 3)
         {
-            roundSignDone = true;
+            AnimatorStateInfo roundState = roundSigns[round].GetCurrentAnimatorStateInfo(0);
+            float roundSignTime = roundState.normalizedTime;
+
+            if (roundState.IsName("EnterRound") && roundSignTime > 1.0f)
+            {
+                roundSignDone = true;
+            }
         }
 
         foreach (GameObject squad in runtimeSquads.ToList())
         {
             foreach (Transform child in squad.transform)
             {
+                if(child.transform.position.y <= -2.5f)
+                {
+                    enemiesBeyondPlayer = true;
+                    PlayerHealth.instance.playerHealth = 0;
+                }
+
                 if (child.childCount < 1)
                 {
                     Destroy(child.gameObject);
@@ -86,6 +96,7 @@ public class LevelManager : MonoBehaviour
             if (squad.transform.childCount < 1)
             {
                 runtimeSquads.Remove(squad);
+                enemiesBeyondPlayer = false;
             }
         }
     }
@@ -98,6 +109,10 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator RoundsManager()
     {
+        fireScript.instance.triggerButton.enabled = false;
+        fireScript.instance.rocketButton.enabled = false;
+        fireScript.instance.gameObject.GetComponent<ShieldController>().shieldButton.enabled = false;
+
         yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
 
         Player_Movement.Instance.enableMovement = true;
@@ -118,6 +133,9 @@ public class LevelManager : MonoBehaviour
 
         //Player cannot attack until next round
         fireScript.instance.enableAttack = false;
+        fireScript.instance.triggerButton.enabled = false;
+        fireScript.instance.rocketButton.enabled = false;
+        fireScript.instance.gameObject.GetComponent<ShieldController>().shieldButton.enabled = false;
 
         //ROUND 2
         Debug.LogWarning("Round 2");
@@ -131,6 +149,9 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => round == 2);
 
         //Player cannot attack until next round
+        fireScript.instance.triggerButton.enabled = false;
+        fireScript.instance.rocketButton.enabled = false;
+        fireScript.instance.gameObject.GetComponent<ShieldController>().shieldButton.enabled = false;
         fireScript.instance.enableAttack = false;
 
         //ROUND 3
@@ -147,15 +168,34 @@ public class LevelManager : MonoBehaviour
 
         //Player cannot attack, end of mission
         fireScript.instance.enableAttack = false;
+        fireScript.instance.triggerButton.enabled = false;
+        fireScript.instance.rocketButton.enabled = false;
+        fireScript.instance.gameObject.GetComponent<ShieldController>().shieldButton.enabled = false;
+
+        //VICTORY SCENE
+        StartCoroutine(Victory());
+    }
+
+    private IEnumerator Victory()
+    {
+        yield return new WaitUntil(() => Player_Movement.Instance.playerInPos);
+
+        //PLAYER LEAVES
+        SoundScript.instance.gameObject.GetComponent<AudioSource>().volume = 0.4f;
+        SoundScript.instance.PlayVictoryMusic();
+
+        yield return new WaitForSecondsRealtime(6);
+
+        Player_Movement.Instance.PlayerLeaves();
+
+        yield return new WaitForSecondsRealtime(4);
 
         //VICTORY SCENE
         DialogueIndex.Instance.SetDialogue(DialogueIndex.Dialogue.System_1_Outtro);
         ShowDialogue();
-        dialogue.GetComponent<Animator>().SetTrigger("OpenDialogue");
         yield return new WaitUntil(() => dialogue.GetComponent<DialogueSystem>().isDialogueClosed);
         dialogue.GetComponent<DialogueSystem>().isDialogueClosed = false;
         dialogue.gameObject.SetActive(false);
-
         SaveLevelData();
     }
 
@@ -231,6 +271,7 @@ public class LevelManager : MonoBehaviour
 
         //WARNING SIGN
         warningSign.SetTrigger("SignOn");
+        //Warning Sound
         yield return new WaitForSeconds(4);
         warningSign.SetTrigger("SignOff");
 
@@ -242,6 +283,7 @@ public class LevelManager : MonoBehaviour
 
         //ROUND SIGN
         roundSigns[round].SetTrigger("RoundOn");
+        //Round Sound
         yield return new WaitUntil(() => roundSignDone);
 
         //BEGIN FIGHT
@@ -258,7 +300,10 @@ public class LevelManager : MonoBehaviour
         }
 
         //ENABLE ATTACKS
+        fireScript.instance.triggerButton.enabled = true;
         fireScript.instance.enableAttack = true;
+        fireScript.instance.rocketButton.enabled = true;
+        fireScript.instance.gameObject.GetComponent<ShieldController>().shieldButton.enabled = true;
 
         yield return new WaitUntil(() => currentSquad.transform.position.y <= yPosition || runtimeSquads.Count == 0);
         SpawnSquad();
@@ -284,6 +329,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitUntil(() => runtimeSquads.Count == 0);
         round++;
+        fireScript.instance.triggerButton.enabled = false;
     }
 
     private void RuntimeEnemySpeed()

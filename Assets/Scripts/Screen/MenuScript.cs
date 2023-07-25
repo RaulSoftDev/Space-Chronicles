@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class MenuScript : Singleton<MenuScript>
 {
     private float t = 0;
+    private Scene currentScene;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class MenuScript : Singleton<MenuScript>
     private void StopTiming(Scene scene, LoadSceneMode mode)
     {
         StopCoroutine("Timing");
+        currentScene = scene;
     }
 
     public void MainMenu(int scene)
@@ -64,18 +66,18 @@ public class MenuScript : Singleton<MenuScript>
     IEnumerator waitForScene(int scene)
     {
         //PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
-        StartCoroutine("Timing");
         BlackScreenLoader.Instance.LoadBlackScreen();
-        yield return new WaitForSeconds(1.2f);
+        SoundScript.instance.FadeOutMusic(currentScene);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(scene);
     }
 
     IEnumerator WaitForLoading(int scene, GameObject loadingScreen)
     {
         //PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
-        StartCoroutine("Timing");
+        SoundScript.instance.FadeOutMusic(currentScene);
         BlackScreenLoader.Instance.LoadBlackScreen();
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(3f);
         StartCoroutine(LoadSceneAsync(scene, loadingScreen));
         
     }
@@ -98,21 +100,10 @@ public class MenuScript : Singleton<MenuScript>
         yield return new WaitForSeconds(2f);
         BlackScreenLoader.Instance.LoadBlackScreen();
         //Wait to show black screen at full to activate the Scene
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(3f);
         //Activate the Scene
         asyncOperation.allowSceneActivation = true;
         BlackScreenLoader.Instance.LoadOutBlackScreen();
-    }
-
-    IEnumerator Timing()
-    {
-        t = 0;
-        while (true)
-        {
-            t += 0.5f * Time.deltaTime;
-            SoundScript.instance.audioSource.volume = Mathf.Lerp(1, 0, t);
-            yield return null;
-        }
     }
 
     IEnumerator waitForExit()
@@ -124,8 +115,8 @@ public class MenuScript : Singleton<MenuScript>
     IEnumerator LoadPreviousScene()
     {
         BlackScreenLoader.Instance.LoadBlackScreen();
-        yield return new WaitForSeconds(1.2f);
-        SceneManager.LoadScene(PlayerPrefs.GetInt("LastScene"));
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void SetCurrentButtonText()

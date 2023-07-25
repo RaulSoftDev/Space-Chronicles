@@ -162,7 +162,7 @@ public class Player_Movement : Singleton<Player_Movement>
                 leftArrows[3].GetComponent<Image>().color = new Color(1, 1, 1, 0);
             }
 
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -2.20f, 2.20f), transform.position.y, transform.position.z);
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.80f, 1.80f), transform.position.y, transform.position.z);
         }
         else
         {
@@ -195,6 +195,39 @@ public class Player_Movement : Singleton<Player_Movement>
             yield return null;
         }
         playerInPos = true;
+        yield break;
+    }
+
+    public void PlayerLeaves()
+    {
+        StartCoroutine(PlayerOnVictory());
+    }
+
+    private IEnumerator PlayerOnVictory()
+    {
+        float counter = 0f;
+        yield return new WaitUntil(() => playerInPos);
+        while (counter < 2)
+        {
+            transform.position = Vector3.Lerp(new Vector3(transform.position.x, -2.5f, transform.position.z), new Vector3(transform.position.x, -1f, transform.position.z), counter / 2);
+            counter += Time.deltaTime;
+            yield return null;
+        }
+        StartCoroutine(PlayerOnVictory2());
+        yield break;
+    }
+
+    private IEnumerator PlayerOnVictory2()
+    {
+        float counter = 0f;
+        yield return new WaitUntil(() => playerInPos);
+        Vector3 playerPos = transform.position;
+        while (counter < 3)
+        {
+            transform.position = Vector3.Lerp(playerPos, new Vector3(transform.position.x, 7, transform.position.z), counter / 3);
+            counter += Time.deltaTime;
+            yield return null;
+        }
         yield break;
     }
 }

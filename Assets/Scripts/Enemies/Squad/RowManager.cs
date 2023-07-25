@@ -17,6 +17,8 @@ public class RowManager : MonoBehaviour
 
     //Functions
     private MyFunctions archive;
+    internal bool left = false;
+    internal bool right = false;
 
     protected void Start()
     {
@@ -51,6 +53,8 @@ public class RowManager : MonoBehaviour
 
     IEnumerator LoopLerpLeft()
     {
+        left = true;
+        right = false;
         while (archive.lerpStatus() <= 1)
         {
             if (rightMoveLoop)
@@ -66,6 +70,8 @@ public class RowManager : MonoBehaviour
 
     IEnumerator LoopLerpRight()
     {
+        right = true;
+        left = false;
         while (archive.lerpStatus() <= 1)
         {
             if (rightMoveLoop)

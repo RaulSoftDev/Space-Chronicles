@@ -30,6 +30,8 @@ public class EnemiesAI : MonoBehaviour
     //Shield Value
     internal int shield = 80;
 
+    //FX Sounds
+    [SerializeField] private AudioClip[] enemyExplosionsFX;
 
     //Components
     internal Animator enemiesAnim;
@@ -37,6 +39,7 @@ public class EnemiesAI : MonoBehaviour
 
     [Header("AUDIO CLIPS")]
     [SerializeField] private AudioClip basicShootSound;
+    [SerializeField] private AudioClip basicIIShotSound;
     [SerializeField] private AudioClip misileSound;
     [SerializeField] private AudioClip enemiesDeath;
 
@@ -59,17 +62,20 @@ public class EnemiesAI : MonoBehaviour
     [Header("DEATH EXPLOSION")]
     public GameObject deathAnimation;
 
+    private GameObject rocketInstance;
+
     //CURRENT POSITION
     private Vector3 currentPosition;
 
     //Enemies Booleans
-    private bool canAttack = false;
+    internal bool canAttack = false;
     internal bool enableAttack = false;
     bool canBeAttacked = false;
     bool shieldDisable = false;
     internal bool enableCollision = false;
     private bool canMissile = false;
     private bool canBasic = false;
+    private bool dead = false;
     //public bool isPlayerDead = false;
 
     //External Scripts
@@ -81,13 +87,8 @@ public class EnemiesAI : MonoBehaviour
     private Vector2 center;
     private float counterZero = 0;
     private float secToAttack;
-
-    private void Awake()
-    {
-        /*healthI = PlayerPrefs.GetInt("BHealth", 40);
-        healthII = PlayerPrefs.GetInt("RocketHealth", 80);
-        shield = PlayerPrefs.GetInt("ShieldValue", 60);*/
-    }
+    private float time = 0;
+    private float volume = 1;
 
     private void Start()
     {
@@ -110,18 +111,19 @@ public class EnemiesAI : MonoBehaviour
         {
             case enemyShip.Basic:
                 currentHealth = PlayerPrefs.GetInt("BHealth", 40);
-                StartCoroutine(WaitingForAimBasicShoot(2, 8));
+                StartCoroutine(Shot(5, 10));
                 return;
             case enemyShip.BasicII:
                 currentHealth = PlayerPrefs.GetInt("BIIHealth", 60);
-                StartCoroutine(WaitingForAimBasicShoot(1, 5));
+                StartCoroutine(Shot(3, 8));
                 return;
             case enemyShip.Rocket:
                 currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
-                StartCoroutine(WaitingForAimMisile());
+                StartCoroutine(MisileShoot(7, 16));
                 return;
             case enemyShip.Shield:
                 currentHealth = PlayerPrefs.GetInt("RocketHealth", 80);
+                shield = PlayerPrefs.GetInt("ShieldValue", 100);
                 return;
             default:
                 return;
@@ -130,13 +132,26 @@ public class EnemiesAI : MonoBehaviour
 
     private void Update()
     {
-        if (canAttack)
+        /*if (canAttack)
         {
             BasicShoot();
             MisileShoot();
-        }
+        }*/
+
+        //LookAtPlayer();
+        HideEnemy();
 
         currentPosition = transform.position;
+    }
+
+    private void LookAtPlayer()
+    {
+        if(rocketInstance != null)
+        {
+            Vector3 look = rocketInstance.transform.InverseTransformPoint(fireScript.instance.gameObject.transform.position);
+            float Angle = Mathf.Atan2(look.y, look.x) * Mathf.Rad2Deg - 90;
+            rocketInstance.transform.Rotate(0, 0, Angle);
+        }
     }
 
     private IEnumerator PlayerDead()
@@ -149,10 +164,63 @@ public class EnemiesAI : MonoBehaviour
     private IEnumerator EnemyDeathCheck()
     {
         yield return new WaitUntil(() => currentHealth < 1);
+        DeactivateEnemy();
+        dead = true;
+        StopAllCoroutines();
+    }
+
+    private void DeactivateEnemy()
+    {
+        enableAttack = false;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        enemiesAnim.SetTrigger("Death");
+        if(enemy == enemyShip.Shield)
+        {
+            shieldObject.SetActive(false);
+        }
+        LoadCurrentFX();
         Debug.LogWarning("Enemy death");
         transform.parent = null;
         GameObject explotionClone = Instantiate(deathAnimation, transform.position, transform.rotation, transform.parent);
-        Destroy(gameObject);
+    }
+
+    private void HideEnemy()
+    {
+        if (dead)
+        {
+            time += Time.deltaTime;
+            if (time > 6)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void LoadCurrentFX()
+    {
+        switch (enemy)
+        {
+            case enemyShip.Basic:
+                audioSourceEnemies.volume = 0.55f;
+                audioSourceEnemies.PlayOneShot(enemyExplosionsFX[0]);
+                return;
+            case enemyShip.BasicII:
+                audioSourceEnemies.volume = 0.60f;
+                audioSourceEnemies.PlayOneShot(enemyExplosionsFX[1]);
+                return;
+            case enemyShip.Rocket:
+                audioSourceEnemies.volume = 0.3f;
+                audioSourceEnemies.PlayOneShot(enemyExplosionsFX[2]);
+                return;
+            case enemyShip.Shield:
+                audioSourceEnemies.volume = 1;
+                audioSourceEnemies.PlayOneShot(enemyExplosionsFX[3]);
+                return;
+            default:
+                audioSourceEnemies.volume = 1;
+                audioSourceEnemies.PlayOneShot(enemyExplosionsFX[0]);
+                return;
+        }
     }
 
     //Assignment for Aim&Shoot
@@ -163,7 +231,7 @@ public class EnemiesAI : MonoBehaviour
         while (true)
         {
             yield return new WaitUntil(() => transform.parent.parent.position.y < 5.5);
-            yield return new WaitForSeconds(Random.Range(2, 8));
+            yield return new WaitForSeconds(Random.Range(rangeA, rangeB));
             canBasic = true;
         }
     }
@@ -189,28 +257,102 @@ public class EnemiesAI : MonoBehaviour
     {
         if (enableAttack && canBasic)
         {
-            GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), transform.rotation);
+            GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(transform.localPosition.x, firePositionEnemies.position.y, transform.position.z), transform.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(-transform.up * bulletForce, ForceMode2D.Impulse);
+            rb.AddForce(-bullet.transform.up * bulletForce, ForceMode2D.Impulse);
             audioSourceEnemies.Stop();
-            audioSourceEnemies.PlayOneShot(basicShootSound);
+
+            switch (enemy)
+            {
+                case enemyShip.Basic:
+                    audioSourceEnemies.PlayOneShot(basicShootSound);
+                    break;
+                case enemyShip.BasicII:
+                    audioSourceEnemies.PlayOneShot(basicIIShotSound);
+                    break;
+                default:
+                    audioSourceEnemies.PlayOneShot(basicShootSound);
+                    break;
+            }
             canBasic = false;
         }
     }
 
-    //Sets the enemy missile shot instance 
-    void MisileShoot()
+    IEnumerator Shot(int rangeA, int rangeB)
     {
-        if (canMissile)
+        //yield return new WaitUntil(() => enableAttack && canAttack);
+        yield return new WaitForSeconds(Random.Range(rangeA, rangeB));
+
+        float currentPositionX;
+
+        if (transform.parent.transform.parent.GetComponent<RowManager>().left)
         {
-            canMissile = false;
-            GameObject misile = Instantiate(misileEnemiesPrefab, firePositionEnemies.position, firePositionEnemies.rotation);
-            Rigidbody2D rb = misile.GetComponent<Rigidbody2D>();
-            rb.AddForce(-firePositionEnemies.up * misileForce, ForceMode2D.Impulse);
-            audioSourceEnemies.Stop();
-            audioSourceEnemies.PlayOneShot(misileSound);
-            Debug.LogError(gameObject.tag);
+            currentPositionX = transform.position.x - 0.15f;
         }
+        else
+        {
+            currentPositionX = transform.position.x + 0.15f;
+        }
+
+        if(enableAttack && canAttack)
+        {
+            GameObject bullet = Instantiate(bulletEnemiesPrefab, new Vector3(currentPositionX, firePositionEnemies.position.y, transform.position.z), transform.rotation);
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(-bullet.transform.up * bulletForce, ForceMode2D.Impulse);
+            audioSourceEnemies.Stop();
+
+            CurrentBasicVolumes();
+
+            switch (enemy)
+            {
+                case enemyShip.Basic:
+                    audioSourceEnemies.PlayOneShot(basicShootSound);
+                    break;
+                case enemyShip.BasicII:
+                    audioSourceEnemies.PlayOneShot(basicIIShotSound);
+                    break;
+                default:
+                    audioSourceEnemies.PlayOneShot(basicShootSound);
+                    break;
+            }
+        }
+
+        StartCoroutine(Shot(rangeA, rangeB));
+    }
+
+    private void CurrentBasicVolumes()
+    {
+        switch (enemy)
+        {
+            case enemyShip.Basic:
+                volume = 0.5f;
+                audioSourceEnemies.volume = volume;
+                break;
+            case enemyShip.BasicII:
+                volume = 0.55f;
+                audioSourceEnemies.volume = volume;
+                break;
+            default:
+                break;
+        }
+    }
+
+    //Sets the enemy missile shot instance 
+    IEnumerator MisileShoot(int rangeA, int rangeB)
+    {
+        yield return new WaitUntil(() => enableAttack && canAttack);
+        yield return new WaitForSeconds(Random.Range(rangeA, rangeB));
+
+        canMissile = false;
+        rocketInstance = Instantiate(misileEnemiesPrefab, firePositionEnemies.position, firePositionEnemies.rotation);
+        Rigidbody2D rb = rocketInstance.GetComponent<Rigidbody2D>();
+        audioSourceEnemies.Stop();
+        volume = 0.75f;
+        audioSourceEnemies.volume = volume;
+        audioSourceEnemies.PlayOneShot(misileSound);
+        Debug.LogError(gameObject.tag);
+
+        StartCoroutine(MisileShoot(rangeA, rangeB));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

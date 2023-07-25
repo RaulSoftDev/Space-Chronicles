@@ -96,6 +96,7 @@ public class TutorialManager : MonoBehaviour
         PlayerPrefs.SetInt("ShieldPoints", shieldPointsTutorial);
         PlayerPrefs.SetInt("RocketPoints", rocketPointsTutorial);
         PlayerPrefs.SetInt("BHealth", 30);
+        PlayerPrefs.SetInt("EnemySpeed", 60);
     }
 
     IEnumerator TutorialIntro()
@@ -206,6 +207,8 @@ public class TutorialManager : MonoBehaviour
     {
         currentSquad = Instantiate(squad, spawnPoint.transform.position, spawnPoint.transform.rotation);
         Debug.LogWarning("Spawning Squad");
+        int currentEnemySpeed = PlayerPrefs.GetInt("EnemySpeed", 60);
+        currentSquad.GetComponent<SquadMovementManager>().lerpTime = currentEnemySpeed;
         currentSquad.GetComponent<SquadMovementManager>().startMove = true;
     }
 
@@ -216,6 +219,7 @@ public class TutorialManager : MonoBehaviour
             foreach (Transform child2 in child.transform)
             {
                 child2.GetComponent<EnemiesAI>().enableAttack = attack;
+                child2.GetComponent<EnemiesAI>().canAttack = attack;
             }
         }
     }

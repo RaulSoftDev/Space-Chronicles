@@ -148,7 +148,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: 1
+  healthI: 20
+  currentHealth: 0
+  enemyExplosionsFX:
+  - {fileID: 8300000, guid: 5509a600a336e0e48a23eb439928c75d, type: 3}
+  - {fileID: 8300000, guid: c3b302d83c1b1aa43969c2c27cab55ac, type: 3}
+  - {fileID: 8300000, guid: cb1032f106569f547b0a178949fd16e3, type: 3}
+  - {fileID: 8300000, guid: d0679d7325d45934a8110720923fa043, type: 3}
   basicShootSound: {fileID: 8300000, guid: 4dd05899cd82a564680fec2dbba55050, type: 3}
+  basicIIShotSound: {fileID: 8300000, guid: 2bb8dfd2efe73fd4fb561c8321b17958, type: 3}
   misileSound: {fileID: 8300000, guid: e4946c556459be24fb24c2de01fcf744, type: 3}
   enemiesDeath: {fileID: 8300000, guid: 088fac503d8d751458306a44b831e7cf, type: 3}
   firePositionEnemies: {fileID: 1007046372358795329}

@@ -11,6 +11,7 @@ public class SoundScript : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip song;
     public AudioClip songMenu;
+    public AudioClip tutorialSong;
     public AudioClip victoryClip1;
     public AudioClip victoryClip2;
     public AudioClip deathClip;
@@ -66,52 +67,70 @@ public class SoundScript : MonoBehaviour
 
     void ChangeSongMenu(Scene scene)
     {
-        audioSource.Stop();
-        audioSource.volume = 1.0f;
-
         switch (scene.name)
         {
             case "Studio_Intro":
                 //NO MUSIC
                 break;
             case "Round1":
+                gameObject.GetComponent<Animator>().SetTrigger("FadeIn_System1");
                 audioSource.loop = true;
+                audioSource.volume = 0.8f;
                 audioSource.clip = song;
                 audioSource.Play();
                 break;
             case "Tutorial":
+                gameObject.GetComponent<Animator>().SetTrigger("FadeIn_Tutorial");
                 audioSource.loop = true;
-                audioSource.clip = song;
+                audioSource.volume = 0.4f;
+                audioSource.clip = tutorialSong;
                 audioSource.Play();
                 break;
             case "MainMenu":
-                if(audioSource.clip != songMenu)
+                gameObject.GetComponent<Animator>().SetTrigger("FadeIn_MainMenu");
+                audioSource.volume = 0.5f;
+                if (audioSource.clip != songMenu)
                 {
                     audioSource.loop = true;
                     audioSource.clip = songMenu;
                     audioSource.Play();
                 }
                 break;
-            case "Victory":
-                StartCoroutine(victoryClipAudio());
+        }
+    }
+
+    public void FadeOutMusic(Scene scene)
+    {
+        switch (scene.name)
+        {
+            case "Studio_Intro":
+                //NO MUSIC
                 break;
-            case "Death":
-                audioSource.loop = false;
-                audioSource.clip = deathClip;
-                audioSource.Play();
+            case "Round1":
+                gameObject.GetComponent<Animator>().SetTrigger("FadeOut_System1");
+                break;
+            case "Tutorial":
+                gameObject.GetComponent<Animator>().SetTrigger("FadeOut_Tutorial");
+                break;
+            case "MainMenu":
+                gameObject.GetComponent<Animator>().SetTrigger("FadeOut_MainMenu");
                 break;
         }
     }
 
-    IEnumerator victoryClipAudio()
+    public void PlayVictoryMusic()
     {
+        audioSource.Stop();
         audioSource.clip = victoryClip1;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void PlayDeathMusic()
+    {
+        audioSource.Stop();
+        audioSource.clip = deathClip;
         audioSource.loop = false;
         audioSource.Play();
-        yield return new WaitForSeconds(victoryClip1.length);
-        audioSource.Stop();
-        audioSource.clip = victoryClip2;
-        audioSource.Play();
-        yield break;
     }
 }
