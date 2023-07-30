@@ -97,28 +97,47 @@ public class DialogueIndex : Singleton<DialogueIndex>
     {
         string Tutorial_Intro_P1 =
             "\n" +
-            "Hello again Adrian..." +
-            "\nI understand that you want to hone your combat skills, but you should be more than ready by now!" +
-            "\nPay attention to the attack and defense systems of our Centauro combat ship, they will help you to fight and protect us from the Shadow, remember that this body does not stand alone. ;)";
+            "Hi! Allow me to introduce myself: Axela Iris." +
+            "\n" +
+            "\n" +
+            "I'm the Centauro combat ship personal A.I. assistant." +
+            "\n" +
+            "\n" +
+            "I understand that you want to hone your combat skills, but you should be more than ready by now!";
         DialogueOutput.Add(Tutorial_Intro_P1);
-        string Tutorial_Intro_P2 = 
+        string Tutorial_Intro_P2 =
             "\n" +
-            "As your AI guide system, I will not let you down to make sure you become the ultimate captain, although I do not promise anything...";
-        DialogueOutput.Add (Tutorial_Intro_P2);
-        string Tutorial_Intro_P3 =
+            "Pay attention to the attack and defense systems of the Centauro, they will help you to fight and protect us from the Shadow." +
             "\n" +
-            "Well, enough of wasting time with instruction manuals. Let's make these bits dance!!!";
-        DialogueOutput.Add(Tutorial_Intro_P3);
+            "Remember that this body does not stand alone.";
+        DialogueOutput.Add(Tutorial_Intro_P2);
+        string Tutorial_Intro_P3 = 
+            "\n" +
+            "As your assistant, I will not let you down to make sure you become the ultimate captain, although I do not promise anything...";
+        DialogueOutput.Add (Tutorial_Intro_P3);
+        string Tutorial_Intro_P4 =
+            "\n" +
+            "Well, enough of wasting time with instruction manuals." +
+            "\n" +
+            "\n" +
+            "Let's make these bits dance!!!";
+        DialogueOutput.Add(Tutorial_Intro_P4);
     }
 
     public void Dialogue_Tutorial_Movement()
     {
         string Tutorial_Movement_P1 =
             "\n" +
-            "The most important thing about to not take damage is to NOT take damage. To achieve this we can move our ship horizontally using these side sliders. " +
+            "The most important thing about to not take damage is to NOT take damage." +
+            "\n" +
+            "\n" +
+            "To achieve this we can move our ship horizontally using these side sliders. " +
+            "\n" +
+            "\n" +
             "Pay attention, the closer you get to the end of the sliders, the faster we will move." +
             "\n" +
-            "\n Give it a try!";
+            "\n" +
+            "\nGive it a try!";
 
         DialogueOutput.Add(Tutorial_Movement_P1);
     }
@@ -127,7 +146,14 @@ public class DialogueIndex : Singleton<DialogueIndex>
     {
         string Tutorial_Attack_P1 = 
             "\n" +
-            "Attack is the best form of deffence. In our case, smash the middle button to destroy them all. If you are able...";
+            "Attack is the best form of deffence." +
+            "\n" +
+            "\n" +
+            "In our case, smash the middle button to destroy them all." +
+            "\n" +
+            "\n" +
+            "\n" +
+            "If you are capable...";
         DialogueOutput.Add(Tutorial_Attack_P1);
     }
 
@@ -158,9 +184,9 @@ public class DialogueIndex : Singleton<DialogueIndex>
             "Now that you've learned everything I could teach you, there's only one last lesson left. " +
             "\n" +
             "\n" +
-            "Survive. " +
             "\n" +
-            "Good luck out there.";
+            "\n" +
+            "Survive.  ;)";
         DialogueOutput.Add (Tutorial_End);
     }
     #endregion

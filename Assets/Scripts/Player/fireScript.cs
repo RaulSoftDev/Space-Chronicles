@@ -173,7 +173,7 @@ public class fireScript : MonoBehaviour
         bullet.SetActive(true);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firePosition.up * bulletForce, ForceMode2D.Impulse);
-        audioSourcePlayer.volume = 0.45f;
+        audioSourcePlayer.volume = 0.30f;
         audioSourcePlayer.PlayOneShot(bulletSound);
         Debug.Log("ShootOut");
         currentBullet++;

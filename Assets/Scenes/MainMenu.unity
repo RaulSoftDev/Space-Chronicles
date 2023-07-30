@@ -798,12 +798,25 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Main Programmer\nRa\xFAl Hidalgo S\xE1nchez\n\nMain Designer\nJavier Jes\xFAs
-    Hidalgo S\xE1nchez\n\nSpecial Thanks\nPersona 1\nPersona 2\nPersona 3\n\nMusic
-    and Sounds\nPersona 1\nPersona 2\nPersona 3"
+  m_text: "<b>MAIN PROGRAMMER<b>\nRa\xFAl Hidalgo S\xE1nchez\n\n<b>MAIN DESIGNER<b>\nJavier
+    Jes\xFAs Hidalgo S\xE1nchez\n\n\n\n\n<b>UNITY ASSET STORE<b>\n2D Spaceship Multipack
+    - Lareon Games\r\nFree 2D Impact FX - Inguz Media\r\nMK S. B. Parallax Maker
+    - Master Key\r\nWarped Shooting FX - Ansimuz\n\n<b>FREESOUND<b>\n\"Energy Shot
+    Sword 1-7\" Ejfortin\r\n\"Sci-Fi Cannon\" Humanoide9000\r\n\"Beam 8\" SieuAmThanh\r\n\"Short
+    Deep Humming\" DrMaysta\r\n\"Energy / Magic Shot\" Iridiuss\r\n\"Sci-Fi Energy
+    Gun\" ItsThatRoboGuy\r\n\"Energy\" BrickDeveloper171\r\n\"Laser Charge Up\" MagnusWaker\r\n\"Sci-Fi
+    Charge Up\" Hemplock\r\n\"8-bit Alarm\" Furbyguy\r\n\"Energy Bounce 1\" MagnusWaker\r\n\"Energy
+    Whip 2.wav\" ejfortin\r\n\"Landing Forcefield\" by unfa\r\n\"Blaster shot 10_3.wav\"
+    Newlocknew\r\n\"Plasma Shot sound - GSE 2_10\" Erokia\r\n\"Guns & Explosions
+    Album - Railgun - Shot 6.wav\" OGsoundFX\r\n\"LaserRocket2.wav\" by EcoDTR\r\n\"PowerDown
+    Faster.wav\" DrMrSir\r\n\"Bomb Explosion.wav\" MATRIXXX_\r\n\"explosion.wav\"
+    IdkMrGarcia\r\n\"explosion_big_02.ogg\" by derplayer\r\n\"Explosion_001.mp3\"
+    by cydon\n\n<b>FREESTOCKMUSIC<b>\n\"Loop Me\" Patchworker\n\"Battle Loop\" Alexander
+    Nakarada\n\"Action\" Alex-Productions\r\n\"Superepic\" Alexander Nakarada\r\n\"Racing\"
+    FSM Team\n\n<b>FONTS<b>\nAdobe Fonts\nTypori - DaFont"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8724f70841aa4b248914857507a812a3, type: 2}
+  m_sharedMaterial: {fileID: -130201661690988123, guid: 8724f70841aa4b248914857507a812a3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -827,8 +840,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 43
+  m_fontSizeBase: 43
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -978,7 +991,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 67738d70c4944b14e95e77414971f314, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 09f319d95eb6a604aa05ec66b9953eea, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -10026,6 +10039,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 453632561}
     m_Modifications:
+    - target: {fileID: 3367152778743801231, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_text
+      value: Axela Iris
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367152778760259177, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_fontSize
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367152778760259177, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 43
+      objectReference: {fileID: 0}
     - target: {fileID: 3367152779174102498, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10114,6 +10139,10 @@ PrefabInstance:
       propertyPath: textIndex
       value: 
       objectReference: {fileID: 1524713413}
+    - target: {fileID: 3367152779174102499, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: typingSpeed
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 3367152779174102501, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
       propertyPath: m_Name
       value: TypeWritter

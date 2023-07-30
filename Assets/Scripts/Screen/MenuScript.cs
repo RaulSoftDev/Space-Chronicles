@@ -9,6 +9,7 @@ public class MenuScript : Singleton<MenuScript>
 {
     private float t = 0;
     private Scene currentScene;
+    private bool startLoading;
 
     private void Awake()
     {
@@ -75,6 +76,7 @@ public class MenuScript : Singleton<MenuScript>
     IEnumerator WaitForLoading(int scene, GameObject loadingScreen)
     {
         //PlayerPrefs.SetInt("LastScene", SceneManager.GetActiveScene().buildIndex);
+        AdsManager.Instance.DestroyAd();
         SoundScript.instance.FadeOutMusic(currentScene);
         BlackScreenLoader.Instance.LoadBlackScreen();
         yield return new WaitForSeconds(3f);
@@ -86,6 +88,11 @@ public class MenuScript : Singleton<MenuScript>
     {
         yield return null;
 
+        //Show Interstitial Ad
+        startLoading = false;
+        AdsManager.Instance.ShowInterstitial();
+        AdsManager.Instance.interstitialAd.OnAdFullScreenContentClosed += CheckAd;
+        yield return new WaitUntil(() => startLoading);
         //Begin to load the Scene you specify
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         //Show loading screen
@@ -104,6 +111,11 @@ public class MenuScript : Singleton<MenuScript>
         //Activate the Scene
         asyncOperation.allowSceneActivation = true;
         BlackScreenLoader.Instance.LoadOutBlackScreen();
+    }
+
+    private void CheckAd()
+    {
+        startLoading = true;
     }
 
     IEnumerator waitForExit()

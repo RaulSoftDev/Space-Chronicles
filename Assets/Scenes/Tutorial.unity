@@ -513,7 +513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -412.0147, y: -837.50024}
+  m_AnchoredPosition: {x: -412.0148, y: -837.50024}
   m_SizeDelta: {x: 122.66, y: 96.600006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &44942888
@@ -935,7 +935,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.041666668, y: 0.015000001}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -410.40244, y: -839.42944}
+  m_AnchoredPosition: {x: -410.40244, y: -839.42926}
   m_SizeDelta: {x: 68.82, y: 42.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &136303651
@@ -3268,7 +3268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d99273d56b62b0742aeea2c21b491766, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 190f853d28d189646a5b5d52fec8151f, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4651,7 +4651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.12100001, y: 0.13947797}
   m_AnchorMax: {x: 0.88100004, y: 0.15052205}
-  m_AnchoredPosition: {x: -1.2364502, y: 743.72064}
+  m_AnchoredPosition: {x: -1.2364502, y: 743.7208}
   m_SizeDelta: {x: -33.699997, y: 1501.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &824681139
@@ -5164,8 +5164,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1861755271}
     m_Modifications:
     - target: {fileID: 3367152778743801231, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_text
+      value: Axela Iris
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367152778743801231, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367152778760259177, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_fontSize
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367152778760259177, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 3367152779174102498, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
       propertyPath: m_Pivot.x
@@ -5255,6 +5267,10 @@ PrefabInstance:
       propertyPath: textIndex
       value: 
       objectReference: {fileID: 1598451090}
+    - target: {fileID: 3367152779174102499, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
+      propertyPath: typingSpeed
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 3367152779174102501, guid: 071686b93a4f2a14a9453991198dc946, type: 3}
       propertyPath: m_Name
       value: TypeWritter

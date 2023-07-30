@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using GoogleMobileAds.Api;
 
 public class MenuBehaviour : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class MenuBehaviour : MonoBehaviour
     private int levelToUnlock = 0;
     public bool resetDifficulty = false;
     private bool creditsDone = false;
+    private bool skipCreditsDone = false;
 
     private void Awake()
     {
@@ -72,6 +74,13 @@ public class MenuBehaviour : MonoBehaviour
     {
         DifficultyButtonsCheck();
         StartCoroutine(LoadMainMenu());
+    }
+
+    private void InMenuBanner(AdPosition bannerPosition)
+    {
+        AdsManager.Instance.DestroyAd();
+        AdsManager.Instance.bannerPosition = bannerPosition;
+        AdsManager.Instance.ShowBanner();
     }
 
     private IEnumerator LoadMainMenu()
@@ -266,6 +275,22 @@ public class MenuBehaviour : MonoBehaviour
         {
             creditsDone = false;
         }
+
+        //Skip Credits Checker
+        AnimatorStateInfo skipCreditsAnimatorStateInfo = skipCredits.GetCurrentAnimatorStateInfo(0);
+
+        if (skipCreditsAnimatorStateInfo.IsName("Skip Credits"))
+        {
+            float SKTime = skipCreditsAnimatorStateInfo.normalizedTime;
+            if (SKTime > 1.0f)
+            {
+                skipCreditsDone = true;
+            }
+        }
+        else
+        {
+            skipCreditsDone = false;
+        }
     }
     #endregion
 
@@ -282,6 +307,7 @@ public class MenuBehaviour : MonoBehaviour
     #region Main Menu
     private IEnumerator EnterMainMenuButtons()
     {
+        InMenuBanner(AdPosition.Bottom);
         menuTitles[0].SetTrigger("TitleOn");
 
         for (int i = 0; i < mainMenuButtons.Length; i++)
@@ -322,6 +348,7 @@ public class MenuBehaviour : MonoBehaviour
 
     private IEnumerator BackMainMenuButtons()
     {
+        InMenuBanner(AdPosition.Bottom);
         menuTitles[0].SetTrigger("TitleOn");
 
         for (int i = 0; i < mainMenuButtons.Length; i++)
@@ -356,8 +383,7 @@ public class MenuBehaviour : MonoBehaviour
                     break;
             }
         }
-
-        enableMenuButtons= false;
+        enableMenuButtons = false;
     }
 
     private void BackToMainMenu()
@@ -405,6 +431,7 @@ public class MenuBehaviour : MonoBehaviour
 
         yield return new WaitUntil(() => mainMenuHidden);
 
+        InMenuBanner(AdPosition.BottomRight);
         //Show Options Menu
         mainMenuSettings.gameObject.SetActive(true);
         mainMenuSettings.SetTrigger("EnterMenu");
@@ -468,6 +495,7 @@ public class MenuBehaviour : MonoBehaviour
     #region Difficulty Menu
     private IEnumerator EnterDifficultyButtons()
     {
+        InMenuBanner(AdPosition.BottomRight);
         menuTitles[1].SetTrigger("TitleOn");
 
         for (int i = 0; i < difficultyMenuButtons.Length; i++)
@@ -822,6 +850,7 @@ public class MenuBehaviour : MonoBehaviour
         }
 
         yield return new WaitUntil(() => mainMenuHidden);
+        InMenuBanner(AdPosition.BottomRight);
         skipCredits.SetTrigger("TurnOnCredits");
         creditsScene.SetBool("CreditsOff", false);
         creditsScene.SetTrigger("ShowCredits");
@@ -840,9 +869,15 @@ public class MenuBehaviour : MonoBehaviour
         skipCreditsButton.SetTrigger("Hide");
         skipCreditsButton.gameObject.GetComponent<Button>().enabled = false;
         skipCredits.SetTrigger("Skip");
+        //Load main menu
+        StartCoroutine(Skip());
+    }
+
+    IEnumerator Skip()
+    {
+        yield return new WaitUntil(() => skipCreditsDone);
         creditsScene.SetBool("CreditsOff", true);
         BackToMainMenu();
-        //Load main menu
     }
     #endregion
 }
